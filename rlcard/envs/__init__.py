@@ -30,7 +30,12 @@ register(
 
 register(
     env_id='tarot',
-    entry_point='rlcard.envs.tarot:UnoEnv',
+    entry_point='rlcard.envs.tarot:TarotEnv',
+)
+
+register(
+    env_id='uno',
+    entry_point='rlcard.envs.uno:UnoEnv',
 )
 
 register(

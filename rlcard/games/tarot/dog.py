@@ -1,9 +1,11 @@
 # CLEAR
+from rlcard.games.tarot.player import TarotPlayer
 
 
-class TarotDog(object):
+class TarotDog(TarotPlayer):
 
-    def __init__(self):
-        """ Initilize a player.
+    def __init__(self, player_id=None):
+        """ Initilize the dog as a player.
         """
-        self.dog_cards = []
+        super().__init__(player_id)
+        self.hand = []

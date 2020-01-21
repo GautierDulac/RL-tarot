@@ -1,3 +1,6 @@
+# CLEAR
+
+
 class TarotCard(object):
     info = {'is_trump': [True, False],
             'color': ['SPADE', 'CLOVER', 'HEART', 'DIAMOND'],
@@ -6,14 +9,13 @@ class TarotCard(object):
             }
 
     def __init__(self, is_trump, color='SPADE', color_value=1, trump_value=0):
-        ''' Initialize the class of TarotCard
+        """ Initialize the class of TarotCard
 
         Args:
-            is_trump (str): The type of card
             color (str): The color of card
             color_value (int): The value of card
             trump_value (int): The value of card when trump
-        '''
+        """
         self.is_trump = is_trump
         self.color = color
         self.color_value = color_value
@@ -21,23 +23,23 @@ class TarotCard(object):
         self.str = self.get_str()
 
     def get_str(self):
-        ''' Get the string representation of card
+        """ Get the string representation of card
 
         Return:
             (str): The string of card's color and value
-        '''
+        """
         if self.is_trump:
             return 'Trump-' + str(self.trump_value)
         else:
-            return self.color + '-' + str(self.value)
+            return self.color + '-' + str(self.color_value)
 
     @staticmethod
-    def print_cards(cards):  # TODO : understand how to work with a static method - unused for now
-        ''' Print out card in a nice form
+    def print_cards(cards):  # TODO : P2 - understand how to work with a static method - unused for now
+        """ Print out card in a nice form
 
         Args:
-            card (str or list): The string form or a list of tarot card
-        '''
+            :param cards: (str or list)list of cards to be printed - or string form of tarot card
+        """
         if isinstance(cards, str):
             cards = [cards]
         for i, card in enumerate(cards):

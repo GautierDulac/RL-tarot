@@ -6,6 +6,17 @@ import numpy as np
 class TarotJudger(object):
 
     @staticmethod
+    def judge_pot_winner(players):
+        # TODO : IMPLEMENT winner for each pot
+        """
+
+        :param players:
+        :return:
+        """
+
+
+
+    @staticmethod
     def judge_winner(players):
         """ Judge the winner of the game
 

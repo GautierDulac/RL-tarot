@@ -33,18 +33,19 @@ class TarotEnv(Env):
                 print('Agent {} has {} cards.'.format(i, len(self.game.players[i].hand)))
         print('======== Actions You Can Choose =========')
         for i, action in enumerate(state['legal_actions']):
-            print(str(ACTION_SPACE[action])+': ', end='')
-            TarotCard.print_cards(action, wild_color=True)
+            print(str(ACTION_SPACE[action]) + ': ', end='')
+            TarotCard.print_cards(action)
             if i < len(state['legal_actions']) - 1:
                 print(', ', end='')
         print('\n')
 
     def print_result(self, player):
-        ''' Print the game result when the game is over
+        # TODO : Adapt with the rank of players
+        """ Print the game result when the game is over
 
         Args:
             player (int): The human player id
-        '''
+        """
         payoffs = self.get_payoffs()
         print('===============     Result     ===============')
         if payoffs[player] > 0:
@@ -55,43 +56,58 @@ class TarotEnv(Env):
 
     @staticmethod
     def print_action(action):
-        ''' Print out an action in a nice form
+        """ Print out an action in a nice form
 
         Args:
             action (str): A string a action
-        '''
-        TarotCard.print_cards(action, wild_color=True)
+        """
+        TarotCard.print_cards(action)
 
     def load_model(self):
-        ''' Load pretrained/rule model
+        """ Load pretrained/rule model
 
         Returns:
             model (Model): A Model object
-        '''
+        """
         return models.load('tarot-rule-v1')
 
     def extract_state(self, state):
-        obs = np.zeros((7, 4, 15), dtype=int)
-        encode_hand(obs[:3], state['hand'])
-        encode_target(obs[3], state['target'])
-        encode_hand(obs[4:], state['others_hand'])
+        """
+
+        :param state:
+        :return:
+        """
+        obs = np.zeros((3, 5, 22), dtype=int)
+        encode_hand(obs[0], state['hand'])
+        encode_target(obs[1], state['target'])
+        encode_hand(obs[2], state['others_hand'])
         legal_action_id = self.get_legal_actions()
         extrated_state = {'obs': obs, 'legal_actions': legal_action_id}
         return extrated_state
 
     def get_payoffs(self):
+        """
 
+        :return:
+        """
         return self.game.get_payoffs()
 
     def decode_action(self, action_id):
+        """
+
+        :param action_id:
+        :return: chosen action id or a random action in the avaiable ones
+        """
         legal_ids = self.get_legal_actions()
         if action_id in legal_ids:
             return ACTION_LIST[action_id]
-        #if (len(self.game.dealer.deck) + len(self.game.round.played_cards)) > 17:
-        #    return ACTION_LIST[60]
         return ACTION_LIST[np.random.choice(legal_ids)]
 
     def get_legal_actions(self):
+        """
+        transform legal actions from game to the action_space legal actions
+        :return:
+        """
         legal_actions = self.game.get_legal_actions()
         legal_ids = [ACTION_SPACE[action] for action in legal_actions]
         return legal_ids

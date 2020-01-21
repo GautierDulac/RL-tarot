@@ -1,124 +1,103 @@
-import numpy as np
-
 from rlcard.games.tarot.card import TarotCard
-from rlcard.games.tarot.utils import cards2list, WILD, WILD_DRAW_4
+from rlcard.games.tarot.player import TarotPlayer
+from rlcard.games.tarot.utils import cards2list
 
 
 class TarotRound(object):
 
     def __init__(self, dealer, num_players):
-        ''' Initialize the round class
+        """ Initialize the round class
 
         Args:
             dealer (object): the object of TarotDealer
             num_players (int): the number of players in game
-        '''
+        """
         self.dealer = dealer
-        self.target = None
+        self.target_card = None
+        self.highest_trump = 0
         self.current_player = 0
         self.num_players = num_players
         self.direction = 1
         self.played_cards = []
+        self.is_pot_over = False
         self.is_over = False
         self.winner = None
 
-    def proceed_round(self, players, action):
-        # TODO : adapt for TAROT
-        ''' Call other Classes's functions to keep one round running
+    def proceed_round(self, players: list[TarotPlayer], played_card: TarotCard):
+        """ Call other Classes's functions to keep one round running
 
         Args:
-            player (object): object of TarotPlayer
-            action (str): string of legal action
-        '''
-        if action == 'draw':
-            self._perform_draw_action(players)
-            return None
+            :param played_card: string of legal action
+            :param players: list of object of TarotPlayer
+        """
         player = players[self.current_player]
-        card_info = action.split('-')
-        color = card_info[0]
-        trait = card_info[1]
-        # remove correspongding card
+
+        # remove corresponding card
         remove_index = None
-        if trait == 'wild' or trait == 'wild_draw_4':
-            for index, card in enumerate(player.hand):
-                if trait == card.trait:
-                    remove_index = index
-                    break
-        else:
-            for index, card in enumerate(player.hand):
-                if color == card.color and trait == card.trait:
-                    remove_index = index
-                    break
-        card = player.hand.pop(remove_index)
-        if not player.hand:
-            self.is_over = True
-            self.winner = [self.current_player]
-        self.played_cards.append(card)
+        for index, card in enumerate(player.hand):
+            if played_card == card:
+                remove_index = index
+                break
 
-        # perform the number action
-        if card.type == 'number':
-            self.current_player = (self.current_player + self.direction) % self.num_players
-            self.target = card
+        _ = player.hand.pop(remove_index)
 
-        # perform non-number action
-        else:
-            self._preform_non_number_action(players, card)
+        if played_card.is_trump:
+            self.highest_trump = max(self.highest_trump, played_card.trump_value)
 
-    def get_legal_actions(self, players, player_id):
-        # TODO : Adapt for TAROT
-        wild_flag = 0
-        wild_draw_4_flag = 0
+    def get_legal_actions(self, players: list[TarotPlayer], player_id):
+        """
+        Get all legal cards that can be played by current player with his hand and the target card
+        :param players: list of all players
+        :param player_id: current player
+        :return: list of legals TarotCard
+        """
         legal_actions = []
-        wild_4_actions = []
         hand = players[player_id].hand
-        target = self.target
-        if target.type == 'wild':
-            for card in hand:
-                if card.type == 'wild':
-                    # card.color = np.random.choice(TarotCard.info['color'])
-                    if card.trait == 'wild_draw_4':
-                        if wild_draw_4_flag == 0:
-                            wild_draw_4_flag = 1
-                            wild_4_actions.extend(WILD_DRAW_4)
-                    else:
-                        if wild_flag == 0:
-                            wild_flag = 1
-                            legal_actions.extend(WILD)
-                elif card.color == target.color:
-                    legal_actions.append(card.str)
-
-        # target is action card or number card
+        target = self.target_card
+        # If no target card (first player to speak)
+        if target is None:
+            return hand  # TODO : add rules for playing initial color
+        # If there is a target
         else:
-            for card in hand:
-                if card.type == 'wild':
-                    if card.trait == 'wild_draw_4':
-                        if wild_draw_4_flag == 0:
-                            wild_draw_4_flag = 1
-                            wild_4_actions.extend(WILD_DRAW_4)
-                    else:
-                        if wild_flag == 0:
-                            wild_flag = 1
-                            legal_actions.extend(WILD)
-                elif card.color == target.color or card.trait == target.trait:
-                    legal_actions.append(card.str)
-        if not legal_actions:
-            legal_actions = wild_4_actions
-        if not legal_actions:
-            legal_actions = ['draw']
+            target_color_is_trump = target.is_trump
+            target_color = target.color
+            # If color is not trump
+            if not target_color_is_trump:
+                for card in hand:
+                    if card.color == target_color:
+                        legal_actions.append(card)
+                if len(legal_actions) == 0:
+                    for card in hand:
+                        if card.is_trump and card.trump_value > self.highest_trump:
+                            legal_actions.append(card)
+                if len(legal_actions) == 0:
+                    legal_actions = hand
+            # If asked is trump
+            else:
+                for card in hand:
+                    if card.is_trump and card.trump_value > self.highest_trump:
+                        legal_actions.append(card)
+                if len(legal_actions) == 0:
+                    for card in hand:
+                        if card.is_trump:
+                            legal_actions.append(card)
+                if len(legal_actions) == 0:
+                    legal_actions = hand
+
         return legal_actions
 
     def get_state(self, players, player_id):
-        # TODO : Adapt for TAROT
-        ''' Get player's state
+        # TODO : Adapt state for TAROT
+        """ Get player's state
 
         Args:
             players (list): The list of TarotPlayer
             player_id (int): The id of the player
-        '''
+        """
         state = {}
         player = players[player_id]
         state['hand'] = cards2list(player.hand)
-        state['target'] = self.target.str
+        state['target'] = self.target_card.str
         state['played_cards'] = cards2list(self.played_cards)
         others_hand = []
         for player in players:

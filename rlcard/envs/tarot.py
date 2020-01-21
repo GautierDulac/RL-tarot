@@ -2,30 +2,30 @@ import numpy as np
 
 from rlcard.envs.env import Env
 from rlcard import models
-from rlcard.games.tarot.game import UnoGame as Game
+from rlcard.games.tarot.game import TarotGame as Game
 from rlcard.games.tarot.utils import encode_hand, encode_target
 from rlcard.games.tarot.utils import ACTION_SPACE, ACTION_LIST
-from rlcard.games.tarot.card import UnoCard
+from rlcard.games.tarot.card import TarotCard
 
 
-class UnoEnv(Env):
+class TarotEnv(Env):
 
-    def __init__(self, allow_step_back=False):
-        super().__init__(Game(allow_step_back), allow_step_back)
+    def __init__(self):
+        super().__init__(Game())
         self.state_shape = [7, 4, 15]
 
     def print_state(self, player):
-        ''' Print out the state of a given player
+        """ Print out the state of a given player
 
         Args:
             player (int): Player id
-        '''
+        """
         state = self.game.get_state(player)
         print('\n=============== Your Hand ===============')
-        UnoCard.print_cards(state['hand'])
+        TarotCard.print_cards(state['hand'])
         print('')
         print('=============== Last Card ===============')
-        UnoCard.print_cards(state['target'], wild_color=True)
+        TarotCard.print_cards(state['target'])
         print('')
         print('========== Agents Card Number ===========')
         for i in range(self.player_num):
@@ -34,7 +34,7 @@ class UnoEnv(Env):
         print('======== Actions You Can Choose =========')
         for i, action in enumerate(state['legal_actions']):
             print(str(ACTION_SPACE[action])+': ', end='')
-            UnoCard.print_cards(action, wild_color=True)
+            TarotCard.print_cards(action, wild_color=True)
             if i < len(state['legal_actions']) - 1:
                 print(', ', end='')
         print('\n')
@@ -60,7 +60,7 @@ class UnoEnv(Env):
         Args:
             action (str): A string a action
         '''
-        UnoCard.print_cards(action, wild_color=True)
+        TarotCard.print_cards(action, wild_color=True)
 
     def load_model(self):
         ''' Load pretrained/rule model

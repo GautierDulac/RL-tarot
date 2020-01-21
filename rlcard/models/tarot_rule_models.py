@@ -1,4 +1,4 @@
-''' UNO rule models
+''' TAROT rule models
 '''
 
 import numpy as np
@@ -6,8 +6,8 @@ import numpy as np
 import rlcard
 from rlcard.models.model import Model
 
-class UNORuleAgentV1(object):
-    ''' UNO Rule agent version 1
+class TAROTRuleAgentV1(object):
+    ''' TAROT Rule agent version 1
     '''
 
     def __init__(self):
@@ -52,10 +52,10 @@ class UNORuleAgentV1(object):
         ''' Filter the wild cards. If all are wild cards, we do not filter
 
         Args:
-            hand (list): A list of UNO card string
+            hand (list): A list of TAROT card string
 
         Returns:
-            filtered_hand (list): A filtered list of UNO string
+            filtered_hand (list): A filtered list of TAROT string
         '''
         filtered_hand = []
         for card in hand:
@@ -72,7 +72,7 @@ class UNORuleAgentV1(object):
         ''' Count the number of cards in each color in hand
 
         Args:
-            hand (list): A list of UNO card string
+            hand (list): A list of TAROT card string
 
         Returns:
             color_nums (dict): The number cards of each color
@@ -86,8 +86,8 @@ class UNORuleAgentV1(object):
 
         return color_nums
 
-class UNORuleModelV1(Model):
-    ''' UNO Rule Model version 1
+class TAROTRuleModelV1(Model):
+    ''' TAROT Rule Model version 1
     '''
 
     def __init__(self):
@@ -95,7 +95,7 @@ class UNORuleModelV1(Model):
         '''
         env = rlcard.make('tarot')
 
-        rule_agent = UNORuleAgentV1()
+        rule_agent = TAROTRuleAgentV1()
         self.rule_agents = [rule_agent for _ in range(env.player_num)]
 
     @property

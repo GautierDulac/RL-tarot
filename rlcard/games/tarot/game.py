@@ -3,7 +3,7 @@
 
 from rlcard.games.tarot.dealer import TarotDealer as Dealer
 from rlcard.games.tarot.dog import TarotDog as Dog
-from rlcard.games.tarot.bid import TarotBid as Bid
+from rlcard.games.tarot.bid_round import BidRound
 from rlcard.games.tarot.player import TarotPlayer as Player
 from rlcard.games.tarot.round import TarotRound as Round
 
@@ -22,7 +22,7 @@ class TarotGame(object):
         # Initialize the dog
         self.dog = Dog()
         # Initialize a Bid instance
-        self.bid = None
+        self.bid_round = None
         # Initialize a Round instance
         self.round = None
 
@@ -43,9 +43,8 @@ class TarotGame(object):
         # Deal 6 cards to the dog
         self.dealer.deal_cards(self.dog, self.num_cards_dog)
 
-        # TODO : manage bid game
-        # Initialize bid part
-        self.bid = Bid()
+        # Initialize bid Round
+        self.bid_round = BidRound(self.num_players)
 
         # Initialize a Round
         self.round = Round(self.dealer, self.num_players)

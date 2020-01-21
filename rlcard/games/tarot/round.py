@@ -18,7 +18,7 @@ class TarotRound(object):
         self.dealer = dealer
         self.target_card = None
         self.highest_trump = 0
-        self.current_player = 0
+        self.current_player_id = 0
         self.num_players = num_players
         self.direction = 1
         self.played_cards = []
@@ -33,7 +33,7 @@ class TarotRound(object):
             :param played_card: string of legal action
             :param players: list of object of TarotPlayer
         """
-        player = players[self.current_player]
+        player = players[self.current_player_id]
 
         # remove corresponding card
         remove_index = None

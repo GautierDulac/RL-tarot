@@ -8,7 +8,7 @@ class TarotCard(object):
             'trump_value': range(0, 22)
             }
 
-    def __init__(self, is_trump, color='SPADE', color_value=1, trump_value=0):
+    def __init__(self, is_trump, color=None, color_value=None, trump_value=None):
         """ Initialize the class of TarotCard
 
         Args:

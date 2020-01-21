@@ -1,22 +1,21 @@
-import numpy as np
-import random
-
 from rlcard.utils.utils import *
 
+
 class Env(object):
-    ''' The base Env class
-    '''
+    """ The base Env class
+    """
 
     def __init__(self, game, allow_step_back=False):
-        ''' Initialize
+        """ Initialize
 
         Args:
             game (Game): The Game class
             allow_step_back (boolean): True if allowing step_back
-        '''
+        """
         self.name = None
         self.game = game
         self.allow_step_back = allow_step_back
+        self.agents = None
 
         # Get number of players/actions in this game
         self.player_num = game.get_player_num()
@@ -30,21 +29,22 @@ class Env(object):
         self.active_player = None
         self.human_mode = False
 
+        self.model = None
 
     def init_game(self):
-        ''' Start a new game
+        """ Start a new game
 
         Returns:
             (tuple): Tuple containing:
 
                 (numpy.array): The begining state of the game
                 (int): The begining player
-        '''
+        """
         state, player_id = self.game.init_game()
         return self.extract_state(state), player_id
 
     def step(self, action):
-        ''' Step forward
+        """ Step forward
 
         Args:
             action (int): the action taken by the current player
@@ -54,7 +54,7 @@ class Env(object):
 
                 (numpy.array): The next state
                 (int): The ID of the next player
-        '''
+        """
         if self.single_agent_mode or self.human_mode:
             return self.single_agent_step(action)
 
@@ -64,14 +64,14 @@ class Env(object):
         return self.extract_state(next_state), player_id
 
     def single_agent_step(self, action):
-        ''' Step forward for human/single agent
+        """ Step forward for human/single agent
 
         Args:
             action (int): the action takem by the current player
 
         Returns:
             next_state (numpy.array): The next state
-        '''
+        """
         reward = 0.
         done = False
         self.timestep += 1
@@ -103,13 +103,11 @@ class Env(object):
         return self.extract_state(state), reward, done
 
     def reset(self):
-        ''' Reset environment in single-agent mode
-        '''
+        """ Reset environment in single-agent mode
+        """
         if not self.single_agent_mode and not self.human_mode:
             raise ValueError('Reset can only be used in single-agent mode or human mode')
-
-        if self.human_mode:
-            history = []
+        history = []
         while True:
             state, player_id = self.game.init_game()
             while not player_id == self.active_player:
@@ -139,7 +137,7 @@ class Env(object):
         return self.extract_state(state)
 
     def step_back(self):
-        ''' Take one step backward.
+        """ Take one step backward.
 
         Returns:
             (tuple): Tuple containing:
@@ -148,7 +146,7 @@ class Env(object):
                 (int): The ID of the previous player
 
         Note: Error will be raised if step back from the root node.
-        '''
+        """
         if not self.allow_step_back:
             raise Exception('Step back is off. To use step_back, please set allow_step_back=True in rlcard.make')
 
@@ -160,47 +158,46 @@ class Env(object):
 
         return state, player_id
 
-
     def get_player_id(self):
-        ''' Get the current player id
+        """ Get the current player id
 
         Returns:
             (int): the id of the current player
-        '''
+        """
         return self.game.get_player_id()
 
     def is_over(self):
-        ''' Check whether the curent game is over
+        """ Check whether the curent game is over
 
         Returns:
             (boolean): True is current game is over
-        '''
+        """
         return self.game.is_over()
 
     def get_state(self, player_id):
-        ''' Get the state given player id
+        """ Get the state given player id
 
         Args:
             player_id (int): The player id
 
         Returns:
             (numpy.array): The observed state of the player
-        '''
+        """
         return self.extract_state(self.game.get_state(player_id))
 
     def set_agents(self, agents):
-        ''' Set the agents that will interact with the environment
+        """ Set the agents that will interact with the environment
 
         Args:
             agents (list): List of Agent classes
-        '''
+        """
         if self.single_agent_mode or self.human_mode:
             raise ValueError('Setting agent in single agent mode or human mode is not allowed.')
 
         self.agents = agents
 
     def run(self, is_training=False, seed=None):
-        ''' Run a complete game, either for evaluation or training RL agent.
+        """ Run a complete game, either for evaluation or training RL agent.
 
         Args:
             is_training (boolean): True if for training purpose.
@@ -216,7 +213,7 @@ class Env(object):
 
         Note: The trajectories are 3-dimension list. The first dimension is for different players.
               The second dimension is for different transitions. The third dimension is for the contents of each transiton
-        '''
+        """
         if self.single_agent_mode or self.human_mode:
             raise ValueError('Run in single agent mode or human mode is not allowed.')
 
@@ -269,12 +266,14 @@ class Env(object):
             result.append(self.run(is_training=is_training))
 
     def set_mode(self, active_player=0, single_agent_mode=False, human_mode=False):
-        ''' Turn on the single-agent-mode. Pretrained models will
+        """ Turn on the single-agent-mode. Pretrained models will
             be loaded to simulate other agents
 
         Args:
-            active_player (int): The player that does not use pretrained models
-        '''
+            :param active_player: The player that does not use pretrained models
+            :param human_mode:
+            :param single_agent_mode:
+        """
         if not isinstance(active_player, int) or active_player < 0 or active_player >= self.player_num:
             raise ValueError('Active player should be a positiv integer less than the player number')
 
@@ -290,61 +289,61 @@ class Env(object):
         self.human_mode = human_mode
 
     def print_state(self, player):
-        ''' Print out the state of a given player
+        """ Print out the state of a given player
 
         Args:
             player (int): Player id
-        '''
+        """
         raise NotImplementedError
 
     def print_result(self, player):
-        ''' Print the game result when the game is over
+        """ Print the game result when the game is over
 
         Args:
             player (int): The human player id
-        '''
+        """
         raise NotImplementedError
 
     @staticmethod
     def print_action(action):
-        ''' Print out an action in a nice form
+        """ Print out an action in a nice form
 
         Args:
             action (str): A string a action
-        '''
+        """
         raise NotImplementedError
 
     def load_model(self):
-        ''' Load pretrained/rule model
+        """ Load pretrained/rule model
 
         Returns:
             model (Model): A Model object
-        '''
+        """
         raise NotImplementedError
 
     def extract_state(self, state):
-        ''' Extract useful information from state for RL. Must be implemented in the child class.
+        """ Extract useful information from state for RL. Must be implemented in the child class.
 
         Args:
             state (dict): the raw state
 
         Returns:
             (numpy.array): the extracted state
-        '''
+        """
         raise NotImplementedError
 
     def get_payoffs(self):
-        ''' Get the payoffs of players. Must be implemented in the child class.
+        """ Get the payoffs of players. Must be implemented in the child class.
 
         Returns:
             (list): A list of payoffs for each player.
 
         Note: Must be implemented in the child class.
-        '''
+        """
         raise NotImplementedError
 
     def decode_action(self, action_id):
-        ''' Decode Action id to the action in the game.
+        """ Decode Action id to the action in the game.
 
         Args:
             action_id (int): The id of the action
@@ -353,15 +352,15 @@ class Env(object):
             (string): The action that will be passed to the game engine.
 
         Note: Must be implemented in the child class.
-        '''
+        """
         raise NotImplementedError
 
     def get_legal_actions(self):
-        ''' Get all legal actions for current state.
+        """ Get all legal actions for current state.
 
         Returns:
             (list): A list of legal actions' id.
 
         Note: Must be implemented in the child class.
-        '''
+        """
         raise NotImplementedError

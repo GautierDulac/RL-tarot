@@ -1,5 +1,5 @@
-''' An example of learning a Deep-Q Agent on French Tarot Game
-'''
+""" An example of learning a Deep-Q Agent on French Tarot Game
+"""
 
 import tensorflow as tf
 
@@ -16,8 +16,8 @@ eval_env = rlcard.make('tarot')
 # Set the iterations numbers and how frequently we evaluate/save plot
 evaluate_every = 100
 save_plot_every = 1000
-evaluate_num = 10000
-episode_num = 1000000
+evaluate_num = 1000
+episode_num = 10000
 
 # Set the the number of steps for collecting normalization statistics
 # and intial memory size
@@ -25,7 +25,7 @@ memory_init_size = 1000
 norm_step = 1000
 
 # The paths for saving the logs and learning curves
-root_path = './experiments/uno_dqn_result/'
+root_path = './experiments/tarot_dqn_result/'
 log_path = root_path + 'log.txt'
 csv_path = root_path + 'performance.csv'
 figure_path = root_path + 'figures/'
@@ -56,7 +56,7 @@ with tf.Session() as sess:
     step_counter = 0
 
     # Init a Logger to plot the learning curve
-    logger = Logger(xlabel='timestep', ylabel='reward', legend='DQN on UNO', log_path=log_path, csv_path=csv_path)
+    logger = Logger(xlabel='timestep', ylabel='reward', legend='DQN on TAROT', log_path=log_path, csv_path=csv_path)
 
     for episode in range(episode_num):
 

@@ -3,7 +3,6 @@ import numpy as np
 from rlcard.games.tarot.card import TarotCard as Card
 from collections import OrderedDict
 
-
 # a map of color to its index
 COLOR_MAP = {'SPADE': 0, 'CLOVER': 1, 'HEART': 2, 'DIAMOND': 3, 'TRUMP': 4}
 
@@ -32,8 +31,8 @@ def init_deck():
 
 deck = init_deck()
 ACTION_DICT = dict()
-for index, card in enumerate(deck):
-    ACTION_DICT[card.str] = index
+for index, a_card in enumerate(deck):
+    ACTION_DICT[a_card.str] = index
 ACTION_SPACE = OrderedDict(ACTION_DICT)
 ACTION_LIST = list(ACTION_SPACE.keys())
 
@@ -88,13 +87,13 @@ def encode_hand(plane, hand):
 
 
 def encode_target(plane, target):
-    ''' Encode target and represerve it into plane
+    """ Encode target and represerve it into plane
     Args:
         plane (array): n*5*22 numpy array
         target(str): string of target card
     Returns:
         (array): n*5*22 numpy array
-    '''
+    """
     target_info = target.split('-')
     color = COLOR_MAP[target_info[0]]
     value = VALUE_MAP[target_info[1]]

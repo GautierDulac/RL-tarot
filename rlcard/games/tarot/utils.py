@@ -1,27 +1,41 @@
-import rlcard
+import numpy as np
 
 from rlcard.games.tarot.card import TarotCard as Card
+from collections import OrderedDict
 
-# Read required docs
-ROOT_PATH = rlcard.__path__[0]
+
+# a map of color to its index
+COLOR_MAP = {'SPADE': 0, 'CLOVER': 1, 'HEART': 2, 'DIAMOND': 3, 'TRUMP': 4}
+
+VALUE_MAP = {'0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7,
+             '8': 8, '9': 9, '10': 10, '11': 11, '12': 12, '13': 13, '14': 14,
+             '15': 15, '16': 16, '17': 17, '18': 18, '19': 19, '20': 20, '21': 21}
 
 
 def init_deck():
     """ Generate tarot deck of 78 cards
     """
-    deck = []
+    card_deck = []
     card_info = Card.info
     for color in card_info['color']:
 
         # init number cards
         for num in card_info['color_value']:
-            deck.append(Card('number', color, num))
+            card_deck.append(Card(False, color=color, color_value=num))
 
-        # init trump cards
-        for num in card_info['trump_value']:
-            deck.append(Card('trump', color, num))
+    # init trump cards
+    for num in card_info['trump_value']:
+        card_deck.append(Card(True, trump_value=num))
 
-    return deck
+    return card_deck
+
+
+deck = init_deck()
+ACTION_DICT = dict()
+for index, card in enumerate(deck):
+    ACTION_DICT[card.str] = index
+ACTION_SPACE = OrderedDict(ACTION_DICT)
+ACTION_LIST = list(ACTION_SPACE.keys())
 
 
 def cards2list(cards):
@@ -50,8 +64,39 @@ def hand2dict(hand):
     """
     hand_dict = {}
     for card in hand:
-        if card not in hand_dict:
-            hand_dict[card] = 1
-        else:
-            hand_dict[card] += 1
+        hand_dict[card] = 1
     return hand_dict
+
+
+def encode_hand(plane, hand):
+    """ Encode hand and represerve it into plane
+    Args:
+        plane (array): n*5*22 numpy array
+        hand (list): list of string of hand's card
+    Returns:
+        (array): n*5*22 numpy array
+    """
+    # TODO : understand full dimension of plane
+    # plane = np.zeros((n, 5, 22), dtype=int)
+    plane[0] = np.zeros((5, 22), dtype=int)
+    for card in hand:
+        card_info = card.split('-')
+        color = COLOR_MAP[card_info[0]]
+        value = VALUE_MAP[card_info[1]]
+        plane[0][color][value] = 1
+    return plane
+
+
+def encode_target(plane, target):
+    ''' Encode target and represerve it into plane
+    Args:
+        plane (array): n*5*22 numpy array
+        target(str): string of target card
+    Returns:
+        (array): n*5*22 numpy array
+    '''
+    target_info = target.split('-')
+    color = COLOR_MAP[target_info[0]]
+    value = VALUE_MAP[target_info[1]]
+    plane[1][color][value] = 1
+    return plane

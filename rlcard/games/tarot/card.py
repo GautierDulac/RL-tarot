@@ -1,19 +1,23 @@
 class TarotCard(object):
-    info = {'color': ['SPADE', 'CLOVER', 'HEART', 'DIAMOND', 'TRUMP'],
-            'value': ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14',
-                      '15', '16', '17', '18', '19', '20', '21']
+    info = {'is_trump': [True, False],
+            'color': ['SPADE', 'CLOVER', 'HEART', 'DIAMOND'],
+            'color_value': range(1, 15),
+            'trump_value': range(0, 22)
             }
 
-    def __init__(self, color, value):
+    def __init__(self, is_trump, color='SPADE', color_value=1, trump_value=0):
         ''' Initialize the class of TarotCard
 
         Args:
-            card_type (str): The type of card
+            is_trump (str): The type of card
             color (str): The color of card
-            value (str): The value of card
+            color_value (int): The value of card
+            trump_value (int): The value of card when trump
         '''
+        self.is_trump = is_trump
         self.color = color
-        self.value = value
+        self.color_value = color_value
+        self.trump_value = trump_value
         self.str = self.get_str()
 
     def get_str(self):
@@ -22,7 +26,10 @@ class TarotCard(object):
         Return:
             (str): The string of card's color and value
         '''
-        return self.color + '-' + self.value
+        if self.is_trump:
+            return 'Trump-' + str(self.trump_value)
+        else:
+            return self.color + '-' + str(self.value)
 
     @staticmethod
     def print_cards(cards):  # TODO : understand how to work with a static method - unused for now

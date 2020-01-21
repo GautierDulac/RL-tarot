@@ -1,15 +1,18 @@
 from copy import deepcopy
 
-from rlcard.games.uno.dealer import UnoDealer as Dealer
-from rlcard.games.uno.player import UnoPlayer as Player
-from rlcard.games.uno.round import UnoRound as Round
+from rlcard.games.tarot.dealer import TarotDealer as Dealer
+from rlcard.games.tarot.dog import TarotDog as Dog
+from rlcard.games.tarot.bid import TarotBid as Bid
+from rlcard.games.tarot.player import TarotPlayer as Player
+from rlcard.games.tarot.round import TarotRound as Round
 
 
-class UnoGame(object):
+class TarotGame(object):
 
-    def __init__(self, allow_step_back=False):
-        self.allow_step_back = allow_step_back
-        self.num_players = 2
+    def __init__(self):
+        self.num_players = 4
+        self.num_cards_per_player = 18
+        self.num_cards_dog = 6
         self.payoffs = [0 for _ in range(self.num_players)]
 
     def init_game(self):
@@ -30,16 +33,23 @@ class UnoGame(object):
         # Initialize four players to play the game
         self.players = [Player(i) for i in range(self.num_players)]
 
-        # Deal 7 cards to each player to prepare for the game
+        # Initialize the dog
+        self.dog = Dog()
+
+        # Deal 18 cards to each player to prepare for the game
         for player in self.players:
-            self.dealer.deal_cards(player, 7)
+            self.dealer.deal_cards(player, self.num_cards_per_player)
+
+        # Deal 6 cards to the dog
+        self.dealer.deal_cards(dog, self.num_cards_dog)
+
+        # Initialize bid part
+        self.bid = Bid()
+
+        # TODO : manage bid time
 
         # Initialize a Round
         self.round = Round(self.dealer, self.num_players)
-
-        # flip and perfrom top card
-        top_card = self.round.flip_top_card()
-        self.round.perform_top_card(self.players, top_card)
 
         # Save the hisory for stepping back to the last state.
         self.history = []
@@ -61,28 +71,11 @@ class UnoGame(object):
                 (int): next plater's id
         '''
 
-        if self.allow_step_back:
-            # First snapshot the current state
-            his_dealer = deepcopy(self.dealer)
-            his_round = deepcopy(self.round)
-            his_players = deepcopy(self.players)
-            self.history.append((his_dealer, his_players, his_round))
-
         self.round.proceed_round(self.players, action)
         player_id = self.round.current_player
         state = self.get_state(player_id)
         return state, player_id
 
-    def step_back(self):
-        ''' Return to the previous state of the game
-
-        Returns:
-            (bool): True if the game steps back successfully
-        '''
-        if not self.history:
-            return False
-        self.dealer, self.players, self.round = self.history.pop()
-        return True
 
     def get_state(self, player_id):
         ''' Return player's state
@@ -118,7 +111,7 @@ class UnoGame(object):
         return self.round.get_legal_actions(self.players, self.round.current_player)
 
     def get_player_num(self):
-        ''' Return the number of players in Limit Texas Hold'em
+        ''' Return the number of players in Tarot
 
         Returns:
             (int): The number of players in the game
@@ -132,6 +125,7 @@ class UnoGame(object):
         Returns:
             (int): The number of actions. There are 61 actions
         '''
+        # TODO : change number of actions
         return 61
 
     def get_player_id(self):
@@ -149,26 +143,3 @@ class UnoGame(object):
             (boolean): True if the game is over
         '''
         return self.round.is_over
-
-
-## For test
-#if __name__ == '__main__':
-#    #import time
-#    #random.seed(0)
-#    #start = time.time()
-#    game = UnoGame()
-#    for _ in range(1):
-#        state, button = game.init_game()
-#        print(button, state)
-#        i = 0
-#        while not game.is_over():
-#            i += 1
-#            legal_actions = game.get_legal_actions()
-#            print('legal_actions', legal_actions)
-#            action = np.random.choice(legal_actions)
-#            print('action', action)
-#            print()
-#            state, button = game.step(action)
-#            print(button, state)
-#        print(game.get_payoffs())
-#    print('step', i)

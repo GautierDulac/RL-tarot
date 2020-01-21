@@ -24,7 +24,7 @@ class TarotDealer(object):
         """ Deal some cards from deck to one player
 
         Args:
-            player (object): The object of DoudizhuPlayer
+            player (object): The object of TarotPlayer
             num (int): The number of cards to be dealed
         """
         for _ in range(num):

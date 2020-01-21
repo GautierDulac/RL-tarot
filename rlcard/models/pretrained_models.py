@@ -1,5 +1,5 @@
-''' Wrrapers of pretrained models. Designed for Tensorflow.
-'''
+""" Wrrapers of pretrained models. Designed for Tensorflow.
+"""
 
 import os
 import tensorflow as tf
@@ -12,13 +12,16 @@ from rlcard.models.model import Model
 # Root path of pretrianed models
 ROOT_PATH = os.path.join(rlcard.__path__[0], 'models/pretrained')
 
+
 class LeducHoldemNFSPModel(Model):
-    ''' A pretrained model on Leduc Holdem with NFSP
-    '''
+    # TODO : ADAPT IF TAROT WITH NFSP MODEL ? (GET BACK FILES RELATED TO NFSP)
+    """ A pretrained model on Leduc Holdem with NFSP
+    """
 
     def __init__(self):
-        ''' Load pretrained model
-        '''
+        """ Load pretrained model
+        """
+        super().__init__()
         self.graph = tf.Graph()
         self.sess = tf.Session(graph=self.graph)
 
@@ -30,9 +33,9 @@ class LeducHoldemNFSPModel(Model):
                                   scope='nfsp' + str(i),
                                   action_num=env.action_num,
                                   state_shape=env.state_shape,
-                                  hidden_layers_sizes=[128,128],
+                                  hidden_layers_sizes=[128, 128],
                                   q_norm_step=1000,
-                                  q_mlp_layers=[128,128])
+                                  q_mlp_layers=[128, 128])
                 self.nfsp_agents.append(agent)
             normalize(env, self.nfsp_agents, 1000)
             self.sess.run(tf.global_variables_initializer())
@@ -42,37 +45,39 @@ class LeducHoldemNFSPModel(Model):
             with self.graph.as_default():
                 saver = tf.train.Saver(tf.model_variables())
                 saver.restore(self.sess, tf.train.latest_checkpoint(check_point_path))
+
     @property
     def agents(self):
-        ''' Get a list of agents for each position in a the game
+        """ Get a list of agents for each position in a the game
 
         Returns:
             agents (list): A list of agents
 
         Note: Each agent should be just like RL agent with step and eval_step
               functioning well.
-        '''
+        """
         return self.nfsp_agents
 
     @property
     def use_raw(self):
-        ''' Indicate whether use raw state and action
+        """ Indicate whether use raw state and action
 
         Returns:
             use_raw (boolean): True if using raw state and action
-        '''
+        """
         return False
 
 
 def normalize(e, agents, num):
-    ''' Feed random data to normalizer
+    # TODO : UNDERSTAND IT
+    """ Feed random data to normalizer
 
     Args:
         e (Env): AN Env class
         agents (list): A list of Agent object
         num (int): The number of steps to be normalized
 
-    '''
+    """
     begin_step = e.timestep
     e.set_agents([RandomAgent(e.action_num) for _ in range(e.player_num)])
     while e.timestep - begin_step < num:
@@ -81,4 +86,3 @@ def normalize(e, agents, num):
             for tra in trajectories:
                 for ts in tra:
                     agent.feed(ts)
-

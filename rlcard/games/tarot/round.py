@@ -1,3 +1,6 @@
+# Understand STATE management ?
+# Add initial rules for first pot
+
 from rlcard.games.tarot.card import TarotCard
 from rlcard.games.tarot.player import TarotPlayer
 from rlcard.games.tarot.utils import cards2list
@@ -87,7 +90,7 @@ class TarotRound(object):
         return legal_actions
 
     def get_state(self, players, player_id):
-        # TODO : Adapt state for TAROT
+        # TODO : Adapt state for TAROT?
         """ Get player's state
 
         Args:

@@ -4,6 +4,7 @@
 from rlcard.games.tarot.card import TarotCard
 from rlcard.games.tarot.player import TarotPlayer
 from rlcard.games.tarot.utils import cards2list
+from typing import List
 
 
 class TarotRound(object):
@@ -26,7 +27,7 @@ class TarotRound(object):
         self.is_over = False
         self.winner = None
 
-    def proceed_round(self, players: list[TarotPlayer], played_card: TarotCard):
+    def proceed_round(self, players: List[TarotPlayer], played_card: TarotCard):
         """ Call other Classes's functions to keep one round running
 
         Args:
@@ -47,7 +48,7 @@ class TarotRound(object):
         if played_card.is_trump:
             self.highest_trump = max(self.highest_trump, played_card.trump_value)
 
-    def get_legal_actions(self, players: list[TarotPlayer], player_id):
+    def get_legal_actions(self, players: List[TarotPlayer], player_id):
         """
         Get all legal cards that can be played by current player with his hand and the target card
         :param players: list of all players

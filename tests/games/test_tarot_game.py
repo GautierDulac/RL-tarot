@@ -1,10 +1,11 @@
 import unittest
 import numpy as np
 
-from rlcard.games.uno.game import UnoGame as Game
-from rlcard.games.uno.player import UnoPlayer as Player
-from rlcard.games.uno.utils import ACTION_LIST
-from rlcard.games.uno.utils import hand2dict, encode_hand, encode_target
+from rlcard.games.tarot.game import TarotGame as Game
+from rlcard.games.tarot.player import TarotPlayer as Player
+from rlcard.games.tarot.utils import ACTION_LIST
+from rlcard.games.tarot.utils import hand2dict, encode_hand, encode_target
+
 
 class TestUnoMethods(unittest.TestCase):
 
@@ -30,7 +31,6 @@ class TestUnoMethods(unittest.TestCase):
         current = game.get_player_id()
         self.assertEqual(player_id, current)
 
-
     def test_get_legal_actions(self):
         game = Game()
         game.init_game()
@@ -54,7 +54,8 @@ class TestUnoMethods(unittest.TestCase):
             actions = game.get_legal_actions()
             action = np.random.choice(actions)
             state, _ = game.step(action)
-            total_cards = len(state['hand']) + len(state['others_hand']) + len(state['played_cards']) + len(game.round.dealer.deck)
+            total_cards = len(state['hand']) + len(state['others_hand']) + len(state['played_cards']) + len(
+                game.round.dealer.deck)
             self.assertEqual(total_cards, 108)
         payoffs = game.get_payoffs()
         total = 0
@@ -63,15 +64,11 @@ class TestUnoMethods(unittest.TestCase):
         self.assertEqual(total, 0)
 
     def test_step_back(self):
-        game = Game(allow_step_back=True)
+        game = Game()
         _, player_id = game.init_game()
         action = np.random.choice(game.get_legal_actions())
         game.step(action)
-        game.step_back()
         self.assertEqual(game.round.current_player, player_id)
-        self.assertEqual(len(game.history), 0)
-        success = game.step_back()
-        self.assertEqual(success, False)
 
     def test_hand2dict(self):
         hand_1 = ['y-1', 'r-8', 'b-9', 'y-reverse', 'r-skip']
@@ -84,30 +81,32 @@ class TestUnoMethods(unittest.TestCase):
             self.assertEqual(count, 2)
 
     def test_encode_hand(self):
-        hand1 = ['y-1', 'r-8', 'b-9', 'y-reverse', 'r-skip']
-        encoded_hand1 = np.zeros((3, 4, 15), dtype=int)
-        encode_hand(encoded_hand1, hand1)
+        hand1 = ['SPADE-1', 'TRUMP-3', 'DIAMOND-14', 'TRUMP-0', 'TRUMP-21']
+        encoded_hand1 = np.zeros((3, 5, 22), dtype=int)
+        encode_hand(encoded_hand1[0], hand1)
         for index in range(15):
             total = 0
             for color in range(4):
-                total += encoded_hand1[0][color][index] + encoded_hand1[1][color][index] + encoded_hand1[2][color][index]
+                total += encoded_hand1[0][color][index] + encoded_hand1[1][color][index] + encoded_hand1[2][color][
+                    index]
             self.assertEqual(total, 4)
-        hand2 = ['r-wild', 'g-wild_draw_4']
-        encoded_hand2 = np.zeros((3, 4, 15), dtype=int)
-        encode_hand(encoded_hand2, hand2)
-        for color in range(4):
-            self.assertEqual(encoded_hand2[1][color][-2], 1)
+        hand2 = hand1
+        encoded_hand2 = np.zeros((3, 5, 22), dtype=int)
+        encode_hand(encoded_hand2[2], hand2)
+        for color in range(5):
+            self.assertEqual(encoded_hand2[0][color][-2], 1)
             self.assertEqual(encoded_hand2[1][color][-1], 1)
 
     def test_encode_target(self):
-        encoded_target = np.zeros((4, 15), dtype=int)
-        target = 'r-1'
-        encode_target(encoded_target, target)
-        self.assertEqual(encoded_target[0][1], 1)
+        encoded_target = np.zeros((3, 5, 22), dtype=int)
+        target = 'TRUMP-1'
+        encode_target(encoded_target[1], target)
+        self.assertEqual(encoded_target[1][4][0], 1)
 
     def test_player_get_player_id(self):
         player = Player(0)
         self.assertEqual(0, player.get_player_id())
+
 
 if __name__ == '__main__':
     unittest.main()

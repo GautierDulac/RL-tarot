@@ -1,5 +1,6 @@
 from rlcard.games.tarot.bid import TarotBid
 from rlcard.games.tarot.player import TarotPlayer
+from typing import List
 
 
 class BidRound(object):
@@ -23,7 +24,7 @@ class BidRound(object):
                          TarotBid('GARDE_SANS'),
                          TarotBid('GARDE_CONTRE')]
 
-    def proceed_round(self, players: list[TarotPlayer], played_bid: TarotBid):
+    def proceed_round(self, players: List[TarotPlayer], played_bid: TarotBid):
         """ proceed bid round with a player bid
 
         Args:
@@ -44,7 +45,7 @@ class BidRound(object):
 
         return legal_bids
 
-    def get_bid_state(self, players: list[TarotPlayer], player_id):
+    def get_bid_state(self, players: List[TarotPlayer], player_id):
         """ Get player's state in the bid round
 
         Args:

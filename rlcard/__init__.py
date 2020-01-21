@@ -1,3 +1,3 @@
 name = "rlcard"
 
-from rlcard.envs import make
+#from rlcard.envs import make

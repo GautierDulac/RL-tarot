@@ -25,7 +25,7 @@ class TarotCard(object):
         return self.color + '-' + self.value
 
     @staticmethod
-    def print_cards(cards): #TODO : understand how to work with a static method - unused for now
+    def print_cards(cards):  # TODO : understand how to work with a static method - unused for now
         ''' Print out card in a nice form
 
         Args:

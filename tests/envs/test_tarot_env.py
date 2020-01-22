@@ -11,7 +11,7 @@ class TestUnoEnv(unittest.TestCase):
     def test_init_game_and_extract_state(self):
         env = Env()
         state, _ = env.init_game()
-        self.assertEqual(state['obs'].size, 3*5*22)
+        self.assertEqual(state['obs'].size, 3 * 5 * 22)
 
     def test_get_legal_actions(self):
         env = Env()
@@ -30,7 +30,7 @@ class TestUnoEnv(unittest.TestCase):
 
     def test_run(self):
         env = Env()
-        env.set_agents([RandomAgent(env.game.get_action_num())]*env.game.get_player_num())
+        env.set_agents([RandomAgent(env.game.get_action_num())] * env.game.get_player_num())
         trajectories, payoffs = env.run(is_training=False)
         self.assertEqual(len(trajectories), env.game.get_player_num())
         total = 0
@@ -66,6 +66,7 @@ class TestUnoEnv(unittest.TestCase):
         self.assertIsInstance(state, dict)
         for _ in range(100):
             state, _, _ = env.step(np.random.choice(state['legal_actions']))
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -3,6 +3,7 @@
 
 from rlcard.games.tarot.card import TarotCard
 from rlcard.games.tarot.player import TarotPlayer
+from rlcard.games.tarot.judger import TarotJudger
 from rlcard.games.tarot.utils import cards2list, get_end_pot_information
 from typing import List
 
@@ -80,6 +81,7 @@ class TarotRound(object):
             # Set game is over if no more card in hands
             if len(self.played_cards) == self.num_players * self.num_card_per_player:
                 self.is_over = True
+                self.winner = TarotJudger.judge_winner(players)
             return winner_id
 
         return (self.current_player_id + 1) % self.num_players
@@ -96,7 +98,7 @@ class TarotRound(object):
         target = self.target_card
         # If no target card (first player to speak)
         if target is None:
-            return hand  # TODO : add rules for playing initial color
+            return hand  # TODO : P2 (5 players) add rules for playing initial color
         # If there is a target
         else:
             target_color_is_trump = target.is_trump

@@ -37,8 +37,8 @@ class TarotGame(object):
         """
 
         # Deal 18 cards to each player to prepare for the game
+        self.dealer = Dealer()
         for player in self.players:
-            self.dealer = Dealer()
             self.dealer.deal_cards(player, self.num_cards_per_player)
 
         # Deal 6 cards to the dog

@@ -17,7 +17,7 @@ class BidRound(object):
         self.current_player_id = starting_player
         self.num_players = num_players
         self.direction = 1
-        self.max_bid = None
+        self.max_bid = 0
         self.is_over = False
         self.is_dead = False
         self.taking = None

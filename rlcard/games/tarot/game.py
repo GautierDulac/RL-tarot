@@ -119,7 +119,7 @@ class TarotGame(object):
         Returns:
             (dict): The state of the player
         """
-        state = self.bid_round.get_state(self.players, player_id)
+        state = self.bid_round.get_bid_state(self.players, player_id)
         return state
 
     def get_state(self, player_id):

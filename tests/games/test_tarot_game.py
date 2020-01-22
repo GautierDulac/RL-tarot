@@ -61,7 +61,7 @@ class TestTarotMethods(unittest.TestCase):
 
     def test_get_payoffs(self):
         game = Game()
-        game.init_game()
+        game.init_bid_game()
         while not game.is_over():
             actions = game.get_legal_actions()
             action = np.random.choice(actions)

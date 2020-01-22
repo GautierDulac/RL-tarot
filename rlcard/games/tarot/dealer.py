@@ -27,5 +27,6 @@ class TarotDealer(object):
             player (object): The object of TarotPlayer
             num (int): The number of cards to be dealed
         """
+        self.deck = init_deck()
         for _ in range(num):
             player.hand.append(self.deck.pop())

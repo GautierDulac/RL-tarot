@@ -11,7 +11,7 @@ class TestUnoEnv(unittest.TestCase):
     def test_init_game_and_extract_state(self):
         env = Env()
         state, _ = env.init_game()
-        self.assertEqual(state['obs'].size, 420)
+        self.assertEqual(state['obs'].size, 3*5*22)
 
     def test_get_legal_actions(self):
         env = Env()
@@ -26,13 +26,13 @@ class TestUnoEnv(unittest.TestCase):
         state, _ = env.init_game()
         action = np.random.choice(state['legal_actions'])
         _, player_id = env.step(action)
-        self.assertEqual(player_id, env.game.round.current_player)
+        self.assertEqual(player_id, env.game.round.current_player_id)
 
     def test_run(self):
         env = Env()
-        env.set_agents([RandomAgent(309), RandomAgent(309)])
+        env.set_agents([RandomAgent(env.game.get_action_num())]*env.game.get_player_num())
         trajectories, payoffs = env.run(is_training=False)
-        self.assertEqual(len(trajectories), 2)
+        self.assertEqual(len(trajectories), env.game.get_player_num())
         total = 0
         for payoff in payoffs:
             total += payoff

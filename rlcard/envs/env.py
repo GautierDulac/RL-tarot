@@ -85,7 +85,7 @@ class Env(object):
                 action = self.decode_action(action)
             if self.human_mode:
                 print('\r>> Agent {} chooses '.format(player_id), end='')
-                self.print_action(action)
+                self.print_action(action.get_str())
                 print('')
             state, player_id = self.game.step(action)
 

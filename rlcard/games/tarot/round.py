@@ -18,7 +18,7 @@ class TarotRound(object):
         """
         self.dealer = dealer
         self.target_card = None
-        self.highest_trump = 0
+        self.highest_trump = -1
         self.current_player_id = 0
         self.num_players = num_players
         self.direction = 1
@@ -49,11 +49,13 @@ class TarotRound(object):
         self.played_cards.append(played_card)
 
         # If no target card, add it as target card
-        if self.target_card is None:
+        # Set back highest_trump to 0 when new round
+        if len(self.played_cards) % 4 == 0:
             self.target_card = played_card
+            self.highest_trump = -1
 
         if played_card.is_trump:
-            self.highest_trump = max(self.highest_trump, played_card.trump_value)
+            self.highest_trump = max(self.highest_trump, int(played_card.trump_value))
 
         # Set game is over if no more card in hands
         if len(self.played_cards) == 72:
@@ -84,6 +86,10 @@ class TarotRound(object):
                 if len(legal_actions) == 0:
                     for card in hand:
                         if card.is_trump and card.trump_value > self.highest_trump:
+                            legal_actions.append(card)
+                if len(legal_actions) == 0:
+                    for card in hand:
+                        if card.is_trump:
                             legal_actions.append(card)
                 if len(legal_actions) == 0:
                     legal_actions = hand

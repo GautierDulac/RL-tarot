@@ -115,13 +115,11 @@ class TarotGame(object):
 
     @staticmethod
     def get_action_num():
-        # TODO : understand why ?
         """ Return the number of applicable actions
 
         Returns:
             (int): The number of actions. There are 78 actions
         """
-        # TODO : change number of actions
         return 78
 
     def get_player_id(self):

@@ -67,8 +67,9 @@ class TarotGame(object):
         """
 
         self.round.proceed_round(self.players, played_card)
-        player_id = self.round.current_player_id
+        player_id = (self.round.current_player_id + 1) % self.num_players
         state = self.get_state(player_id)
+        self.round.current_player_id = player_id
         return state, player_id
 
     def get_state(self, player_id):
@@ -119,10 +120,10 @@ class TarotGame(object):
         """ Return the number of applicable actions
 
         Returns:
-            (int): The number of actions. There are 61 actions
+            (int): The number of actions. There are 78 actions
         """
         # TODO : change number of actions
-        return 61
+        return 78
 
     def get_player_id(self):
         """ Return the current player's id

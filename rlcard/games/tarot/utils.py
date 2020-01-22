@@ -67,29 +67,30 @@ def hand2dict(hand):
     return hand_dict
 
 
-def encode_hand(plane, hand):
+def encode_hand(plane, hand, index_to_encode=0):
     """ Encode hand and represerve it into plane
     Args:
         plane (array): n*5*22 numpy array
         hand (list): list of string of hand's card
+        index_to_encode (int): 0 if player hand, 2 is all other hand
     Returns:
         (array): n*5*22 numpy array
     """
     # TODO : understand full dimension of plane
     # plane = np.zeros((n, 5, 22), dtype=int)
-    plane[0] = np.zeros((5, 22), dtype=int)
+    plane[index_to_encode] = np.zeros((5, 22), dtype=int)
     for card in hand:
         card_info = card.split('-')
         color = COLOR_MAP[card_info[0]]
         value = VALUE_MAP[card_info[1]]
-        plane[0][color][value] = 1
+        plane[index_to_encode][color][value] = 1
     return plane
 
 
 def encode_target(plane, target):
     """ Encode target and represerve it into plane
     Args:
-        plane (array): n*5*22 numpy array
+        plane (array): n*5*22 numpy array - we give only one composant to this function
         target(str): string of target card
     Returns:
         (array): n*5*22 numpy array
@@ -97,5 +98,5 @@ def encode_target(plane, target):
     target_info = target.split('-')
     color = COLOR_MAP[target_info[0]]
     value = VALUE_MAP[target_info[1]]
-    plane[1][color][value] = 1
+    plane[color][value] = 1
     return plane

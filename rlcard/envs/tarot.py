@@ -78,9 +78,9 @@ class TarotEnv(Env):
         :return:
         """
         obs = np.zeros((3, 5, 22), dtype=int)
-        encode_hand(obs[0], state['hand'])
+        encode_hand(obs, state['hand'], index_to_encode=0)
         encode_target(obs[1], state['target'])
-        encode_hand(obs[2], state['others_hand'])
+        encode_hand(obs, state['others_hand'], index_to_encode=2)
         legal_action_id = self.get_legal_actions()
         extrated_state = {'obs': obs, 'legal_actions': legal_action_id}
         return extrated_state

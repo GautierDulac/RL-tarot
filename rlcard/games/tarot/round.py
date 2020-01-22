@@ -45,8 +45,19 @@ class TarotRound(object):
 
         _ = player.hand.pop(remove_index)
 
+        # Add in Played_card list
+        self.played_cards.append(played_card)
+
+        # If no target card, add it as target card
+        if self.target_card is None:
+            self.target_card = played_card
+
         if played_card.is_trump:
             self.highest_trump = max(self.highest_trump, played_card.trump_value)
+
+        # Set game is over if no more card in hands
+        if len(self.played_cards) == 72:
+            self.is_over = True
 
     def get_legal_actions(self, players: List[TarotPlayer], player_id):
         """
@@ -101,7 +112,10 @@ class TarotRound(object):
         state = {}
         player = players[player_id]
         state['hand'] = cards2list(player.hand)
-        state['target'] = self.target_card.str
+        if self.target_card is not None:
+            state['target'] = self.target_card.get_str()
+        else:
+            state['target'] = None
         state['played_cards'] = cards2list(self.played_cards)
         others_hand = []
         for player in players:

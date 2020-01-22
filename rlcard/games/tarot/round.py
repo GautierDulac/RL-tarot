@@ -68,6 +68,15 @@ class TarotRound(object):
             winner_id, pot_value, nb_bout = get_end_pot_information(self.pot_cards)
             players[winner_id].points += pot_value
             players[winner_id].bouts += nb_bout
+            # Erasing target_card
+            self.target_card = None
+
+            # Printing values for debugging purpose # TODO REMOVE for training
+            print('================= Winner      ===============')
+            print('\r>> Agent {} '.format(winner_id))
+            print('\r>> winning {} points'.format(pot_value))
+            print('')
+
             # Set game is over if no more card in hands
             if len(self.played_cards) == self.num_players * self.num_card_per_player:
                 self.is_over = True
@@ -122,7 +131,6 @@ class TarotRound(object):
         return legal_actions
 
     def get_state(self, players, player_id):
-        # TODO : Adapt state for TAROT?
         """ Get player's state
 
         Args:
@@ -137,6 +145,8 @@ class TarotRound(object):
         else:
             state['target'] = None
         state['played_cards'] = cards2list(self.played_cards)
+        state['pot_number'] = int(len(state['played_cards']) / 4)
+        state['pot_cards'] = state['played_cards'][state['pot_number']*4:]
         others_hand = []
         for player in players:
             if player.player_id != player_id:

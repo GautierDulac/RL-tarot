@@ -146,10 +146,17 @@ def get_end_pot_information(pot_cards):
         winner_id = max(trump_values, key=trump_values.get)
     # If color is given in target card
     else:
-        target_color = target_card.color
+        trump_used = False
         for player_id in range(len(pot_cards) - 1):
-            color_values[player_id] = (target_color == colors[player_id]) * values[player_id]
-        winner_id = max(color_values, key=color_values.get)
+            if colors[player_id] == 'TRUMP':
+                trump_used = True
+        if trump_used:
+            winner_id = max(trump_values, key=trump_values.get)
+        else:
+            target_color = target_card.color
+            for player_id in range(len(pot_cards) - 1):
+                color_values[player_id] = (target_color == colors[player_id]) * values[player_id]
+            winner_id = max(color_values, key=color_values.get)
 
     return winner_id, get_pot_value(pot_cards), get_nb_bouts(pot_cards)
 

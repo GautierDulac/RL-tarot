@@ -16,7 +16,7 @@ class TarotGame(object):
         self.num_cards_dog = 6
         self.payoffs = [0 for _ in range(self.num_players)]
         # Initialize a dealer that can deal cards
-        self.dealer = Dealer()
+        self.dealer = None
         # Initialize four players to play the game
         self.players = [Player(i) for i in range(self.num_players)]
         # Initialize the dog
@@ -38,6 +38,7 @@ class TarotGame(object):
 
         # Deal 18 cards to each player to prepare for the game
         for player in self.players:
+            self.dealer = Dealer()
             self.dealer.deal_cards(player, self.num_cards_per_player)
 
         # Deal 6 cards to the dog

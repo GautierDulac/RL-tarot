@@ -12,7 +12,7 @@ class TarotEnv(Env):
 
     def __init__(self):
         super().__init__(Game())
-        self.state_shape = [7, 4, 15]
+        self.state_shape = [3, 5, 22]
 
     def print_state(self, player):
         """ Print out the state of a given player
@@ -80,10 +80,11 @@ class TarotEnv(Env):
         :param state:
         :return:
         """
-        obs = np.zeros((3, 5, 22), dtype=int)
+        obs = np.zeros((4, 5, 22), dtype=int)
         encode_hand(obs, state['hand'], index_to_encode=0)
         encode_target(obs[1], state['target'])
         encode_hand(obs, state['others_hand'], index_to_encode=2)
+        encode_hand(obs, state['pot_cards'], index_to_encode=3)
         legal_action_id = self.get_legal_actions()
         extrated_state = {'obs': obs, 'legal_actions': legal_action_id}
         return extrated_state

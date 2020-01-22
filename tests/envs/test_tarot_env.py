@@ -6,12 +6,12 @@ from rlcard.agents.random_agent import RandomAgent
 from rlcard.games.tarot.utils import ACTION_LIST
 
 
-class TestUnoEnv(unittest.TestCase):
+class TestTarotEnv(unittest.TestCase):
 
     def test_init_game_and_extract_state(self):
         env = Env()
         state, _ = env.init_game()
-        self.assertEqual(state['obs'].size, 3 * 5 * 22)
+        self.assertEqual(state['obs'].size, 4 * 5 * 22)
 
     def test_get_legal_actions(self):
         env = Env()

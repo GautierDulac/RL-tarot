@@ -1,5 +1,4 @@
-# STILL WIP
-
+import random
 
 from rlcard.games.tarot.dealer import TarotDealer as Dealer
 from rlcard.games.tarot.dog import TarotDog as Dog
@@ -14,6 +13,7 @@ class TarotGame(object):
         self.num_players = 4
         self.num_cards_per_player = 18
         self.num_cards_dog = 6
+        self.starting_player = random.randint(0, self.num_players - 1)
         self.payoffs = [0 for _ in range(self.num_players)]
         # Initialize a dealer that can deal cards
         self.dealer = None
@@ -45,10 +45,10 @@ class TarotGame(object):
         self.dealer.deal_cards(self.dog, self.num_cards_dog)
 
         # Initialize bid Round
-        self.bid_round = BidRound(self.num_players)
+        self.bid_round = BidRound(self.num_players, self.starting_player)
 
         # Initialize a Round
-        self.round = Round(self.dealer, self.num_players, self.num_cards_per_player)
+        self.round = Round(self.dealer, self.num_players, self.num_cards_per_player, self.starting_player)
 
         player_id = self.round.current_player_id
         state = self.get_state(player_id)

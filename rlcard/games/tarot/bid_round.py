@@ -1,3 +1,5 @@
+import random
+
 from rlcard.games.tarot.bid import TarotBid
 from rlcard.games.tarot.player import TarotPlayer
 from typing import List
@@ -5,13 +7,13 @@ from typing import List
 
 class BidRound(object):
 
-    def __init__(self, num_players):
+    def __init__(self, num_players, starting_player):
         """ Initialize the bid round class
 
         Args:
             num_players (int): the number of players in game
         """
-        self.current_player_id = 0
+        self.current_player_id = starting_player
         self.num_players = num_players
         self.direction = 1
         self.max_bid = None

@@ -1,6 +1,3 @@
-# Understand STATE management ?
-# Add initial rules for first pot
-
 from rlcard.games.tarot.card import TarotCard
 from rlcard.games.tarot.player import TarotPlayer
 from rlcard.games.tarot.judger import TarotJudger
@@ -10,7 +7,7 @@ from typing import List
 
 class TarotRound(object):
 
-    def __init__(self, dealer, num_players, num_card_per_player):
+    def __init__(self, dealer, num_players, num_card_per_player, starting_player):
         """ Initialize the round class
 
         Args:
@@ -20,7 +17,7 @@ class TarotRound(object):
         self.dealer = dealer
         self.target_card = None
         self.highest_trump = -1
-        self.current_player_id = 0
+        self.current_player_id = starting_player
         self.num_players = num_players
         self.num_card_per_player = num_card_per_player
         self.direction = 1
@@ -148,7 +145,7 @@ class TarotRound(object):
             state['target'] = None
         state['played_cards'] = cards2list(self.played_cards)
         state['pot_number'] = int(len(state['played_cards']) / 4)
-        state['pot_cards'] = state['played_cards'][state['pot_number']*4:]
+        state['pot_cards'] = state['played_cards'][state['pot_number'] * 4:]
         others_hand = []
         for player in players:
             if player.player_id != player_id:

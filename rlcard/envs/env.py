@@ -129,7 +129,7 @@ class Env(object):
                     print('\n>> Start a new game!')
                     for player_id, action in history:
                         print('\r>> Agent {} chooses '.format(player_id), end='')
-                        self.print_action(action)
+                        self.print_action(action.str)
                         print('')
                     self.print_state(self.active_player)
                 break

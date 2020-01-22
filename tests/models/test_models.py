@@ -1,7 +1,8 @@
 import unittest
 
 from rlcard.models.model import Model
-from rlcard.models.pretrained_models import LeducHoldemNFSPModel
+#from rlcard.models.pretrained_models import LeducHoldemNFSPModel
+#TODO : Add pretrained TAROT model for unittest
 
 class TestModel(unittest.TestCase):
 
@@ -9,9 +10,10 @@ class TestModel(unittest.TestCase):
         model = Model()
         self.assertIsInstance(model, Model)
 
-    def test_leduc_holdem_nfsp_model(self):
-        model = LeducHoldemNFSPModel()
-        self.assertIsInstance(model, LeducHoldemNFSPModel)
+#    def test_leduc_holdem_nfsp_model(self):
+#        model = LeducHoldemNFSPModel()
+#        self.assertIsInstance(model, LeducHoldemNFSPModel)
+
 
 if __name__ == '__main__':
     unittest.main()

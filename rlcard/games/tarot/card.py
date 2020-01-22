@@ -29,7 +29,7 @@ class TarotCard(object):
             (str): The string of card's color and value
         """
         if self.is_trump:
-            return 'Trump-' + str(self.trump_value)
+            return 'TRUMP-' + str(self.trump_value)
         else:
             return self.color + '-' + str(self.color_value)
 

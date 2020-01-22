@@ -42,10 +42,10 @@ class TarotCard(object):
             if self.trump_value in [0, 1, 21]:
                 return 4.5
             else:
-                return 0
+                return 0.5
         else:
             if self.color_value <= 10:
-                return 0
+                return 0.5
             else:
                 return 0.5 + self.color_value - 10
 

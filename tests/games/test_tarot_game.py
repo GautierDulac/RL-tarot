@@ -4,6 +4,7 @@ import numpy as np
 from rlcard.games.tarot.game import TarotGame as Game
 from rlcard.games.tarot.player import TarotPlayer as Player
 from rlcard.games.tarot.card import TarotCard as Card
+from rlcard.games.tarot.bid import TarotBid as Bid
 from rlcard.games.tarot.utils import ACTION_LIST
 from rlcard.games.tarot.utils import hand2dict, encode_hand, encode_target, get_TarotCard_from_str
 
@@ -30,6 +31,11 @@ class TestTarotMethods(unittest.TestCase):
         game = Game()
         state, _ = game.init_game()
         self.assertEqual(len(list(state['hand'])), game.num_cards_per_player)
+
+    def test_bid(self):
+        bid1 = Bid('PASSE')
+        bid2 = Bid('PETITE')
+        self.assertLess(bid1.get_bid_order(), bid2.get_bid_order())
 
     def test_get_player_id(self):
         game = Game()

@@ -36,7 +36,9 @@ class ModelRegistry(object):
         self.model_specs = {}
 
     def register(self, model_id, entry_point):
-        """ Register an model
+        print(model_id)
+        print(entry_point)
+        """ Register a model
 
         Args:
             model_id (string): the name of the model

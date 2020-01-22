@@ -40,11 +40,14 @@ class TarotCard(object):
         Args:
             :param cards: (str or list)list of cards to be printed - or string form of tarot card
         """
+        if cards is None:
+            print('No card played yet')
+            return
         if isinstance(cards, str):
             cards = [cards]
         for i, card in enumerate(cards):
             color, value = card.split('-')
-            print(value, ' of ', color)
+            print(value, ' of ', color, end='')
 
             if i < len(cards) - 1:
                 print(', ', end='')

@@ -4,7 +4,7 @@ from rlcard.games.tarot.card import TarotCard as Card
 from collections import OrderedDict
 
 # a map of color to its index
-COLOR_MAP = {'SPADE': 0, 'CLOVER': 1, 'HEART': 2, 'DIAMOND': 3, 'TRUMP': 4}
+COLOR_MAP = {'SPADE': 0, 'CLOVER': 1, 'HEART': 2, 'DIAMOND': 3, 'Trump': 4}
 
 VALUE_MAP = {'0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7,
              '8': 8, '9': 9, '10': 10, '11': 11, '12': 12, '13': 13, '14': 14,
@@ -95,8 +95,28 @@ def encode_target(plane, target):
     Returns:
         (array): n*5*22 numpy array
     """
+    if target is None:
+        return plane
     target_info = target.split('-')
     color = COLOR_MAP[target_info[0]]
     value = VALUE_MAP[target_info[1]]
     plane[color][value] = 1
     return plane
+
+
+def get_TarotCard_from_str(card):
+    """
+
+    :param card:
+    :return: TarotCard object
+    """
+    if card is None:
+        return None
+    else:
+        color, value = card.split('-')
+        if color == 'Trump':
+            is_trump = True
+            return Card(is_trump, trump_value=value)
+        else:
+            is_trump = False
+            return Card(is_trump, color=color, color_value=value)

@@ -39,7 +39,7 @@ class TarotRound(object):
         # remove corresponding card
         remove_index = None
         for index, card in enumerate(player.hand):
-            if played_card == card:
+            if played_card.get_str() == card.get_str():
                 remove_index = index
                 break
 

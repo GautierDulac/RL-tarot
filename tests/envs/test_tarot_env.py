@@ -1,9 +1,9 @@
 import unittest
 import numpy as np
 
-from rlcard.envs.tarot import UnoEnv as Env
+from rlcard.envs.tarot import TarotEnv as Env
 from rlcard.agents.random_agent import RandomAgent
-from rlcard.games.uno.utils import ACTION_LIST
+from rlcard.games.tarot.utils import ACTION_LIST
 
 
 class TestUnoEnv(unittest.TestCase):
@@ -15,11 +15,11 @@ class TestUnoEnv(unittest.TestCase):
 
     def test_get_legal_actions(self):
         env = Env()
-        env.set_agents([RandomAgent(61), RandomAgent(61)])
+        env.set_agents([RandomAgent(env.game.get_action_num()), RandomAgent(env.game.get_action_num())])
         env.init_game()
         legal_actions = env.get_legal_actions()
         for legal_action in legal_actions:
-            self.assertLessEqual(legal_action, 60)
+            self.assertLessEqual(legal_action, env.game.get_action_num())
 
     def test_step(self):
         env = Env()
@@ -27,21 +27,6 @@ class TestUnoEnv(unittest.TestCase):
         action = np.random.choice(state['legal_actions'])
         _, player_id = env.step(action)
         self.assertEqual(player_id, env.game.round.current_player)
-
-    def test_step_back(self):
-        env = Env(allow_step_back=True)
-        state, player_id = env.init_game()
-        action = np.random.choice(state['legal_actions'])
-        env.step(action)
-        env.step_back()
-        self.assertEqual(env.game.round.current_player, player_id)
-
-        env = Env(allow_step_back=False)
-        state, player_id = env.init_game()
-        action = np.random.choice(state['legal_actions'])
-        env.step(action)
-        # env.step_back()
-        self.assertRaises(Exception, env.step_back)
 
     def test_run(self):
         env = Env()
@@ -64,7 +49,7 @@ class TestUnoEnv(unittest.TestCase):
         legal_actions = env.get_legal_actions()
         for legal_action in legal_actions:
             decoded = env.decode_action(legal_action)
-            self.assertLessEqual(decoded, ACTION_LIST[legal_action])
+            self.assertLessEqual(decoded.get_str(), ACTION_LIST[legal_action])
 
     def test_single_agent_mode(self):
         env = Env()

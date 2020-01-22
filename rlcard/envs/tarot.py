@@ -3,7 +3,7 @@ import numpy as np
 from rlcard.envs.env import Env
 from rlcard import models
 from rlcard.games.tarot.game import TarotGame as Game
-from rlcard.games.tarot.utils import encode_hand, encode_target
+from rlcard.games.tarot.utils import encode_hand, encode_target, get_TarotCard_from_str
 from rlcard.games.tarot.utils import ACTION_SPACE, ACTION_LIST
 from rlcard.games.tarot.card import TarotCard
 
@@ -33,8 +33,8 @@ class TarotEnv(Env):
                 print('Agent {} has {} cards.'.format(i, len(self.game.players[i].hand)))
         print('======== Actions You Can Choose =========')
         for i, action in enumerate(state['legal_actions']):
-            print(str(ACTION_SPACE[action]) + ': ', end='')
-            TarotCard.print_cards(action)
+            print(str(ACTION_SPACE[action.get_str()]) + ': ', end='')
+            TarotCard.print_cards(action.get_str())
             if i < len(state['legal_actions']) - 1:
                 print(', ', end='')
         print('\n')
@@ -96,12 +96,12 @@ class TarotEnv(Env):
         """
 
         :param action_id:
-        :return: chosen action id or a random action in the avaiable ones
+        :return: TarotCard - chosen action id or a random action in the avaiable ones
         """
         legal_ids = self.get_legal_actions()
         if action_id in legal_ids:
-            return ACTION_LIST[action_id]
-        return ACTION_LIST[np.random.choice(legal_ids)]
+            return get_TarotCard_from_str(ACTION_LIST[action_id])
+        return get_TarotCard_from_str(ACTION_LIST[np.random.choice(legal_ids)])
 
     def get_legal_actions(self):
         """
@@ -109,5 +109,5 @@ class TarotEnv(Env):
         :return:
         """
         legal_actions = self.game.get_legal_actions()
-        legal_ids = [ACTION_SPACE[action] for action in legal_actions]
+        legal_ids = [ACTION_SPACE[action.get_str()] for action in legal_actions]
         return legal_ids

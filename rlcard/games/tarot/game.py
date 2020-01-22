@@ -57,7 +57,7 @@ class TarotGame(object):
         """ Get the next state
 
         Args:
-            played_card (str): A specific card
+            played_card (TarotCard): A specific card
 
         Returns:
             (tuple): Tuple containing:

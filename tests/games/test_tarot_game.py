@@ -24,7 +24,7 @@ class TestTarotMethods(unittest.TestCase):
         game = Game()
         state, _ = game.init_game()
         total_cards = list(state['hand'] + state['others_hand'])
-        self.assertEqual(len(total_cards), game.num_players*game.num_cards_per_player)
+        self.assertEqual(len(total_cards), game.num_players * game.num_cards_per_player)
 
     def test_init_cards(self):
         game = Game()
@@ -82,7 +82,7 @@ class TestTarotMethods(unittest.TestCase):
         for _, count in hand1_dict.items():
             self.assertEqual(count, 1)
 
-    def test_str_to_card_and_reverse(self):
+    def test_str_to_card_and_rev(self):
         card = Card(True, trump_value=10)
         self.assertEqual(get_TarotCard_from_str(card.get_str()).get_str(), card.get_str())
         card = Card(False, color='SPADE', color_value=10)
@@ -116,6 +116,20 @@ class TestTarotMethods(unittest.TestCase):
     def test_player_get_player_id(self):
         player = Player(0)
         self.assertEqual(0, player.get_player_id())
+
+    def test_value_card(self):
+        card = Card(True, trump_value=0)
+        self.assertEqual(card.get_value(), 4.5)
+        card = Card(True, trump_value=2)
+        self.assertEqual(card.get_value(), .5)
+        card = Card(False, color='SPADE', color_value=12)
+        self.assertEqual(card.get_value(), 2.5)
+
+    def test_is_bout(self):
+        card = Card(True, trump_value=0)
+        self.assertEqual(card.is_bout(), True)
+        card = Card(True, trump_value=2)
+        self.assertEqual(card.is_bout(), False)
 
 
 if __name__ == '__main__':

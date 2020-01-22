@@ -22,3 +22,10 @@ class TarotBid(object):
         :return: bid value
         """
         return TarotBid.order[self.bid]
+
+    def get_bid_value(self):
+        """
+
+        :return: bid value
+        """
+        return TarotBid.value[self.bid]

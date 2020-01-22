@@ -1,8 +1,10 @@
 import unittest
 
-from  rlcard import models
+from rlcard import models
 from rlcard.models.registration import register, load
 
+
+# TODO : Check with a real pretrained model !
 
 class TestRegistration(unittest.TestCase):
 
@@ -16,6 +18,7 @@ class TestRegistration(unittest.TestCase):
         models.load('test_load')
         with self.assertRaises(ValueError):
             load('test_random_make')
+
 
 if __name__ == '__main__':
     unittest.main()

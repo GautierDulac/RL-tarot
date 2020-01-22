@@ -47,7 +47,7 @@ class TarotGame(object):
         self.bid_round = BidRound(self.num_players)
 
         # Initialize a Round
-        self.round = Round(self.dealer, self.num_players)
+        self.round = Round(self.dealer, self.num_players, self.num_cards_per_player)
 
         player_id = self.round.current_player_id
         state = self.get_state(player_id)
@@ -66,8 +66,7 @@ class TarotGame(object):
                 (int): next plater's id
         """
 
-        self.round.proceed_round(self.players, played_card)
-        player_id = (self.round.current_player_id + 1) % self.num_players
+        player_id = self.round.proceed_round(self.players, played_card)
         state = self.get_state(player_id)
         self.round.current_player_id = player_id
         return state, player_id

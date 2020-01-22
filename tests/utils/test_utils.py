@@ -1,8 +1,11 @@
 import unittest
 import numpy as np
-from rlcard.utils.utils import get_random_cards, init_54_deck, init_standard_deck, is_in_cards, is_pair, is_single, rank2int, take_out_cards, print_card, get_random_cards, elegent_form, init_players, get_upstream_player_id, get_downstream_player_id, reorganize, set_global_seed, get_cards_from_ranks
+from rlcard.utils.utils import init_54_deck, init_standard_deck, is_in_cards, is_pair, is_single, \
+    rank2int, take_out_cards, print_card, get_random_cards, elegent_form, init_players, get_upstream_player_id, \
+    get_downstream_player_id, reorganize, set_global_seed, get_cards_from_ranks
 
 from rlcard.core import Card, Player
+
 
 class TestUtils(unittest.TestCase):
 
@@ -22,7 +25,6 @@ class TestUtils(unittest.TestCase):
             get_random_cards(hand, 1000)
         with self.assertRaises(AssertionError):
             get_random_cards(hand, -1)
-
 
     def test_is_pair(self):
         self.assertTrue(is_pair([Card('S', 'A'), Card('D', 'A')]))
@@ -100,7 +102,7 @@ class TestUtils(unittest.TestCase):
         self.assertEqual(get_downstream_player_id(players[4], players), 0)
 
     def test_reorganize(self):
-        trajectories = reorganize([[[1,2],1,[4,5]]], [1])
+        trajectories = reorganize([[[1, 2], 1, [4, 5]]], [1])
         self.assertEqual(np.array(trajectories).shape, (1, 1, 5))
 
     def test_set_global_seed(self):

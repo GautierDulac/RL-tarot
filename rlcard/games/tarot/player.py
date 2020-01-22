@@ -11,8 +11,8 @@ class TarotPlayer(object):
         """
         self.player_id = player_id
         self.hand = []
-        self.points = []
-        self.bouts = []
+        self.points = 0
+        self.bouts = 0
         self.bid = []
         self.taking = taking
 

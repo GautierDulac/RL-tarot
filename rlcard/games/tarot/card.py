@@ -33,6 +33,32 @@ class TarotCard(object):
         else:
             return self.color + '-' + str(self.color_value)
 
+    def get_value(self):
+        """
+
+        :return: points value of the card (float)
+        """
+        if self.is_trump:
+            if self.trump_value in [0, 1, 21]:
+                return 4.5
+            else:
+                return 0
+        else:
+            if self.color_value <= 10:
+                return 0
+            else:
+                return 0.5 + self.color_value - 10
+
+    def is_bout(self):
+        """
+
+        :return: Boolean telling if it is "Le Petit", "L'Excuse" ou "Le 21"
+        """
+        if self.is_trump:
+            if self.trump_value in [0, 1, 21]:
+                return True
+        return False
+
     @staticmethod
     def print_cards(cards):  # TODO : P2 - understand how to work with a static method - unused for now
         """ Print out card in a nice form

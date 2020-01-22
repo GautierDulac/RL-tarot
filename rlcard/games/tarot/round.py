@@ -3,13 +3,13 @@
 
 from rlcard.games.tarot.card import TarotCard
 from rlcard.games.tarot.player import TarotPlayer
-from rlcard.games.tarot.utils import cards2list
+from rlcard.games.tarot.utils import cards2list, get_end_pot_information
 from typing import List
 
 
 class TarotRound(object):
 
-    def __init__(self, dealer, num_players):
+    def __init__(self, dealer, num_players, num_card_per_player):
         """ Initialize the round class
 
         Args:
@@ -21,8 +21,10 @@ class TarotRound(object):
         self.highest_trump = -1
         self.current_player_id = 0
         self.num_players = num_players
+        self.num_card_per_player = num_card_per_player
         self.direction = 1
         self.played_cards = []
+        self.pot_cards = dict()
         self.is_pot_over = False
         self.is_over = False
         self.winner = None
@@ -45,21 +47,33 @@ class TarotRound(object):
 
         _ = player.hand.pop(remove_index)
 
+        # When starting a new pot
+        if len(self.played_cards) % self.num_players == 0:
+            self.highest_trump = -1
+            self.target_card = played_card
+            self.pot_cards['target'] = played_card
+
         # Add in Played_card list
         self.played_cards.append(played_card)
 
-        # If no target card, add it as target card
-        # Set back highest_trump to 0 when new round
-        if len(self.played_cards) % 4 == 0:
-            self.target_card = played_card
-            self.highest_trump = -1
+        # Add in pot_card
+        self.pot_cards[self.current_player_id] = played_card
 
+        # Keeping the highest trump of the pot
         if played_card.is_trump:
             self.highest_trump = max(self.highest_trump, int(played_card.trump_value))
 
-        # Set game is over if no more card in hands
-        if len(self.played_cards) == 72:
-            self.is_over = True
+        # When pot is over
+        if len(self.played_cards) % self.num_players == 0:
+            winner_id, pot_value, nb_bout = get_end_pot_information(self.pot_cards)
+            players[winner_id].points += pot_value
+            players[winner_id].bouts += nb_bout
+            # Set game is over if no more card in hands
+            if len(self.played_cards) == self.num_players * self.num_card_per_player:
+                self.is_over = True
+            return winner_id
+
+        return (self.current_player_id + 1) % self.num_players
 
     def get_legal_actions(self, players: List[TarotPlayer], player_id):
         """

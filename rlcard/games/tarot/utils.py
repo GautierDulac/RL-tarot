@@ -120,3 +120,57 @@ def get_TarotCard_from_str(card):
         else:
             is_trump = False
             return Card(is_trump, color=color, color_value=value)
+
+
+def get_end_pot_information(pot_cards):
+    """
+
+    :param pot_cards: dictionnary with target_card, and the num_players cards of all players
+    :return: winner_id, pot_value, nb_bouts
+    """
+    target_card = pot_cards['target']
+    trump_values = dict()
+    values = dict()
+    color_values = dict()
+    colors = dict()
+    for player_id in range(len(pot_cards) - 1):
+        trump_values[player_id] = pot_cards[player_id].trump_value
+        values[player_id] = pot_cards[player_id].color_value
+        colors[player_id] = pot_cards[player_id].color
+    # If target is trump :
+    if target_card.is_trump:
+        winner_id = max(trump_values, key=trump_values.get)
+    # If color is given in target card
+    else:
+        target_color = target_card.color
+        for player_id in range(len(pot_cards) - 1):
+            color_values[player_id] = (target_color == colors[player_id]) * values[player_id]
+        winner_id = max(color_values, key=color_values.get)
+
+    return winner_id, get_pot_value(pot_cards), get_nb_bouts(pot_cards)
+
+
+def get_pot_value(pot_cards):
+    """
+
+    :param pot_cards: dict cards of all players + THE TARGET CARD NOT TO BE COUNTED
+    :return: point value of this pot (float)
+    """
+    total_points = 0
+    for player_id in range(len(pot_cards) - 1):
+        total_points += pot_cards[player_id].get_value()
+
+    return total_points
+
+
+def get_nb_bouts(pot_cards):
+    """
+
+    :param pot_cards:
+    :return:
+    """
+    total_bouts = 0
+    for player_id in range(len(pot_cards) - 1):
+        total_bouts += pot_cards[player_id].is_bout()
+
+    return total_bouts

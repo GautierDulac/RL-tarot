@@ -3,8 +3,9 @@ import numpy as np
 
 from rlcard.games.tarot.game import TarotGame as Game
 from rlcard.games.tarot.player import TarotPlayer as Player
+from rlcard.games.tarot.card import TarotCard as Card
 from rlcard.games.tarot.utils import ACTION_LIST
-from rlcard.games.tarot.utils import hand2dict, encode_hand, encode_target
+from rlcard.games.tarot.utils import hand2dict, encode_hand, encode_target, get_TarotCard_from_str
 
 
 class TestTarotMethods(unittest.TestCase):
@@ -23,7 +24,12 @@ class TestTarotMethods(unittest.TestCase):
         game = Game()
         state, _ = game.init_game()
         total_cards = list(state['hand'] + state['others_hand'])
-        self.assertGreaterEqual(len(total_cards), 14)
+        self.assertEqual(len(total_cards), game.num_players*game.num_cards_per_player)
+
+    def test_init_cards(self):
+        game = Game()
+        state, _ = game.init_game()
+        self.assertEqual(len(list(state['hand'])), game.num_cards_per_player)
 
     def test_get_player_id(self):
         game = Game()
@@ -75,6 +81,16 @@ class TestTarotMethods(unittest.TestCase):
         hand1_dict = hand2dict(hand_1)
         for _, count in hand1_dict.items():
             self.assertEqual(count, 1)
+
+    def test_str_to_card_and_reverse(self):
+        card = Card(True, trump_value=10)
+        self.assertEqual(get_TarotCard_from_str(card.get_str()).get_str(), card.get_str())
+        card = Card(False, color='SPADE', color_value=10)
+        self.assertEqual(get_TarotCard_from_str(card.get_str()).get_str(), card.get_str())
+        str_card = 'TRUMP-10'
+        self.assertEqual(get_TarotCard_from_str(str_card).get_str(), str_card)
+        str_card = 'SPADE-10'
+        self.assertEqual(get_TarotCard_from_str(str_card).get_str(), str_card)
 
     def test_encode_hand(self):
         hand1 = ['SPADE-1', 'TRUMP-3', 'DIAMOND-14', 'TRUMP-0', 'TRUMP-21']

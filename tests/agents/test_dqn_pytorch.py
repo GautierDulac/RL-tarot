@@ -4,6 +4,7 @@ import numpy as np
 
 from rlcard.agents.dqn_agent_pytorch import DQNAgent
 
+
 class TestDQN(unittest.TestCase):
 
     def test_init(self):
@@ -20,7 +21,7 @@ class TestDQN(unittest.TestCase):
                          action_num=2,
                          state_shape=[1],
                          norm_step=0,
-                         mlp_layers=[10,10],
+                         mlp_layers=[10, 10],
                          device=torch.device('cpu'))
 
         self.assertEqual(agent.replay_memory_init_size, 0)
@@ -38,12 +39,12 @@ class TestDQN(unittest.TestCase):
         step_num = 1500
 
         agent = DQNAgent(scope='dqn',
-                         replay_memory_size = 500,
+                         replay_memory_size=500,
                          replay_memory_init_size=memory_init_size,
                          update_target_estimator_every=100,
                          norm_step=norm_step,
                          state_shape=[2],
-                         mlp_layers=[10,10],
+                         mlp_layers=[10, 10],
                          device=torch.device('cpu'))
 
         predicted_action = agent.eval_step({'obs': np.random.random_sample((2,)), 'legal_actions': [0, 1]})
@@ -52,7 +53,7 @@ class TestDQN(unittest.TestCase):
 
         for step in range(step_num):
             ts = [{'obs': np.random.random_sample((2,)), 'legal_actions': [0, 1]}, \
-                np.random.randint(2), 0, {'obs': np.random.random_sample((2,)), 'legal_actions': [0, 1]}, True]
+                  np.random.randint(2), 0, {'obs': np.random.random_sample((2,)), 'legal_actions': [0, 1]}, True]
             agent.feed(ts)
             if step > norm_step + memory_init_size:
                 agent.train()

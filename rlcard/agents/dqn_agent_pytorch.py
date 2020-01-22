@@ -42,6 +42,7 @@ class DQNAgent(object):
     Approximate clone of rlcard.agents.dqn_agent.DQNAgent
     that depends on PyTorch instead of Tensorflow
     '''
+
     def __init__(self,
                  scope,
                  replay_memory_size=20000,
@@ -109,11 +110,11 @@ class DQNAgent(object):
         self.epsilons = np.linspace(epsilon_start, epsilon_end, epsilon_decay_steps)
 
         # Create estimators
-        #with tf.variable_scope(scope):
+        # with tf.variable_scope(scope):
         self.q_estimator = Estimator(action_num=action_num, learning_rate=learning_rate, state_shape=state_shape, \
-            mlp_layers=mlp_layers, device=self.device)
+                                     mlp_layers=mlp_layers, device=self.device)
         self.target_estimator = Estimator(action_num=action_num, learning_rate=learning_rate, state_shape=state_shape, \
-            mlp_layers=mlp_layers, device=self.device)
+                                          mlp_layers=mlp_layers, device=self.device)
 
         # Create normalizer
         self.normalizer = Normalizer()
@@ -176,7 +177,7 @@ class DQNAgent(object):
         Returns:
             q_values (numpy.array): a 1-d array where each entry represents a Q value
         '''
-        epsilon = self.epsilons[min(self.total_t, self.epsilon_decay_steps-1)]
+        epsilon = self.epsilons[min(self.total_t, self.epsilon_decay_steps - 1)]
         A = np.ones(self.action_num, dtype=float) * epsilon / self.action_num
         q_values = self.q_estimator.predict_nograd(np.expand_dims(self.normalizer.normalize(state), 0))[0]
         best_action = np.argmax(q_values)
@@ -198,7 +199,7 @@ class DQNAgent(object):
         # Evaluate best next actions using Target-network (Double DQN)
         q_values_next_target = self.target_estimator.predict_nograd(next_state_batch)
         target_batch = reward_batch + np.invert(done_batch).astype(np.float32) * \
-            self.discount_factor * q_values_next_target[np.arange(self.batch_size), best_actions]
+                       self.discount_factor * q_values_next_target[np.arange(self.batch_size), best_actions]
 
         # Perform gradient descent update
         state_batch = np.array(state_batch)
@@ -233,6 +234,7 @@ class DQNAgent(object):
         '''
         self.memory.save(self.normalizer.normalize(state), action, reward, self.normalizer.normalize(next_state), done)
 
+
 class Estimator(object):
     '''
     Approximate clone of rlcard.agents.dqn_agent.Estimator that
@@ -252,7 +254,7 @@ class Estimator(object):
             device (torch.device): whether to use cpu or gpu
         '''
         self.action_num = action_num
-        self.learning_rate=learning_rate
+        self.learning_rate = learning_rate
         self.state_shape = state_shape
         self.mlp_layers = mlp_layers
         self.device = device
@@ -272,7 +274,7 @@ class Estimator(object):
         self.mse_loss = nn.MSELoss(reduction='mean')
 
         # set up optimizer
-        self.optimizer =  torch.optim.Adam(self.qnet.parameters(), lr=self.learning_rate)
+        self.optimizer = torch.optim.Adam(self.qnet.parameters(), lr=self.learning_rate)
 
     def predict_nograd(self, s):
         ''' Predicts action values, but prediction is not included
@@ -329,6 +331,7 @@ class Estimator(object):
 
         return batch_loss
 
+
 class EstimatorNetwork(nn.Module):
     ''' The function approximation network for Estimator
         It is just a series of tanh layers. All in/out are torch.tensor
@@ -351,8 +354,8 @@ class EstimatorNetwork(nn.Module):
         # build the Q network
         layer_dims = [np.prod(self.state_shape)] + self.mlp_layers
         fc = [nn.Flatten()]
-        for i in range(len(layer_dims)-1):
-            fc.append(nn.Linear(layer_dims[i], layer_dims[i+1], bias=True))
+        for i in range(len(layer_dims) - 1):
+            fc.append(nn.Linear(layer_dims[i], layer_dims[i + 1], bias=True))
             fc.append(nn.Tanh())
         fc.append(nn.Linear(layer_dims[-1], self.action_num, bias=True))
         self.fc_layers = nn.Sequential(*fc)

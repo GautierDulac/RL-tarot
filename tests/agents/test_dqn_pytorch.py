@@ -52,7 +52,7 @@ class TestDQN(unittest.TestCase):
         self.assertLessEqual(predicted_action, 1)
 
         for step in range(step_num):
-            ts = [{'obs': np.random.random_sample((2,)), 'legal_actions': [0, 1]}, \
+            ts = [{'obs': np.random.random_sample((2,)), 'legal_actions': [0, 1]},
                   np.random.randint(2), 0, {'obs': np.random.random_sample((2,)), 'legal_actions': [0, 1]}, True]
             agent.feed(ts)
             if step > norm_step + memory_init_size:

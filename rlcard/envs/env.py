@@ -56,6 +56,9 @@ class Env(object):
                 (int): The ID of the next player
         """
         if self.single_agent_mode or self.human_mode:
+            print('\r>> Agent 0 (Human) chooses ', end='')
+            self.print_action(self.decode_action(action).get_str())
+            print('')
             return self.single_agent_step(action)
 
         self.timestep += 1

@@ -2,6 +2,7 @@ import random
 
 from rlcard.games.tarot.bid import TarotBid
 from rlcard.games.tarot.player import TarotPlayer
+from rlcard.games.tarot.utils import cards2list
 from typing import List
 
 
@@ -18,7 +19,8 @@ class BidRound(object):
         self.direction = 1
         self.max_bid = None
         self.is_over = False
-        self.taker = None
+        self.is_dead = False
+        self.taking = None
         self.all_bids = [TarotBid('PASSE'),
                          TarotBid('PETITE'),
                          TarotBid('POUSSE'),
@@ -34,16 +36,37 @@ class BidRound(object):
             :param players: list of object of TarotPlayer
         """
         player = players[self.current_player_id]
-        player.bid.append(played_bid)
+        if len(player.bid) == 0:
+            player.bid.append(played_bid)
+        elif player.bid[-1].bid != "PASSE":
+            player.bid.append(played_bid)
 
-        self.max_bid = played_bid.get_bid_order()
+        self.max_bid = max(self.max_bid, played_bid.get_bid_order())
+
+        total_surrendered_players = 0
+        for player_id in range(self.num_players):
+            if players[player_id].bid[-1].bid == "PASSE":
+                total_surrendered_players += 1
+                players[player_id].taking = False
+            else:
+                players[player_id].taking = True
+
+        # Maximal bid encountered
+        if self.max_bid == 5:
+            self.is_over = True
+        elif total_surrendered_players == self.num_players - 1:
+            self.is_over = True
+        elif total_surrendered_players == self.num_players:
+            self.id_dead = True
+
+        return (self.current_player_id + 1) % self.num_players
 
     def get_legal_bids(self):
         """
         Get legal bids
         :return: list of legals bids
         """
-        legal_bids = self.all_bids[(self.max_bid + 1):]
+        legal_bids = self.all_bids[(self.max_bid + 1):] + [self.all_bids[0]]
 
         return legal_bids
 
@@ -56,6 +79,7 @@ class BidRound(object):
         """
         state = {}
         player = players[player_id]
+        state['hand'] = cards2list(player.hand)
         state['max_bid'] = self.max_bid
         state['current_personnal_bid'] = player.bid
         other_bids = []

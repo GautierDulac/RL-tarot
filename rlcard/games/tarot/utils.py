@@ -76,7 +76,6 @@ def encode_hand(plane, hand, index_to_encode=0):
     Returns:
         (array): n*5*22 numpy array
     """
-    # TODO : understand full dimension of plane
     # plane = np.zeros((n, 5, 22), dtype=int)
     plane[index_to_encode] = np.zeros((5, 22), dtype=int)
     for card in hand:
@@ -114,12 +113,12 @@ def get_TarotCard_from_str(card):
         return None
     else:
         color, value = card.split('-')
-        if color == 'Trump':
+        if color == 'TRUMP':
             is_trump = True
-            return Card(is_trump, trump_value=value)
+            return Card(is_trump, trump_value=int(value))
         else:
             is_trump = False
-            return Card(is_trump, color=color, color_value=value)
+            return Card(is_trump, color=color, color_value=int(value))
 
 
 def get_end_pot_information(pot_cards):
@@ -134,9 +133,14 @@ def get_end_pot_information(pot_cards):
     color_values = dict()
     colors = dict()
     for player_id in range(len(pot_cards) - 1):
-        trump_values[player_id] = pot_cards[player_id].trump_value
-        values[player_id] = pot_cards[player_id].color_value
-        colors[player_id] = pot_cards[player_id].color
+        if pot_cards[player_id].is_trump:
+            trump_values[player_id] = pot_cards[player_id].trump_value
+            values[player_id] = -1
+            colors[player_id] = 'TRUMP'
+        else:
+            trump_values[player_id] = -1
+            values[player_id] = pot_cards[player_id].color_value
+            colors[player_id] = pot_cards[player_id].color
     # If target is trump :
     if target_card.is_trump:
         winner_id = max(trump_values, key=trump_values.get)

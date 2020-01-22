@@ -3,7 +3,7 @@ import numpy as np
 from rlcard.envs.env import Env
 from rlcard import models
 from rlcard.games.tarot.game import TarotGame as Game
-from rlcard.games.tarot.utils import encode_hand, encode_target, get_TarotCard_from_str
+from rlcard.games.tarot.utils import encode_hand, encode_target, get_TarotCard_from_str, cards2list
 from rlcard.games.tarot.utils import ACTION_SPACE, ACTION_LIST
 from rlcard.games.tarot.card import TarotCard
 
@@ -21,17 +21,20 @@ class TarotEnv(Env):
             player (int): Player id
         """
         state = self.game.get_state(player)
-        print('\n=============== Your Hand ===============')
+
+        print('================= Your Hand    ===============')
         TarotCard.print_cards(state['hand'])
         print('')
-        print('=============== Last Card ===============')
+        print('================= Pot Number   ===============')
+        print(state['pot_number'])
+        print('')
+        print('================= Target Card  ===============')
         TarotCard.print_cards(state['target'])
         print('')
-        print('========== Agents Card Number ===========')
-        for i in range(self.player_num):
-            if i != self.active_player:
-                print('Agent {} has {} cards.'.format(i, len(self.game.players[i].hand)))
-        print('======== Actions You Can Choose =========')
+        print('================= Pot Cards    ===============')
+        TarotCard.print_cards(state['pot_cards'])
+        print('')
+        print('========== Actions You Can Choose ============')
         for i, action in enumerate(state['legal_actions']):
             print(str(ACTION_SPACE[action.get_str()]) + ': ', end='')
             TarotCard.print_cards(action.get_str())

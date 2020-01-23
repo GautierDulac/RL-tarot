@@ -1,7 +1,5 @@
-import random
-
-from rlcard.games.tarot.bid import TarotBid
-from rlcard.games.tarot.player import TarotPlayer
+from rlcard.games.tarot.bid.bid import TarotBid
+from rlcard.games.tarot.alpha_and_omega.player import TarotPlayer
 from rlcard.games.tarot.utils import cards2list
 from typing import List
 

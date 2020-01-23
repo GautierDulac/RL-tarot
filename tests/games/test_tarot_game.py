@@ -1,10 +1,10 @@
 import unittest
 import numpy as np
 
-from rlcard.games.tarot.game import TarotGame as Game
-from rlcard.games.tarot.player import TarotPlayer as Player
-from rlcard.games.tarot.card import TarotCard as Card
-from rlcard.games.tarot.bid import TarotBid as Bid
+from rlcard.games.tarot.main_game.main_game import TarotGame as Game
+from rlcard.games.tarot.alpha_and_omega.player import TarotPlayer as Player
+from rlcard.games.tarot.alpha_and_omega.card import TarotCard as Card
+from rlcard.games.tarot.bid.bid import TarotBid as Bid
 from rlcard.games.tarot.utils import ACTION_LIST
 from rlcard.games.tarot.utils import hand2dict, encode_hand, encode_target, get_TarotCard_from_str
 

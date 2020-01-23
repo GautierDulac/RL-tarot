@@ -1,11 +1,11 @@
 import random
 
-from rlcard.games.tarot.dealer import TarotDealer as Dealer
-from rlcard.games.tarot.dog import TarotDog as Dog
-from rlcard.games.tarot.bid_round import BidRound
-from rlcard.games.tarot.bid import TarotBid
-from rlcard.games.tarot.player import TarotPlayer as Player
-from rlcard.games.tarot.round import TarotRound as Round
+from rlcard.games.tarot.alpha_and_omega.dealer import TarotDealer as Dealer
+from rlcard.games.tarot.dog.dog import TarotDog as Dog
+from rlcard.games.tarot.bid.bid_round import BidRound
+from rlcard.games.tarot.bid.bid import TarotBid
+from rlcard.games.tarot.alpha_and_omega.player import TarotPlayer as Player
+from rlcard.games.tarot.main_game.main_round import TarotRound as Round
 
 
 class TarotGame(object):
@@ -155,9 +155,9 @@ class TarotGame(object):
             asked_contract = 51
         elif winning_bouts == 2:
             asked_contract = 41
-        elif winning_bouts == 3:
+        else:  # winning_bouts == 3:
             asked_contract = 36
-        additional_points = abs(int((winning_points-asked_contract)/10))
+        additional_points = abs(int((winning_points - asked_contract) / 10))
         total_contract_points = TarotBid.get_bid_value(self.players[taking_player].bid[-1].bid) + additional_points
         # Defining sense of the final points for every one (POS is taker winner, NEG otherwise)
         if winner is not None and len(winner) == 1:
@@ -165,7 +165,7 @@ class TarotGame(object):
         else:
             taker_winner = -1
         # Giving points to the taker
-        self.payoffs[taking_player] = taker_winner * 3 * total_contract_points # TODO : Specific to 4 player game
+        self.payoffs[taking_player] = taker_winner * 3 * total_contract_points  # TODO : Specific to 4 player game
         # Giving points to the others
         for player_id in range(self.num_players):
             if player_id != taking_player:

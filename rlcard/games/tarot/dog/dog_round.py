@@ -1,6 +1,6 @@
-from rlcard.games.tarot.card import TarotCard
-from rlcard.games.tarot.player import TarotPlayer
-from rlcard.games.tarot.judger import TarotJudger
+from rlcard.games.tarot.alpha_and_omega.card import TarotCard
+from rlcard.games.tarot.alpha_and_omega.player import TarotPlayer
+from rlcard.games.tarot.alpha_and_omega.judger import TarotJudger
 from rlcard.games.tarot.utils import cards2list, get_end_pot_information
 from typing import List
 

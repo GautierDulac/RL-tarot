@@ -1,5 +1,5 @@
 # CLEAR
-from rlcard.games.tarot.player import TarotPlayer
+from rlcard.games.tarot.alpha_and_omega.player import TarotPlayer
 
 
 class TarotDog(TarotPlayer):

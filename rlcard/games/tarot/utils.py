@@ -1,6 +1,6 @@
 import numpy as np
 
-from rlcard.games.tarot.card import TarotCard as Card
+from rlcard.games.tarot.alpha_and_omega.card import TarotCard as Card
 from collections import OrderedDict
 
 # a map of color to its index

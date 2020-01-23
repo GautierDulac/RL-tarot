@@ -4,7 +4,7 @@
 import random
 
 from rlcard.games.tarot.utils import init_deck
-from rlcard.games.tarot.player import TarotPlayer
+from rlcard.games.tarot.alpha_and_omega.player import TarotPlayer
 
 
 class TarotDealer(object):

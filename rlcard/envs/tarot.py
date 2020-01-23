@@ -2,10 +2,10 @@ import numpy as np
 
 from rlcard.envs.env import Env
 from rlcard import models
-from rlcard.games.tarot.game import TarotGame as Game
-from rlcard.games.tarot.utils import encode_hand, encode_target, get_TarotCard_from_str, cards2list
+from rlcard.games.tarot.main_game.main_game import TarotGame as Game
+from rlcard.games.tarot.utils import encode_hand, encode_target, get_TarotCard_from_str
 from rlcard.games.tarot.utils import ACTION_SPACE, ACTION_LIST
-from rlcard.games.tarot.card import TarotCard
+from rlcard.games.tarot.alpha_and_omega.card import TarotCard
 
 
 class TarotEnv(Env):
@@ -20,6 +20,7 @@ class TarotEnv(Env):
         Args:
             player (int): Player id
         """
+        # TODO : Adapt print depending on the part of the game, define a state['game_part'] ?
         state = self.game.get_state(player)
 
         print('================= Your Hand    ===============')
@@ -43,6 +44,7 @@ class TarotEnv(Env):
         print('\n')
 
     def print_result(self, player):
+        # TODO : Print results for the bid time
         # TODO : Adapt with the rank of players
         """ Print the game result when the game is over
 
@@ -57,8 +59,8 @@ class TarotEnv(Env):
             print('You lose!')
         print('')
 
-    @staticmethod
-    def print_action(action):
+    def print_action(self, action):
+        # TODO : print depending on the game part
         """ Print out an action in a nice form
 
         Args:
@@ -67,6 +69,7 @@ class TarotEnv(Env):
         TarotCard.print_cards(action)
 
     def load_model(self):
+        # TODO : load model depending on the game part
         """ Load pretrained/rule model
 
         Returns:
@@ -75,6 +78,7 @@ class TarotEnv(Env):
         return models.load('tarot-rule-v1')
 
     def extract_state(self, state):
+        # TODO : extract_state depending on the game part
         """
 
         :param state:
@@ -91,16 +95,18 @@ class TarotEnv(Env):
 
     def get_payoffs(self):
         """
-
+        Give final payoffs of the game
         :return:
         """
         return self.game.get_payoffs()
 
     def decode_action(self, action_id):
+        # TODO : decode depending on the game part
         """
 
         :param action_id:
         :return: TarotCard - chosen action id or a random action in the avaiable ones
+        :return: OR TarotBid ?
         """
         legal_ids = self.get_legal_actions()
         if action_id in legal_ids:
@@ -108,6 +114,7 @@ class TarotEnv(Env):
         return get_TarotCard_from_str(ACTION_LIST[np.random.choice(legal_ids)])
 
     def get_legal_actions(self):
+        # TODO : depending on the game part
         """
         transform legal actions from game to the action_space legal actions
         :return:

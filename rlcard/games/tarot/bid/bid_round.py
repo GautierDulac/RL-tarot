@@ -53,6 +53,7 @@ class BidRound(object):
 
         # Maximal bid encountered
         if self.max_bid_order == 5:
+            self.taking_player_id = self.current_player_id
             self.is_over = True
         elif total_surrendered_players == self.num_players - 1:
             self.is_over = True

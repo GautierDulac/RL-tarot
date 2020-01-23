@@ -70,6 +70,19 @@ class TestTarotBidGameMethods(unittest.TestCase):
         self.assertLessEqual(len(state['other_bids']), num_players)
         self.assertEqual(next_player_id, current)
 
+    def test_get_final_bid(self):
+        game = BidGame(players, num_players, starting_player, num_cards_per_player, num_cards_dog, dog)
+        game.init_game()
+        while not game.bid_over:
+            actions = game.get_legal_actions()
+            action = np.random.choice(actions)
+            state, _ = game.step(action)
+            total_cards = len(state['hand'])
+            self.assertEqual(total_cards, 18)
+        taking_player_id = game.bid_round.taking_player_id
+        self.assertIsInstance(taking_player_id, int)
+        self.assertLessEqual(- game.bid_round.max_bid_order, -1)
+
     def test_encode_hand(self):
         # TODO Adapt encode for bid game
         hand1 = ['SPADE-1', 'TRUMP-3', 'DIAMOND-14', 'TRUMP-0', 'TRUMP-21']

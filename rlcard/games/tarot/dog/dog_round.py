@@ -18,7 +18,7 @@ class DogRound(object):
         self.num_cards_dog = num_cards_dog
         self.taking_player = taking_player
         self.taking_player_id = taking_player_id
-        self.all_cards = taking_player.hand + dog
+        self.all_cards = taking_player.hand + dog.hand
         self.taking_bid = taking_bid
         self.dog = dog
         self.new_dog = []
@@ -80,10 +80,12 @@ class DogRound(object):
                 others_hand.extend(player.hand)
         state['hand'] = cards2list(self.taking_player.hand)
         if self.taking_bid.get_bid_order() < 4:
-            state['dog_cards'] = cards2list(self.new_dog)
+            state['new_dog'] = cards2list(self.new_dog)
+        # otherwise
         else:
+            state['new_dog'] = cards2list(self.dog)
             others_hand.extend(self.dog.hand)
-            state['dog_cards'] = None
         state['others_hand'] = cards2list(others_hand)
         state['legal_actions'] = self.get_legal_actions()
+        state['all_cards'] = cards2list(self.all_cards)
         return state

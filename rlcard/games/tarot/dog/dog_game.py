@@ -16,7 +16,7 @@ class DogGame(object):
         self.taking_player = players[taking_player_id]
         self.current_player_id = taking_player_id
         # Initialize the dog round
-        self.dog_round = DogRound(taking_player, taking_player_id, dog, num_cards_dog, taking_bid)
+        self.dog_round = DogRound(self.taking_player, taking_player_id, dog, num_cards_dog, taking_bid)
         # Get the known cards
         self.known_cards = []
         # Taking bid for the taking player

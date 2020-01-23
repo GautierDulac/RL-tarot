@@ -55,11 +55,11 @@ class BidRound(object):
         elif total_surrendered_players == self.num_players - 1:
             self.is_over = True
         elif total_surrendered_players == self.num_players:
-            self.id_dead = True
+            self.is_dead = True
 
         return (self.current_player_id + 1) % self.num_players
 
-    def get_legal_bids(self):
+    def get_legal_actions(self):
         """
         Get legal bids
         :return: list of legals bids
@@ -68,7 +68,7 @@ class BidRound(object):
 
         return legal_bids
 
-    def get_bid_state(self, players: List[TarotPlayer], player_id):
+    def get_state(self, players: List[TarotPlayer], player_id):
         """ Get player's state in the bid round
 
         Args:
@@ -85,5 +85,5 @@ class BidRound(object):
             if player.player_id != player_id:
                 other_bids.extend(player.bid)
         state['other_bids'] = other_bids
-        state['legal_actions'] = self.get_legal_bids()
+        state['legal_actions'] = self.get_legal_actions()
         return state

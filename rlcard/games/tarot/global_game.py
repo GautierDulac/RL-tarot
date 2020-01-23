@@ -28,6 +28,8 @@ class GlobalGame(object):
         self.dog_game = None
         self.dog = None
         self.dog_over = False
+        # Depending on the bid and dog, the known cards differ:
+        self.known_card = []
         # Initialize a Round instance
         self.main_game = None
         self.main_round = None

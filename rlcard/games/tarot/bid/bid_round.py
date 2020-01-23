@@ -52,14 +52,16 @@ class BidRound(object):
                 players[player_id].taking = True
 
         # Maximal bid encountered
+        print(self.max_bid_order) # TODO REMOVE
         if self.max_bid_order == 5:
             self.taking_player_id = self.current_player_id
             self.is_over = True
+            print('COUCOU ICI') # TODO REMOVE
         elif total_surrendered_players == self.num_players - 1:
             self.is_over = True
         elif total_surrendered_players == self.num_players:
             self.is_dead = True
-
+        print(self.is_over) #TODO REMOVE
         return (self.current_player_id + 1) % self.num_players
 
     def get_legal_actions(self):

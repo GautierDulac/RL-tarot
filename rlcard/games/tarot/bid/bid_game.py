@@ -63,7 +63,10 @@ class BidGame(object):
         """
 
         player_id = self.bid_round.proceed_round(self.players, played_bid)
+        print('ICI') # TODO REMOVE
+        print(self.bid_round.is_over)
         if self.bid_round.is_over:
+            print('COUCOU') # TODO REMOVE
             self.bid_over = True
             self.taking_player_id = self.bid_round.taking_player_id
             self.taking_bid = self.bid_round.max_bid

@@ -37,6 +37,7 @@ class GlobalGame(object):
         # Initialize a Round instance
         self.main_game = None
         self.main_round = None
+        self.main_over = False
         self.is_over = False
 
     def init_game(self):
@@ -49,7 +50,6 @@ class GlobalGame(object):
                 (int): Current bidder's id
         """
         # Initialize bid Round
-        print(self.players)
         self.bid_game = BidGame(self.players, self.num_players, self.starting_player, self.num_cards_per_player,
                                 self.num_cards_dog, self.dog)
 
@@ -73,7 +73,8 @@ class GlobalGame(object):
                 (int): next plater's id
         """
         if self.current_game_part == 'BID':
-            player_id = self.bid_game.bid_round.proceed_round(self.players, played_action)
+            state, player_id = self.bid_game.step(played_action)
+            print(player_id) # TODO Remove
             state = self.bid_game.get_state(player_id)
             self.bid_game.bid_round.current_player_id = player_id
             if self.bid_game.bid_over:
@@ -84,7 +85,7 @@ class GlobalGame(object):
                 self.dog_game = DogGame(self.players, self.taking_player_id, self.num_cards_per_player,
                                         self.num_cards_dog, self.dog, self.taking_bid)
         elif self.current_game_part == 'DOG':
-            player_id = self.dog_game.dog_round.proceed_round(self.players, played_action)
+            state, player_id = self.dog_game.step(played_action)
             state = self.dog_game.get_state(player_id)
             if self.dog_game.is_over:
                 self.dog_over = True
@@ -93,9 +94,10 @@ class GlobalGame(object):
                 self.main_game = MainGame(self.num_players, self.num_cards_per_player, self.starting_player,
                                           self.players, self.bid_game.taking_player_id)
         else:
-            player_id = self.main_game.main_round.proceed_round(self.players, played_action)
+            player_id = self.main_game.step(played_action)
             state = self.main_game.get_state(player_id)
             if self.main_game.is_over:
+                self.main_over = True
                 self.is_over = True
 
         return state, player_id
@@ -110,7 +112,7 @@ class GlobalGame(object):
             (dict): The state of the player
         """
         if self.current_game_part == 'BID':
-            state = self.bid_game.get_state(self.players, player_id)
+            state = self.bid_game.get_state(player_id)
         elif self.current_game_part == 'DOG':
             state = self.dog_game.get_state(self.players, player_id)
         else:
@@ -133,11 +135,11 @@ class GlobalGame(object):
             (list): A list of legal actions
         """
         if self.current_game_part == 'BID':
-            return self.bid_game.get_legal_actions(self.players, self.bid_game.bid_round.current_player_id)
+            return self.bid_game.get_legal_actions()
         elif self.current_game_part == 'DOG':
-            return self.dog_game.get_legal_actions(self.players, self.dog_game.current_player_id)
+            return self.dog_game.get_legal_actions()
         else:
-            return self.main_game.get_legal_actions(self.players, self.main_game.main_round.current_player_id)
+            return self.main_game.get_legal_actions()
 
     def get_player_num(self):
         """ Return the number of players in Tarot
@@ -172,11 +174,3 @@ class GlobalGame(object):
             return self.dog_game.get_player_id()
         else:
             return self.main_game.get_player_id()
-
-    def is_over(self):
-        """ Check if the game is over
-
-        Returns:
-            (boolean): True if the game is over
-        """
-        return self.is_over

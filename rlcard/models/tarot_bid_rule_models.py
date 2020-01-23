@@ -1,4 +1,4 @@
-""" TAROT - CARD GAME - rule models
+""" TAROT - BID GAME - rule models
 """
 
 import numpy as np
@@ -7,8 +7,8 @@ import rlcard
 from rlcard.models.model import Model
 
 
-class TAROTRuleAgentV1(object):
-    """ TAROT Rule agent version 1
+class TAROTBIDRuleAgentV1(object):
+    """ TAROT BID Rule agent version 1
     """
 
     def __init__(self):
@@ -37,8 +37,8 @@ class TAROTRuleAgentV1(object):
         return self.step(state)
 
 
-class TAROTRuleModelV1(Model):
-    """ TAROT Rule Model version 1
+class TAROTBIDRuleModelV1(Model):
+    """ TAROT BID Rule Model version 1
     """
 
     def __init__(self):
@@ -47,7 +47,7 @@ class TAROTRuleModelV1(Model):
         super().__init__()
         env = rlcard.make('tarot')
 
-        rule_agent = TAROTRuleAgentV1()
+        rule_agent = TAROTBIDRuleAgentV1()
         self.rule_agents = [rule_agent for _ in range(env.player_num)]
 
     @property

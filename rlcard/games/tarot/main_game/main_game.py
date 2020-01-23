@@ -28,7 +28,7 @@ class MainGame(object):
         # Initialize a Round
         self.main_round = MainRound(self.starting_player, self.num_players, self.num_cards_per_player)
 
-        player_id = self.round.current_player_id
+        player_id = self.main_round.current_player_id
         state = self.get_state(player_id)
         return state, player_id
 
@@ -138,11 +138,3 @@ class MainGame(object):
             (int): current player's id
         """
         return self.main_round.current_player_id
-
-    def is_over(self):
-        """ Check if the game is over
-
-        Returns:
-            (boolean): True if the game is over
-        """
-        return self.main_round.is_over

@@ -1,34 +1,41 @@
 import unittest
 import numpy as np
+import random
 
-from rlcard.games.tarot.main_game.main_game import TarotGame as Game
+from rlcard.games.tarot.global_game import GlobalGame
+from rlcard.games.tarot.main_game.main_game import MainGame
 from rlcard.games.tarot.alpha_and_omega.player import TarotPlayer as Player
 from rlcard.games.tarot.alpha_and_omega.card import TarotCard as Card
 from rlcard.games.tarot.bid.bid import TarotBid as Bid
 from rlcard.games.tarot.utils import ACTION_LIST
 from rlcard.games.tarot.utils import hand2dict, encode_hand, encode_target, get_TarotCard_from_str
 
+num_players = 4
+num_cards_per_player = 18
+starting_player = random.randint(0, 3)
+players = [Player(i) for i in range(num_players)]
 
-class TestTarotMethods(unittest.TestCase):
+
+class TestTarotMainGameMethods(unittest.TestCase):
 
     def test_get_player_num(self):
-        game = Game()
+        game = MainGame(num_players, num_cards_per_player, starting_player, players)
         num_player = game.get_player_num()
         self.assertEqual(num_player, 4)
 
     def test_get_action_num(self):
-        game = Game()
+        game = MainGame(num_players, num_cards_per_player, starting_player, players)
         action_num = game.get_action_num()
         self.assertEqual(action_num, 78)
 
     def test_init_game(self):
-        game = Game()
+        game = MainGame(num_players, num_cards_per_player, starting_player, players)
         state, _ = game.init_game()
         total_cards = list(state['hand'] + state['others_hand'])
         self.assertEqual(len(total_cards), game.num_players * game.num_cards_per_player)
 
     def test_init_cards(self):
-        game = Game()
+        game = GlobalGame()
         state, _ = game.init_game()
         self.assertEqual(len(list(state['hand'])), game.num_cards_per_player)
 
@@ -38,20 +45,20 @@ class TestTarotMethods(unittest.TestCase):
         self.assertLess(bid1.get_bid_order(), bid2.get_bid_order())
 
     def test_get_player_id(self):
-        game = Game()
+        game = MainGame(num_players, num_cards_per_player, starting_player, players)
         _, player_id = game.init_game()
         current = game.get_player_id()
         self.assertEqual(player_id, current)
 
     def test_get_legal_actions(self):
-        game = Game()
+        game = MainGame(num_players, num_cards_per_player, starting_player, players)
         game.init_game()
         actions = game.get_legal_actions()
         for action in actions:
             self.assertIn(action.get_str(), ACTION_LIST)
 
     def test_step(self):
-        game = Game()
+        game = MainGame(num_players, num_cards_per_player, starting_player, players)
         game.init_game()
         action = np.random.choice(game.get_legal_actions())
         state, next_player_id = game.step(action)
@@ -59,10 +66,27 @@ class TestTarotMethods(unittest.TestCase):
         self.assertLessEqual(len(state['played_cards']), 2)
         self.assertEqual(next_player_id, current)
 
-    def test_get_payoffs(self):
-        game = Game()
-        game.init_bid_game()
-        while not game.is_over():
+    def test_get_payoffs_globally(self):
+        global_game = GlobalGame()
+        global_game.init_game()
+        while not global_game.is_over:
+            actions = global_game.get_legal_actions()
+            action = np.random.choice(actions)
+            state, _ = global_game.step(action)
+            total_cards = len(state['hand']) + len(state['others_hand']) + len(state['played_cards'])
+            self.assertEqual(total_cards, 72)  # Not counting the dog in it
+        payoffs = global_game.get_payoffs()
+        total = 0
+        for payoff in payoffs:
+            total += payoff
+        self.assertEqual(total, 0)
+
+        # TODO Adapt to check only third part behavior
+        """    
+        def test_get_payoffs(self):
+        game = MainGame(num_players, num_cards_per_player, starting_player, players)
+        game.init_game()
+        while not game.is_over:
             actions = game.get_legal_actions()
             action = np.random.choice(actions)
             state, _ = game.step(action)
@@ -73,9 +97,10 @@ class TestTarotMethods(unittest.TestCase):
         for payoff in payoffs:
             total += payoff
         self.assertEqual(total, 0)
+        """
 
     def test_step_back(self):
-        game = Game()
+        game = MainGame(num_players, num_cards_per_player, starting_player, players)
         _, player_id = game.init_game()
         action = np.random.choice(game.get_legal_actions())
         self.assertEqual(game.round.current_player_id, player_id)

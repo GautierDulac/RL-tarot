@@ -13,7 +13,7 @@ class TarotPlayer(object):
         self.hand = []
         self.points = 0
         self.bouts = 0
-        self.bid = []
+        self.bid = None
         self.taking = taking
 
     def get_player_id(self):

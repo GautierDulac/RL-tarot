@@ -38,6 +38,7 @@ class BidGame(object):
         # Deal 18 cards to each player to prepare for the game
         self.dealer = Dealer()
         for player in self.players:
+            player.hand = []
             self.dealer.deal_cards(player, self.num_cards_per_player)
 
         # Deal 6 cards to the dog
@@ -93,7 +94,7 @@ class BidGame(object):
             (list): A list of legal actions
         """
 
-        return self.bid_round.get_legal_actions(self.players, self.bid_round.current_player_id)
+        return self.bid_round.get_legal_actions()
 
     def get_player_num(self):
         """ Return the number of players in Tarot

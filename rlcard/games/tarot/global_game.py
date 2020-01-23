@@ -2,6 +2,7 @@ import random
 
 from rlcard.games.tarot.bid.bid import TarotBid
 from rlcard.games.tarot.alpha_and_omega.player import TarotPlayer as Player
+from rlcard.games.tarot.dog.dog import TarotDog
 
 from rlcard.games.tarot.bid.bid_game import BidGame
 from rlcard.games.tarot.dog.dog_game import DogGame
@@ -29,7 +30,7 @@ class GlobalGame(object):
         self.bid_over = False
         # Initialize the dog
         self.dog_game = None
-        self.dog = None
+        self.dog = TarotDog()
         self.dog_over = False
         # Depending on the bid and dog, the known cards differ:
         self.known_cards = []
@@ -48,8 +49,11 @@ class GlobalGame(object):
                 (int): Current bidder's id
         """
         # Initialize bid Round
+        print(self.players)
         self.bid_game = BidGame(self.players, self.num_players, self.starting_player, self.num_cards_per_player,
                                 self.num_cards_dog, self.dog)
+
+        self.bid_game.init_game()
 
         player_id = self.bid_game.bid_round.current_player_id
         state = self.bid_game.get_state(player_id)

@@ -35,17 +35,17 @@ class BidRound(object):
             :param players: list of object of TarotPlayer
         """
         player = players[self.current_player_id]
-        if len(player.bid) == 0:
-            player.bid.append(played_bid)
-        elif player.bid[-1].bid != "PASSE":
-            player.bid.append(played_bid)
+        if player.bid is None:
+            player.bid = played_bid
+        elif player.bid.get_str() != "PASSE":
+            player.bid = played_bid
             self.taking_player_id = self.current_player_id
 
-        self.max_bid_order = max(self.max_bid, played_bid.get_bid_order())
+        self.max_bid_order = max(self.max_bid_order, played_bid.get_bid_order())
 
         total_surrendered_players = 0
         for player_id in range(self.num_players):
-            if players[player_id].bid[-1].bid == "PASSE":
+            if players[player_id].bid is not None and players[player_id].bid.get_str() == "PASSE":
                 total_surrendered_players += 1
                 players[player_id].taking = False
             else:
@@ -66,7 +66,7 @@ class BidRound(object):
         Get legal bids
         :return: list of legals bids
         """
-        legal_bids = self.all_bids[(self.max_bid + 1):] + [self.all_bids[0]]
+        legal_bids = self.all_bids[(self.max_bid_order + 1):] + [self.all_bids[0]]
 
         return legal_bids
 
@@ -80,12 +80,12 @@ class BidRound(object):
         state = {}
         player = players[player_id]
         state['hand'] = cards2list(player.hand)
-        state['max_bid'] = self.max_bid
+        state['max_bid'] = self.max_bid_order
         state['current_personnal_bid'] = player.bid
         other_bids = []
         for player in players:
-            if player.player_id != player_id:
-                other_bids.extend(player.bid)
+            if player.player_id != player_id and player.bid is not None:
+                other_bids.append(player.bid)
         state['other_bids'] = other_bids
         state['legal_actions'] = self.get_legal_actions()
         return state

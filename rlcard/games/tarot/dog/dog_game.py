@@ -7,13 +7,13 @@ from typing import List
 
 class DogGame(object):
 
-    def __init__(self, players: List[TarotPlayer], taking_player: TarotPlayer, taking_player_id: int,
+    def __init__(self, players: List[TarotPlayer], taking_player_id: int,
                  num_cards_per_player: int, num_cards_dog: int, dog: TarotDog, taking_bid: TarotBid):
         self.num_cards_per_player = num_cards_per_player
         self.num_cards_dog = num_cards_dog
         # Initialize players
         self.players = players
-        self.taking_player = taking_player
+        self.taking_player = players[taking_player_id]
         self.current_player_id = taking_player_id
         # Initialize the dog round
         self.dog_round = DogRound(taking_player, taking_player_id, dog, num_cards_dog, taking_bid)

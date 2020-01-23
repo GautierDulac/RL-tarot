@@ -15,16 +15,17 @@ class BidRound(object):
         self.current_player_id = starting_player
         self.num_players = num_players
         self.direction = 1
-        self.max_bid = 0
+        self.max_bid_order = 0
         self.is_over = False
         self.is_dead = False
-        self.taking = None
+        self.taking_player_id = None
         self.all_bids = [TarotBid('PASSE'),
                          TarotBid('PETITE'),
                          TarotBid('POUSSE'),
                          TarotBid('GARDE'),
                          TarotBid('GARDE_SANS'),
                          TarotBid('GARDE_CONTRE')]
+        self.max_bid = self.all_bids[self.max_bid_order]
 
     def proceed_round(self, players: List[TarotPlayer], played_bid: TarotBid):
         """ proceed bid round with a player bid
@@ -38,8 +39,9 @@ class BidRound(object):
             player.bid.append(played_bid)
         elif player.bid[-1].bid != "PASSE":
             player.bid.append(played_bid)
+            self.taking_player_id = self.current_player_id
 
-        self.max_bid = max(self.max_bid, played_bid.get_bid_order())
+        self.max_bid_order = max(self.max_bid, played_bid.get_bid_order())
 
         total_surrendered_players = 0
         for player_id in range(self.num_players):
@@ -50,7 +52,7 @@ class BidRound(object):
                 players[player_id].taking = True
 
         # Maximal bid encountered
-        if self.max_bid == 5:
+        if self.max_bid_order == 5:
             self.is_over = True
         elif total_surrendered_players == self.num_players - 1:
             self.is_over = True
@@ -69,7 +71,6 @@ class BidRound(object):
         return legal_bids
 
     def get_state(self, players: List[TarotPlayer], player_id):
-        # TODO : Check relevance of this state for bid round
         """ Get player's state in the bid round
 
         Args:

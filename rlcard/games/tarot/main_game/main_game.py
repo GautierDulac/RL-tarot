@@ -1,14 +1,8 @@
-import random
-
-from rlcard.games.tarot.alpha_and_omega.dealer import TarotDealer as Dealer
-from rlcard.games.tarot.dog.dog import TarotDog as Dog
-from rlcard.games.tarot.bid.bid_round import BidRound
 from rlcard.games.tarot.bid.bid import TarotBid
-from rlcard.games.tarot.alpha_and_omega.player import TarotPlayer as Player
-from rlcard.games.tarot.main_game.main_round import TarotRound as Round
+from rlcard.games.tarot.main_game.main_round import MainRound
 
 
-class TarotGame(object):
+class MainGame(object):
 
     def __init__(self, num_players, num_cards_per_player, starting_player, players):
         self.num_players = num_players
@@ -16,9 +10,10 @@ class TarotGame(object):
         self.starting_player = starting_player
         self.players = players
         # Initialize a Round instance
-        self.round = None
+        self.main_round = None
         # End of game
         self.is_over = False
+        self.payoffs = []
 
     def init_game(self):
         """ Initialize round and state for the game
@@ -31,7 +26,7 @@ class TarotGame(object):
         """
 
         # Initialize a Round
-        self.round = Round(self.starting_player, self.num_players, self.num_cards_per_player)
+        self.main_round = MainRound(self.starting_player, self.num_players, self.num_cards_per_player)
 
         player_id = self.round.current_player_id
         state = self.get_state(player_id)
@@ -50,13 +45,13 @@ class TarotGame(object):
                 (int): next plater's id
         """
 
-        player_id = self.round.proceed_round(self.players, played_card)
+        player_id = self.main_round.proceed_round(self.players, played_card)
 
-        if self.round.is_over:
+        if self.main_round.is_over:
             self.is_over = True
 
         state = self.get_state(player_id)
-        self.round.current_player_id = player_id
+        self.main_round.current_player_id = player_id
         return state, player_id
 
     def get_state(self, player_id):
@@ -68,17 +63,16 @@ class TarotGame(object):
         Returns:
             (dict): The state of the player
         """
-        state = self.round.get_state(self.players, player_id)
+        state = self.main_round.get_state(self.players, player_id)
         return state
 
     def get_payoffs(self):
-        # TODO : Confirm removal if in global_game ?
         """ Return the payoffs of the game
 
         Returns:
             (list): Each entry corresponds to the payoff of one player
         """
-        winner = self.round.winner
+        winner = self.main_round.winner
         taking_player = 0
         for player_id in range(self.num_players):
             if self.players[player_id].taking:
@@ -118,7 +112,7 @@ class TarotGame(object):
             (list): A list of legal actions
         """
 
-        return self.round.get_legal_actions(self.players, self.round.current_player_id)
+        return self.main_round.get_legal_actions(self.players, self.main_round.current_player_id)
 
     def get_player_num(self):
         """ Return the number of players in Tarot
@@ -143,7 +137,7 @@ class TarotGame(object):
         Returns:
             (int): current player's id
         """
-        return self.round.current_player_id
+        return self.main_round.current_player_id
 
     def is_over(self):
         """ Check if the game is over
@@ -151,4 +145,4 @@ class TarotGame(object):
         Returns:
             (boolean): True if the game is over
         """
-        return self.round.is_over
+        return self.main_round.is_over

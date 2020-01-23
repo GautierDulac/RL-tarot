@@ -4,7 +4,7 @@ from rlcard.games.tarot.bid.bid_round import BidRound
 
 class BidGame(object):
 
-    def __init__(self, players, num_players, starting_player, num_cards_per_player, num_cards_dog):
+    def __init__(self, players, num_players, starting_player, num_cards_per_player, num_cards_dog, dog):
         self.num_players = num_players
         self.num_cards_per_player = num_cards_per_player
         self.num_cards_dog = num_cards_dog
@@ -14,11 +14,14 @@ class BidGame(object):
         # Initialize four players to play the game
         self.players = players
         # Initialize the Dog
-        self.dog = None
+        self.dog = dog
         # Initialize a Bid Round instance
         self.bid_round = None
         # Bid round over ?
         self.bid_over = False
+        # Taking player ?
+        self.taking_player_id = None
+        self.taking_bid = None
 
     def init_game(self):
         """ Initialize players and state for bid game
@@ -61,6 +64,8 @@ class BidGame(object):
         player_id = self.bid_round.proceed_round(self.players, played_bid)
         if self.bid_round.is_over:
             self.bid_over = True
+            self.taking_player_id = self.bid_round.taking_player_id
+            self.taking_bid = self.bid_round.max_bid
             return self.get_state(player_id), player_id
         elif self.bid_round.is_dead:
             self.init_game()

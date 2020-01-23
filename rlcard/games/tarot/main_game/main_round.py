@@ -5,7 +5,7 @@ from rlcard.games.tarot.utils import cards2list, get_end_pot_information
 from typing import List
 
 
-class TarotRound(object):
+class MainRound(object):
 
     def __init__(self, starting_player, num_players, num_card_per_player):
         """

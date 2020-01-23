@@ -2,7 +2,7 @@ import numpy as np
 
 from rlcard.envs.env import Env
 from rlcard import models
-from rlcard.games.tarot.main_game.main_game import TarotGame as Game
+from rlcard.games.tarot.global_game import GlobalGame as Game
 from rlcard.games.tarot.utils import encode_hand, encode_target, get_TarotCard_from_str
 from rlcard.games.tarot.utils import ACTION_SPACE, ACTION_LIST
 from rlcard.games.tarot.alpha_and_omega.card import TarotCard
@@ -11,8 +11,9 @@ from rlcard.games.tarot.alpha_and_omega.card import TarotCard
 class TarotEnv(Env):
 
     def __init__(self):
+        # defining a self.game instance of GlobalGame
         super().__init__(Game())
-        self.state_shape = [3, 5, 22]
+        # self.state_shape = [3, 5, 22] # TODO : Confirm removal
 
     def print_state(self, player):
         """ Print out the state of a given player

@@ -8,7 +8,7 @@ from rlcard.games.tarot.alpha_and_omega.player import TarotPlayer as Player
 from rlcard.games.tarot.main_game.main_round import TarotRound as Round
 
 
-class TarotGame(object):
+class GlobalGame(object):
 
     def __init__(self):
         self.num_players = 4
@@ -20,12 +20,18 @@ class TarotGame(object):
         self.dealer = None
         # Initialize four players to play the game
         self.players = [Player(i) for i in range(self.num_players)]
-        # Initialize the dog
-        self.dog = Dog()
         # Initialize a Bid instance
+        self.bid_game = None
         self.bid_round = None
+        self.bid_over = False
+        # Initialize the dog
+        self.dog_game = None
+        self.dog = None
+        self.dog_over = False
         # Initialize a Round instance
-        self.round = None
+        self.main_game = None
+        self.main_round = None
+        self.is_over = False
 
     def init_bid_game(self):
         """ Initialize players and state for bid game

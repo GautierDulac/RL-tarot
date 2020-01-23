@@ -7,14 +7,11 @@ from typing import List
 
 class TarotRound(object):
 
-    def __init__(self, dealer, num_players, num_card_per_player, starting_player):
-        """ Initialize the round class
-
-        Args:
-            dealer (object): the object of TarotDealer
-            num_players (int): the number of players in game
+    def __init__(self, starting_player, num_players, num_card_per_player):
         """
-        self.dealer = dealer
+        Initialize the round class
+        :param starting_player:
+        """
         self.target_card = None
         self.highest_trump = -1
         self.current_player_id = starting_player
@@ -130,6 +127,7 @@ class TarotRound(object):
         return legal_actions
 
     def get_state(self, players, player_id):
+        # TODO : Ensure state is correctly recorded (all relevant information for NN ?)
         """ Get player's state
 
         Args:

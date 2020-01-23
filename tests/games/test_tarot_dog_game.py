@@ -69,6 +69,7 @@ class TestTarotBidGameMethods(unittest.TestCase):
     def test_get_final_dog(self):
         game = DogGame(players, taking_player_id, num_cards_per_player, num_cards_dog, dog, taking_bid)
         game.init_game()
+        state = {}
         while not game.is_over:
             actions = game.get_legal_actions()
             action = np.random.choice(actions)

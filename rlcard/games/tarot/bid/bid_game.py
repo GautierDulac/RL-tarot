@@ -1,5 +1,3 @@
-import random
-
 from rlcard.games.tarot.alpha_and_omega.dealer import TarotDealer as Dealer
 from rlcard.games.tarot.bid.bid_round import BidRound
 
@@ -63,6 +61,7 @@ class BidGame(object):
         player_id = self.bid_round.proceed_round(self.players, played_bid)
         if self.bid_round.is_over:
             self.bid_over = True
+            return self.get_state(player_id), player_id
         elif self.bid_round.is_dead:
             self.init_game()
         else:

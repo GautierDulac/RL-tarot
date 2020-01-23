@@ -69,6 +69,7 @@ class BidRound(object):
         return legal_bids
 
     def get_state(self, players: List[TarotPlayer], player_id):
+        # TODO : Check relevance of this state for bid round
         """ Get player's state in the bid round
 
         Args:

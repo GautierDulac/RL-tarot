@@ -49,8 +49,8 @@ with tf.Session() as sess:
 
     sess.run(tf.global_variables_initializer())
 
-    env.set_agents([agent, random_agent, random_agent])
-    eval_env.set_agents([agent, random_agent, random_agent])
+    env.set_agents([agent] + [random_agent] * (env.player_num - 1))
+    eval_env.set_agents([agent] + [random_agent] * (env.player_num - 1))
 
     # Count the number of steps
     step_counter = 0
@@ -82,14 +82,14 @@ with tf.Session() as sess:
                 reward += payoffs[0]
 
             logger.log('\n########## Evaluation ##########')
-            logger.log('Timestep: {} Average reward is {}'.format(env.timestep, float(reward)/evaluate_num))
+            logger.log('Timestep: {} Average reward is {}'.format(env.timestep, float(reward) / evaluate_num))
 
             # Add point to logger
-            logger.add_point(x=env.timestep, y=float(reward)/evaluate_num)
+            logger.add_point(x=env.timestep, y=float(reward) / evaluate_num)
 
         # Make plot
         if episode % save_plot_every == 0 and episode > 0:
-            logger.make_plot(save_path=figure_path+str(episode)+'.png')
+            logger.make_plot(save_path=figure_path + str(episode) + '.png')
 
     # Make the final plot
-    logger.make_plot(save_path=figure_path+'final_'+str(episode)+'.png')
+    logger.make_plot(save_path=figure_path + 'final_' + str(episode) + '.png')

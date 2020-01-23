@@ -145,6 +145,7 @@ class TarotRound(object):
         state['pot_number'] = int(len(state['played_cards']) / 4)
         state['pot_cards'] = state['played_cards'][state['pot_number'] * 4:]
         others_hand = []
+        # TODO : Remove dog here
         for player in players:
             if player.player_id != player_id:
                 others_hand.extend(player.hand)

@@ -17,6 +17,8 @@ class TarotGame(object):
         self.players = players
         # Initialize a Round instance
         self.round = None
+        # End of game
+        self.is_over = False
 
     def init_game(self):
         """ Initialize round and state for the game
@@ -49,6 +51,10 @@ class TarotGame(object):
         """
 
         player_id = self.round.proceed_round(self.players, played_card)
+
+        if self.round.is_over:
+            self.is_over = True
+
         state = self.get_state(player_id)
         self.round.current_player_id = player_id
         return state, player_id

@@ -91,7 +91,7 @@ class GlobalGame(object):
                 self.known_cards = self.dog_game.known_cards
                 self.current_game_part = 'MAIN'
                 self.main_game = MainGame(self.num_players, self.num_cards_per_player, self.starting_player,
-                                          self.players)
+                                          self.players, self.bid_game.taking_player_id)
         else:
             player_id = self.main_game.main_round.proceed_round(self.players, played_action)
             state = self.main_game.get_state(player_id)

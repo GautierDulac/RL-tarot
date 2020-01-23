@@ -67,7 +67,7 @@ class MainRound(object):
             self.target_card = None
 
             # Printing values for debugging purpose # TODO REMOVE for training
-            print('================= Winner      ===============')
+            print('================= Winner - '+str(int(len(self.played_cards)/4))+' =================')
             print('\r>> Agent {} '.format(winner_id))
             print('\r>> winning {} points'.format(pot_value))
             print('')

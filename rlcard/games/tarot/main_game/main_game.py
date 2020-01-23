@@ -4,16 +4,19 @@ from rlcard.games.tarot.main_game.main_round import MainRound
 
 class MainGame(object):
 
-    def __init__(self, num_players, num_cards_per_player, starting_player, players):
+    def __init__(self, num_players, num_cards_per_player, starting_player, players, taking_player_id):
         self.num_players = num_players
         self.num_cards_per_player = num_cards_per_player
         self.starting_player = starting_player
         self.players = players
+        self.taking_player_id = taking_player_id
         # Initialize a Round instance
         self.main_round = None
         # End of game
         self.is_over = False
-        self.payoffs = []
+        self.payoffs = dict()
+        for player_id in range(num_players):
+            self.payoffs[player_id] = 0
 
     def init_game(self):
         """ Initialize round and state for the game
@@ -24,6 +27,9 @@ class MainGame(object):
                 (dict): The first state in one game
                 (int): Current player's id
         """
+
+        for player_id in range(self.num_players):
+            self.payoffs[player_id] = 0
 
         # Initialize a Round
         self.main_round = MainRound(self.starting_player, self.num_players, self.num_cards_per_player)
@@ -73,14 +79,10 @@ class MainGame(object):
             (list): Each entry corresponds to the payoff of one player
         """
         winner = self.main_round.winner
-        taking_player = 0
-        for player_id in range(self.num_players):
-            if self.players[player_id].taking:
-                taking_player = player_id
 
         # Counting points
-        winning_points = self.players[taking_player].points
-        winning_bouts = self.players[taking_player].bouts
+        winning_points = self.players[self.taking_player_id].points
+        winning_bouts = self.players[self.taking_player_id].bouts
         if winning_bouts == 0:
             asked_contract = 56
         elif winning_bouts == 1:
@@ -90,17 +92,17 @@ class MainGame(object):
         else:  # winning_bouts == 3:
             asked_contract = 36
         additional_points = abs(int((winning_points - asked_contract) / 10))
-        total_contract_points = TarotBid.get_bid_value(self.players[taking_player].bid[-1].bid) + additional_points
+        total_contract_points = self.players[self.taking_player_id].bid.get_bid_value() + additional_points
         # Defining sense of the final points for every one (POS is taker winner, NEG otherwise)
         if winner is not None and len(winner) == 1:
             taker_winner = 1
         else:
             taker_winner = -1
         # Giving points to the taker
-        self.payoffs[taking_player] = taker_winner * 3 * total_contract_points  # TODO : Specific to 4 player game
+        self.payoffs[self.taking_player_id] = taker_winner * 3 * total_contract_points  # TODO : Specific to 4 player game
         # Giving points to the others
         for player_id in range(self.num_players):
-            if player_id != taking_player:
+            if player_id != self.taking_player_id:
                 self.payoffs[player_id] = - total_contract_points * taker_winner
 
         return self.payoffs

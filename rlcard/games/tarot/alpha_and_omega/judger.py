@@ -19,7 +19,7 @@ class TarotJudger(object):
         for player_id in range(len(players)):
             counts[player_id] = np.sum(players[player_id].points)
             if players[player_id].taking:
-                number_bouts = len(players[player_id].bouts)
+                number_bouts = players[player_id].bouts
                 if (number_bouts == 3 and counts[player_id] >= 36) \
                         or (number_bouts == 2 and counts[player_id] >= 41) \
                         or (number_bouts == 1 and counts[player_id] >= 51) \

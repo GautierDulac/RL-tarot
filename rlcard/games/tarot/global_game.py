@@ -74,7 +74,6 @@ class GlobalGame(object):
         """
         if self.current_game_part == 'BID':
             state, player_id = self.bid_game.step(played_action)
-            print(player_id) # TODO Remove
             state = self.bid_game.get_state(player_id)
             self.bid_game.bid_round.current_player_id = player_id
             if self.bid_game.bid_over:
@@ -84,6 +83,7 @@ class GlobalGame(object):
                 self.current_game_part = 'DOG'
                 self.dog_game = DogGame(self.players, self.taking_player_id, self.num_cards_per_player,
                                         self.num_cards_dog, self.dog, self.taking_bid)
+                self.dog_game.init_game()
         elif self.current_game_part == 'DOG':
             state, player_id = self.dog_game.step(played_action)
             state = self.dog_game.get_state(player_id)
@@ -93,12 +93,14 @@ class GlobalGame(object):
                 self.current_game_part = 'MAIN'
                 self.main_game = MainGame(self.num_players, self.num_cards_per_player, self.starting_player,
                                           self.players, self.bid_game.taking_player_id)
-        else:
-            player_id = self.main_game.step(played_action)
-            state = self.main_game.get_state(player_id)
+                self.main_game.init_game()
+        elif self.current_game_part == 'MAIN':
+            state, player_id = self.main_game.step(played_action)
             if self.main_game.is_over:
                 self.main_over = True
                 self.is_over = True
+        else:
+            raise AttributeError
 
         return state, player_id
 

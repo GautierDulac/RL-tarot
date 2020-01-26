@@ -4,7 +4,7 @@ from rlcard.envs.env import Env
 from rlcard import models
 from rlcard.games.tarot.global_game import GlobalGame as Game
 from rlcard.games.tarot.utils import encode_hand, encode_target, get_TarotCard_from_str
-from rlcard.games.tarot.utils import ACTION_SPACE, ACTION_LIST
+from rlcard.games.tarot.utils import ACTION_SPACE, ACTION_LIST, BID_SPACE, BID_LIST
 from rlcard.games.tarot.alpha_and_omega.card import TarotCard
 
 
@@ -20,12 +20,51 @@ class TarotEnv(Env):
         Args:
             player (int): Player id
         """
-        # TODO : Adapt print depending on the part of the game
         state = self.game.get_state(player)
         if self.game.current_game_part == 'BID':
-
+            print('================= Your Hand    ===============')
+            TarotCard.print_cards(state['hand'])
+            print('')
+            print('============== Current max Bid ===============')
+            print(self.game.bid_game.bid_round.all_bids[state['max_bid']])
+            print('')
+            print('============ Current Personnal Bid ===========')
+            print(state['current_personnal_bid'].get_str())
+            print('')
+            print('========== Actions You Can Choose ============')
+            for i, bid in enumerate(state['legal_actions']):
+                print(str(BID_SPACE[bid.get_str()]) + ': ', end='')
+                print(bid.get_str() + ', ', end='')
+                if i < len(state['legal_actions']) - 1:
+                    print(' ', end='')
+            print('\n')
+            return
         elif self.game.current_game_part == 'DOG':
-
+            print('================= Taking Bid =================')
+            print(self.game.bid_game.bid_round.all_bids[state['taking_bid']])
+            print('')
+            if state['taking_bid'] < 4:
+                # Dog has to be done
+                print('================= Total Hand =================')
+                TarotCard.print_cards(state['all_cards'])
+                print('')
+                print('============= Current New Dog ================')
+                TarotCard.print_cards(state['new_dog'])
+                print('')
+                print('============ Cards You Can Choose ============')
+                for i, action in enumerate(state['legal_actions']):
+                    print(str(ACTION_SPACE[action.get_str()]) + ': ', end='')
+                    TarotCard.print_cards(action.get_str())
+                    if i < len(state['legal_actions']) - 1:
+                        print(', ', end='')
+                print('\n')
+            else :
+                # No dog to be done
+                print('================= Your Hand  =================')
+                TarotCard.print_cards(state['hand'])
+                print('')
+                print('NO ACTION TO BE DONE')
+            return
         elif self.game.current_game_part == 'MAIN':
             print('================= Your Hand    ===============')
             TarotCard.print_cards(state['hand'])

@@ -72,20 +72,18 @@ class DogRound(object):
             players (list): The list of TarotPlayer
             player_id (int): The id of the player
         """
-        state = {}
+        state = {'taking_bid': self.taking_bid.get_bid_order(), 'all_cards': cards2list(self.all_cards),
+                 'legal_actions': self.get_legal_actions(), 'hand': cards2list(self.taking_player.hand)}
         # When dog is known
         others_hand = []
         for player in players:
             if player.player_id != player_id:
                 others_hand.extend(player.hand)
-        state['hand'] = cards2list(self.taking_player.hand)
         if self.taking_bid.get_bid_order() < 4:
             state['new_dog'] = cards2list(self.new_dog)
         # otherwise
         else:
-            state['new_dog'] = cards2list(self.dog.hand)
+            state['new_dog'] = None
             others_hand.extend(self.dog.hand)
         state['others_hand'] = cards2list(others_hand)
-        state['legal_actions'] = self.get_legal_actions()
-        state['all_cards'] = cards2list(self.all_cards)
         return state

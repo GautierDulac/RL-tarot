@@ -13,7 +13,6 @@ class TarotEnv(Env):
     def __init__(self):
         # defining a self.game instance of GlobalGame
         super().__init__(Game())
-        # self.state_shape = [3, 5, 22] # TODO : Confirm removal
 
     def print_state(self, player):
         """ Print out the state of a given player
@@ -21,28 +20,32 @@ class TarotEnv(Env):
         Args:
             player (int): Player id
         """
-        # TODO : Adapt print depending on the part of the game, define a state['game_part'] ?
+        # TODO : Adapt print depending on the part of the game
         state = self.game.get_state(player)
+        if self.game.current_game_part == 'BID':
 
-        print('================= Your Hand    ===============')
-        TarotCard.print_cards(state['hand'])
-        print('')
-        print('================= Pot Number   ===============')
-        print(state['pot_number'])
-        print('')
-        print('================= Target Card  ===============')
-        TarotCard.print_cards(state['target'])
-        print('')
-        print('================= Pot Cards    ===============')
-        TarotCard.print_cards(state['pot_cards'])
-        print('')
-        print('========== Actions You Can Choose ============')
-        for i, action in enumerate(state['legal_actions']):
-            print(str(ACTION_SPACE[action.get_str()]) + ': ', end='')
-            TarotCard.print_cards(action.get_str())
-            if i < len(state['legal_actions']) - 1:
-                print(', ', end='')
-        print('\n')
+        elif self.game.current_game_part == 'DOG':
+
+        elif self.game.current_game_part == 'MAIN':
+            print('================= Your Hand    ===============')
+            TarotCard.print_cards(state['hand'])
+            print('')
+            print('================= Pot Number   ===============')
+            print(state['pot_number'])
+            print('')
+            print('================= Target Card  ===============')
+            TarotCard.print_cards(state['target'])
+            print('')
+            print('================= Pot Cards    ===============')
+            TarotCard.print_cards(state['pot_cards'])
+            print('')
+            print('========== Actions You Can Choose ============')
+            for i, action in enumerate(state['legal_actions']):
+                print(str(ACTION_SPACE[action.get_str()]) + ': ', end='')
+                TarotCard.print_cards(action.get_str())
+                if i < len(state['legal_actions']) - 1:
+                    print(', ', end='')
+            print('\n')
 
     def print_result(self, player):
         # TODO : Print results for the bid time

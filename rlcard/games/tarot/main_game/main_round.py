@@ -134,21 +134,20 @@ class MainRound(object):
             players (list): The list of TarotPlayer
             player_id (int): The id of the player
         """
-        state = {}
         player = players[player_id]
-        state['hand'] = cards2list(player.hand)
+        number_of_played_cards = len(self.played_cards)
+        state = {'hand': cards2list(player.hand), 'played_cards': cards2list(self.played_cards),
+                 'pot_number': int(number_of_played_cards / 4),
+                 'legal_actions': self.get_legal_actions(players, player_id)}
+        state['pot_cards'] = state['played_cards'][state['pot_number'] * 4:]
         if self.target_card is not None:
             state['target'] = self.target_card.get_str()
         else:
             state['target'] = None
-        state['played_cards'] = cards2list(self.played_cards)
-        state['pot_number'] = int(len(state['played_cards']) / 4)
-        state['pot_cards'] = state['played_cards'][state['pot_number'] * 4:]
         others_hand = []
         # TODO : Remove dog here
         for player in players:
             if player.player_id != player_id:
                 others_hand.extend(player.hand)
         state['others_hand'] = cards2list(others_hand)
-        state['legal_actions'] = self.get_legal_actions(players, player_id)
         return state

@@ -194,3 +194,6 @@ class GlobalGame(object):
         :return: (bool) is the game over
         """
         return self.is_game_over
+
+    def step_back(self):
+        pass

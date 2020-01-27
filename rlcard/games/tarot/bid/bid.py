@@ -15,6 +15,7 @@ class TarotBid(object):
 
     def __init__(self, bid: str):
         self.bid = bid
+        self.str = bid
 
     def get_str(self):
         return self.bid

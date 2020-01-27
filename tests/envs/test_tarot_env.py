@@ -64,6 +64,7 @@ class TestTarotEnv(unittest.TestCase):
         env.set_mode(human_mode=True)
         state = env.reset()
         self.assertIsInstance(state, dict)
+        print(state) # TODO REMOVE
         for _ in range(100):
             state, _, _ = env.step(np.random.choice(state['legal_actions']))
 

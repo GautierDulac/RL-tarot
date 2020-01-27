@@ -27,10 +27,13 @@ class TarotEnv(Env):
             TarotCard.print_cards(state['hand'])
             print('')
             print('============== Current max Bid ===============')
-            print(self.game.bid_game.bid_round.all_bids[state['max_bid']])
+            print(self.game.bid_game.bid_round.all_bids[state['max_bid']].get_str())
             print('')
             print('============ Current Personnal Bid ===========')
-            print(state['current_personnal_bid'].get_str())
+            if state['current_personnal_bid'] is None:
+                print('No bid yet')
+            else:
+                print(state['current_personnal_bid'].get_str())
             print('')
             print('========== Actions You Can Choose ============')
             for i, bid in enumerate(state['legal_actions']):
@@ -115,6 +118,7 @@ class TarotEnv(Env):
         Args:
             action (str): A string a action
         """
+        print(self.game.current_game_part) # TODO REMOVE
         if self.game.current_game_part == 'BID':
             print(action)
         else:
@@ -137,7 +141,7 @@ class TarotEnv(Env):
         """
         obs = np.zeros((6, 5, 22), dtype=int)
         legal_action_id = self.get_legal_actions()
-        extracted_state = {'legal_action': legal_action_id}
+        extracted_state = {'legal_actions': legal_action_id}
         if self.game.current_game_part == 'BID':
             obs[0][0][0] = 0
             encode_hand(obs, state['hand'], index_to_encode=1)

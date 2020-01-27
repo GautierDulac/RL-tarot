@@ -116,9 +116,9 @@ class GlobalGame(object):
         if self.current_game_part == 'BID':
             state = self.bid_game.get_state(player_id)
         elif self.current_game_part == 'DOG':
-            state = self.dog_game.get_state(self.players, player_id)
+            state = self.dog_game.get_state(player_id)
         else:
-            state = self.main_game.get_state(self.players, player_id)
+            state = self.main_game.get_state(player_id)
         return state
 
     def get_payoffs(self):

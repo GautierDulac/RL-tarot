@@ -58,7 +58,7 @@ class TarotEnv(Env):
                     if i < len(state['legal_actions']) - 1:
                         print(', ', end='')
                 print('\n')
-            else :
+            else:
                 # No dog to be done
                 print('================= Your Hand  =================')
                 TarotCard.print_cards(state['hand'])
@@ -87,8 +87,7 @@ class TarotEnv(Env):
             print('\n')
 
     def print_result(self, player):
-        # TODO : Print results for the bid time
-        # TODO : Adapt with the rank of players
+        # The Bid game is not printed
         """ Print the game result when the game is over
 
         Args:
@@ -96,10 +95,17 @@ class TarotEnv(Env):
         """
         payoffs = self.get_payoffs()
         print('===============     Result     ===============')
-        if payoffs[player] > 0:
-            print('You win!')
-        else:
-            print('You lose!')
+        payoffs = sorted(payoffs, key=payoffs.get)
+        print('Taking player : ' + str(self.game.taking_player_id) + ', with a ' + self.game.taking_bid.get_str())
+        print('This player did ' + str(self.game.players[self.game.taking_player_id].points) +
+              ' with ' + str(self.game.players[self.game.taking_player_id].bouts))
+        print('Final winner(s) is/are :' + str(self.game.main_game.main_round.winner))
+        print('===============     Earned points     ===============')
+        for key, value in enumerate(payoffs):
+            if value > 0:
+                print('Player ' + str(key) + ' wins ' + str(value) + ' points !')
+            else:
+                print('Player ' + str(key) + 'loses ' + str(- value) + 'points !')
         print('')
 
     def print_action(self, action):

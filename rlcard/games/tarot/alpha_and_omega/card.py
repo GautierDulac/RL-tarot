@@ -8,13 +8,13 @@ class TarotCard(object):
             'trump_value': range(0, 22)
             }
 
-    def __init__(self, is_trump, color=None, color_value=None, trump_value=None):
-        """ Initialize the class of TarotCard
-
-        Args:
-            color (str): The color of card
-            color_value (int): The value of card
-            trump_value (int): The value of card when trump
+    def __init__(self, is_trump: bool, color: str = None, color_value: int = None, trump_value: int = None):
+        """
+        Initialize the class of TarotCard
+        :param is_trump: True if trump color
+        :param color: str representation of the color ('SPADE', 'CLOVER', 'HEART', 'DIAMOND')
+        :param color_value: int in between 1 and 14
+        :param trump_value: int in between 0 and 21
         """
         self.is_trump = is_trump
         self.color = color
@@ -23,10 +23,9 @@ class TarotCard(object):
         self.str = self.get_str()
 
     def get_str(self):
-        """ Get the string representation of card
-
-        Return:
-            (str): The string of card's color and value
+        """
+        Get the string representation of card
+        :return: A string reprensenting the card
         """
         if self.is_trump:
             return 'TRUMP-' + str(self.trump_value)
@@ -35,7 +34,7 @@ class TarotCard(object):
 
     def get_value(self):
         """
-
+        Compute the value of a given card
         :return: points value of the card (float)
         """
         if self.is_trump:
@@ -51,7 +50,6 @@ class TarotCard(object):
 
     def is_bout(self):
         """
-
         :return: Boolean telling if it is "Le Petit", "L'Excuse" ou "Le 21"
         """
         if self.is_trump:
@@ -61,10 +59,10 @@ class TarotCard(object):
 
     @staticmethod
     def print_cards(cards):  # TODO : P2 - understand how to work with a static method - unused for now
-        """ Print out card in a nice form
-
-        Args:
-            :param cards: (str or list)list of cards to be printed - or string form of tarot card
+        """
+        Print out cards in a nice form
+        :param cards: (str or list of str) list of cards to be printed - or string form of tarot card
+        :return:
         """
         if cards is None:
             print('No card played yet')

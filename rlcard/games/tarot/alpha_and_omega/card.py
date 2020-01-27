@@ -19,7 +19,7 @@ class TarotCard(object):
         self.trump_value = trump_value
         self.str = self.get_str()
 
-    def get_str(self):
+    def get_str(self) -> str:
         """
         Get the string representation of card
         :return: A string reprensenting the card
@@ -29,7 +29,7 @@ class TarotCard(object):
         else:
             return self.color + '-' + str(self.color_value)
 
-    def get_value(self):
+    def get_value(self) -> float:
         """
         Compute the value of a given card
         :return: points value of the card (float)
@@ -45,7 +45,7 @@ class TarotCard(object):
             else:
                 return 0.5 + self.color_value - 10
 
-    def is_bout(self):
+    def is_bout(self) -> bool:
         """
         :return: Boolean telling if it is "Le Petit", "L'Excuse" ou "Le 21"
         """
@@ -55,7 +55,7 @@ class TarotCard(object):
         return False
 
     @staticmethod
-    def print_cards(cards):  # TODO : P2 - understand how to work with a static method - unused for now
+    def print_cards(cards) -> None:
         """
         Print out cards in a nice form
         :param cards: (str or list of str) list of cards to be printed - or string form of tarot card

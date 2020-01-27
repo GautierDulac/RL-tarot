@@ -12,7 +12,7 @@ class TarotPlayer(object):
         self.bid = None
         self.taking = False
 
-    def get_player_id(self):
+    def get_player_id(self) -> int:
         """ Return the id of the player
         """
 

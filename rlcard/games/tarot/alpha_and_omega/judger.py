@@ -10,7 +10,7 @@ from rlcard.games.tarot.utils import get_pot_value
 class TarotJudger(object):
 
     @staticmethod
-    def judge_winner(players: List[TarotPlayer], new_dog: List[TarotCard]):
+    def judge_winner(players: List[TarotPlayer], new_dog: List[TarotCard]) -> List[int]:
         """
         Judge the winner of the game
         :param players: All the competing players, a list of TarotPlayer objects

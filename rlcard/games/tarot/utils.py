@@ -1,9 +1,11 @@
 import numpy as np
 
 from rlcard.games.tarot.alpha_and_omega.card import TarotCard as Card
+from rlcard.games.tarot.bid.bid import TarotBid
 from collections import OrderedDict
 
 # a map of color to its index
+
 COLOR_MAP = {'SPADE': 0, 'CLOVER': 1, 'HEART': 2, 'DIAMOND': 3, 'TRUMP': 4}
 
 VALUE_MAP = {'0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7,
@@ -70,12 +72,12 @@ def hand2dict(hand):
     return hand_dict
 
 
-def encode_hand(plane, hand, index_to_encode=0):
+def encode_hand(plane: np.ndarray, hand, index_to_encode=0):
     """ Encode hand and represerve it into plane
     Args:
         plane (array): n*5*22 numpy array
         hand (list): list of string of hand's card
-        index_to_encode (int): 0 if player hand, 2 is all other hand
+        index_to_encode (int): see tarot extract state function
     Returns:
         (array): n*5*22 numpy array
     """
@@ -89,11 +91,12 @@ def encode_hand(plane, hand, index_to_encode=0):
     return plane
 
 
-def encode_target(plane, target, index_to_encode=1):
+def encode_target(plane, target, index_to_encode=2):
     """ Encode target and represerve it into plane
     Args:
         plane (array): n*5*22 numpy array - we give only one composant to this function
         target(str): string of target card
+        :param index_to_encode:
     Returns:
         (array): n*5*22 numpy array
     """
@@ -103,7 +106,7 @@ def encode_target(plane, target, index_to_encode=1):
     target_info = target.split('-')
     color = COLOR_MAP[target_info[0]]
     value = VALUE_MAP[target_info[1]]
-    plane[1][color][value] = 1
+    plane[index_to_encode][color][value] = 1
     return plane
 
 
@@ -139,6 +142,18 @@ def get_TarotCard_from_str(card):
         else:
             is_trump = False
             return Card(is_trump, color=color, color_value=int(value))
+
+
+def get_TarotBid_from_str(bid):
+    """
+
+    :param bid:
+    :return:
+    """
+    if bid is None:
+        return None
+    else:
+        return TarotBid(bid)
 
 
 def get_end_pot_information(pot_cards):

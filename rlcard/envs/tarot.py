@@ -3,7 +3,8 @@ import numpy as np
 from rlcard.envs.env import Env
 from rlcard import models
 from rlcard.games.tarot.global_game import GlobalGame as Game
-from rlcard.games.tarot.utils import encode_hand, encode_target, encode_bid, get_TarotCard_from_str
+from rlcard.games.tarot.utils import encode_hand, encode_target, encode_bid, get_TarotCard_from_str, \
+    get_TarotBid_from_str
 from rlcard.games.tarot.utils import ACTION_SPACE, ACTION_LIST, BID_SPACE, BID_LIST
 from rlcard.games.tarot.alpha_and_omega.card import TarotCard
 
@@ -129,61 +130,77 @@ class TarotEnv(Env):
         return models.load('tarot-rule-v1')
 
     def extract_state(self, state):
-        # TODO : extract_state depending on the game part
         """
-
+        # TODO : Get documentation for the different way to extract state depending on the game part
         :param state:
         :return:
         """
-        obs = np.zeros((5, 5, 22), dtype=int)
+        obs = np.zeros((6, 5, 22), dtype=int)
         legal_action_id = self.get_legal_actions()
+        extracted_state = {'legal_action': legal_action_id}
         if self.game.current_game_part == 'BID':
             obs[0][0][0] = 0
             encode_hand(obs, state['hand'], index_to_encode=1)
             encode_bid(obs, state['current_personnal_bid'], index_to_encode='2-0')
             encode_bid(obs, state['other_bids'], index_to_encode='2-1')
-            extracted_state = {'obs': obs, 'legal_actions': legal_action_id}
+            extracted_state['obs'] = obs
         elif self.game.current_game_part == 'DOG':
             obs[0][0][0] = 1
             encode_hand(obs, state['all_cards'], index_to_encode=1)
             encode_bid(obs, state['taking_bid'], index_to_encode='2-0')
             encode_hand(obs, state['new_dog'], index_to_encode=3)
             encode_hand(obs, state['others_hand'], index_to_encode=4)
-            extracted_state = {'obs': obs, 'legal_actions': legal_action_id}
-        else: # CURRENT IS MAIN
+            extracted_state['obs'] = obs
+        elif self.game.current_game_part == 'MAIN':
+            obs[0][0][0] = 2
             encode_hand(obs, state['hand'], index_to_encode=1)
-            encode_target(obs[1], state['target'])
-            encode_hand(obs, state['others_hand'], index_to_encode=3)
-            encode_hand(obs, state['pot_cards'], index_to_encode=4)
-            extrated_state = {'obs': obs, 'legal_actions': legal_action_id}
-        return extrated_state
+            encode_target(obs, state['target'], index_to_encode=2)
+            encode_hand(obs, state['pot_cards'], index_to_encode=3)
+            encode_hand(obs, state['played_cards'], index_to_encode=4)
+            encode_hand(obs, state['others_hand'], index_to_encode=5)
+            extracted_state['obs'] = obs
+        else:
+            raise ValueError
+        return extracted_state
 
     def get_payoffs(self):
         """
         Give final payoffs of the game
-        :return:
+        :return: dictionary with player_id - won points
         """
         return self.game.get_payoffs()
 
     def decode_action(self, action_id):
-        # TODO : decode depending on the game part
         """
 
         :param action_id:
         :return: TarotCard - chosen action id or a random action in the avaiable ones
-        :return: OR TarotBid ?
+        :return: OR TarotBid
         """
         legal_ids = self.get_legal_actions()
-        if action_id in legal_ids:
-            return get_TarotCard_from_str(ACTION_LIST[action_id])
-        return get_TarotCard_from_str(ACTION_LIST[np.random.choice(legal_ids)])
+        if self.game.current_game_part == 'BID':
+            if action_id in legal_ids:
+                return get_TarotBid_from_str(BID_LIST[action_id])
+            else:
+                get_TarotBid_from_str(BID_LIST[np.random.choice(legal_ids)])
+        elif self.game.current_game_part in ['DOG', 'MAIN']:
+            if action_id in legal_ids:
+                return get_TarotCard_from_str(ACTION_LIST[action_id])
+            return get_TarotCard_from_str(ACTION_LIST[np.random.choice(legal_ids)])
+        else:
+            raise ValueError
 
     def get_legal_actions(self):
-        # TODO : depending on the game part
         """
         transform legal actions from game to the action_space legal actions
         :return:
         """
         legal_actions = self.game.get_legal_actions()
-        legal_ids = [ACTION_SPACE[action.get_str()] for action in legal_actions]
-        return legal_ids
+        if self.game.current_game_part == 'BID':
+            legal_ids = [BID_SPACE[bid.get_str()] for bid in legal_actions]
+            return legal_ids
+        elif self.game.current_game_part in ['DOG', 'MAIN']:
+            legal_ids = [ACTION_SPACE[action.get_str()] for action in legal_actions]
+            return legal_ids
+        else:
+            raise ValueError

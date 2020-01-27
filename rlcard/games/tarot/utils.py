@@ -1,9 +1,9 @@
 from collections import OrderedDict
-from typing import List
+from typing import List, Union
 
 import numpy as np
 
-from rlcard.games.tarot.alpha_and_omega.card import TarotCard as Card
+from rlcard.games.tarot.alpha_and_omega.card import TarotCard as Card, TarotCard
 from rlcard.games.tarot.bid.bid import TarotBid
 
 # a map of color to its index
@@ -24,8 +24,10 @@ all_bids = [TarotBid('PASSE'),
             TarotBid('GARDE_CONTRE')]
 
 
-def init_deck():
-    """ Generate tarot deck of 78 cards
+def init_deck() -> List[TarotCard]:
+    """
+    Generate tarot deck of 78 cards
+    :return: List of TarotCards
     """
     card_deck = []
     card_info = Card.info
@@ -50,14 +52,11 @@ ACTION_SPACE = OrderedDict(ACTION_DICT)
 ACTION_LIST = list(ACTION_SPACE.keys())
 
 
-def cards2list(cards) -> List[str]:
-    """ Get the corresponding string representation of cards
-
-    Args:
-        cards (list): list of TarotCards objects
-
-    Returns:
-        (string): string representation of cards
+def cards2list(cards: Union[TarotCard, List[TarotCard]]) -> List[str]:
+    """
+    Get the corresponding string representation of cards
+    :param cards: list of TarotCards objects
+    :return: List of str-tarot-cards
     """
     cards_list = []
     for card in cards:
@@ -65,14 +64,11 @@ def cards2list(cards) -> List[str]:
     return cards_list
 
 
-def hand2dict(hand):
-    """ Get the corresponding dict representation of hand
-
-    Args:
-        hand (list): list of string of hand's card
-
-    Returns:
-        (dict): dict of hand
+def hand2dict(hand: List[str]) -> dict:
+    """
+    Get the corresponding dict representation of hand
+    :param hand: list of string of hand's card
+    :return: dict of hand
     """
     hand_dict = {}
     for card in hand:
@@ -80,14 +76,13 @@ def hand2dict(hand):
     return hand_dict
 
 
-def encode_hand(plane: np.ndarray, hand, index_to_encode=0):
-    """ Encode hand and represerve it into plane
-    Args:
-        plane (array): n*5*22 numpy array
-        hand (list): list of string of hand's card
-        index_to_encode (int): see tarot extract state function
-    Returns:
-        (array): n*5*22 numpy array
+def encode_hand(plane: np.ndarray, hand: List[str], index_to_encode: int = 0) -> np.ndarray:
+    """
+    Encode hand and represerve it into plane
+    :param plane: n*5*22 numpy ndarray
+    :param hand: list of string of hand's card
+    :param index_to_encode: see tarot extract state function
+    :return: n*5*22 numpy ndarray
     """
     # plane = np.zeros((n, 5, 22), dtype=int)
     plane[index_to_encode] = np.zeros((5, 22), dtype=int)
@@ -99,16 +94,13 @@ def encode_hand(plane: np.ndarray, hand, index_to_encode=0):
     return plane
 
 
-def encode_target(plane, target, index_to_encode=2):
-    """ Encode target and represerve it into plane
-    Args:
-        plane (array): n*5*22 numpy array - we give only one composant to this function
-        target(str): string of target card
-        :param plane:
-        :param target:
-        :param index_to_encode:
-    Returns:
-        (array): n*5*22 numpy array
+def encode_target(plane: np.ndarray, target: str, index_to_encode: int = 2) -> np.ndarray:
+    """
+    Encode target and represerve it into plane
+    :param plane: n*5*22 numpy ndarray
+    :param target: string of target card
+    :param index_to_encode: see tarot extract state function
+    :return: n*5*22 numpy ndarray
     """
     plane[index_to_encode] = np.zeros((5, 22), dtype=int)
     if target is None:
@@ -120,13 +112,13 @@ def encode_target(plane, target, index_to_encode=2):
     return plane
 
 
-def encode_bid(plane, bid, index_to_encode='2-0'):
+def encode_bid(plane: np.ndarray, bid: List[TarotBid], index_to_encode: str = '2-0') -> np.ndarray:
     """
     index_to_encode gives the path inside plane to encode the given bids
+    :param plane: n*5*22 numpy ndarray
+    :param bid: List of TarotBid to be encoded
     :param index_to_encode: Index 2-0 when encoding own personnal max bid, and '2-1' when encoding other bids
-    :param plane:
-    :param bid: List of bids to be encoded
-    :return:
+    :return: n*5*22 numpy ndarray
     """
     if bid is None:
         return plane
@@ -140,10 +132,10 @@ def encode_bid(plane, bid, index_to_encode='2-0'):
     return plane
 
 
-def get_TarotCard_from_str(card):
+def get_TarotCard_from_str(card: str) -> Union[None, TarotCard]:
     """
-
-    :param card:
+    Transform a str representation of a card into TarotCard
+    :param card: str representation of the card
     :return: TarotCard object
     """
     if card is None:
@@ -158,11 +150,11 @@ def get_TarotCard_from_str(card):
             return Card(is_trump, color=color, color_value=int(value))
 
 
-def get_TarotBid_from_str(bid):
+def get_TarotBid_from_str(bid: str) -> Union[None, TarotBid]:
     """
-
-    :param bid:
-    :return:
+    Get a TarotBid object from a string representation of a bid
+    :param bid: str
+    :return: TarotBid object
     """
     if bid is None:
         return None
@@ -170,11 +162,12 @@ def get_TarotBid_from_str(bid):
         return TarotBid(bid)
 
 
-def get_end_pot_information(pot_cards):
+def get_end_pot_information(pot_cards: dict) -> (int, float, int):
     """
-
-    :param pot_cards: dictionnary with target_card, and the num_players cards of all players
-    :return: winner_id, pot_value, nb_bouts
+    Extract from a complete pot (4 cards and a target), the important results, i.e. the winner, the points and the
+    number of bouts
+    :param pot_cards: dictionnary with target_card, and the cards of all players
+    :return: (winner_id, pot_value, nb_bouts) tuple
     """
     target_card = pot_cards['target']
     trump_values = dict()
@@ -210,9 +203,9 @@ def get_end_pot_information(pot_cards):
     return winner_id, get_pot_value(pot_cards), get_nb_bouts(pot_cards)
 
 
-def get_pot_value(pot_cards):
+def get_pot_value(pot_cards: dict) -> float:
     """
-
+    Get the pot value from 4 cards and the initial target
     :param pot_cards: dict cards of all players + THE TARGET CARD NOT TO BE COUNTED
     :return: point value of this pot (float)
     """
@@ -223,11 +216,11 @@ def get_pot_value(pot_cards):
     return total_points
 
 
-def get_nb_bouts(pot_cards):
+def get_nb_bouts(pot_cards: dict) -> int:
     """
-
-    :param pot_cards:
-    :return:
+    Compute the number of bouts in the pot
+    :param pot_cards: dict cards of all players + THE TARGET CARD NOT TO BE COUNTED
+    :return: number of bouts in the pot (int)
     """
     total_bouts = 0
     for player_id in range(len(pot_cards) - 1):

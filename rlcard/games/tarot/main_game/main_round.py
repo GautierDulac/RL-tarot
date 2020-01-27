@@ -1,24 +1,30 @@
-from rlcard.games.tarot.alpha_and_omega.card import TarotCard
-from rlcard.games.tarot.alpha_and_omega.player import TarotPlayer
-from rlcard.games.tarot.alpha_and_omega.judger import TarotJudger
-from rlcard.games.tarot.utils import cards2list, get_end_pot_information
 from typing import List
+
+from rlcard.games.tarot.alpha_and_omega.card import TarotCard
+from rlcard.games.tarot.alpha_and_omega.judger import TarotJudger
+from rlcard.games.tarot.alpha_and_omega.player import TarotPlayer
+from rlcard.games.tarot.utils import cards2list, get_end_pot_information
 
 
 class MainRound(object):
 
-    def __init__(self, starting_player, num_players, num_card_per_player, taking_bid, new_dog):
+    def __init__(self, starting_player_id: int, num_players: int, num_card_per_player: int, taking_bid_order: int,
+                 new_dog: List[TarotCard]):
         """
         Initialize the round class
-        :param starting_player:
+        :param starting_player_id: (int) id of the starting player
+        :param num_players: (int)
+        :param num_card_per_player: (int)
+        :param taking_bid_order: (int) from 0 to 5
+        :param new_dog: (List[TarotCard]) from dog part of the game
         """
         self.target_card = None
         self.highest_trump = -1
-        self.current_player_id = starting_player
+        self.current_player_id = starting_player_id
         self.num_players = num_players
         self.num_card_per_player = num_card_per_player
         self.direction = 1
-        self.taking_bid = taking_bid
+        self.taking_bid_order = taking_bid_order
         self.played_cards = []
         self.pot_cards = dict()
         self.new_dog = new_dog
@@ -26,12 +32,12 @@ class MainRound(object):
         self.is_over = False
         self.winner = None
 
-    def proceed_round(self, players: List[TarotPlayer], played_card: TarotCard):
-        """ Call other Classes's functions to keep one round running
-
-        Args:
-            :param played_card: string of legal action
-            :param players: list of object of TarotPlayer
+    def proceed_round(self, players: List[TarotPlayer], played_card: TarotCard) -> int:
+        """
+        Call other Classes's functions to keep one round running
+        :param players: (List[TarotPlayer]) list of the players
+        :param played_card: (TarotCard) card chosen to be played
+        :return:
         """
         player = players[self.current_player_id]
 
@@ -69,10 +75,10 @@ class MainRound(object):
             self.target_card = None
 
             # Printing values for debugging purpose # TODO REMOVE for training
-            print('================= Winner - '+str(int(len(self.played_cards)/4))+' =================')
-            print('\r>> Agent {} '.format(winner_id))
-            print('\r>> winning {} points'.format(pot_value))
-            print('')
+            # print('================= Winner - '+str(int(len(self.played_cards)/4))+' =================')
+            # print('\r>> Agent {} '.format(winner_id))
+            # print('\r>> winning {} points'.format(pot_value))
+            # print('')
 
             # Set game is over if no more card in hands
             if len(self.played_cards) == self.num_players * self.num_card_per_player:
@@ -82,7 +88,7 @@ class MainRound(object):
 
         return (self.current_player_id + 1) % self.num_players
 
-    def get_legal_actions(self, players: List[TarotPlayer], player_id):
+    def get_legal_actions(self, players: List[TarotPlayer], player_id: int) -> List[TarotCard]:
         """
         Get all legal cards that can be played by current player with his hand and the target card
         :param players: list of all players
@@ -94,7 +100,7 @@ class MainRound(object):
         target = self.target_card
         # If no target card (first player to speak)
         if target is None:
-            return hand  # TODO : P2 (5 players) add rules for playing initial color
+            return hand
         # If there is a target
         else:
             target_color_is_trump = target.is_trump
@@ -128,13 +134,20 @@ class MainRound(object):
 
         return legal_actions
 
-    def get_state(self, players, player_id):
-        # TODO : Ensure state is correctly recorded (all relevant information for NN ?)
-        """ Get player's state
+    def get_state(self, players: List[TarotPlayer], player_id: int) -> dict:
+        """
+        Get player's state
+        :param players: The list of TarotPlayer
+        :param player_id: The id of the player
+        :return: (dict) containing:
 
-        Args:
-            players (list): The list of TarotPlayer
-            player_id (int): The id of the player
+                (List[str]) - hand: list of str tarotcards in hand
+                (List[str]) - played_cards: list of all str-tarotcards played up to this moment
+                (int) - pot_number
+                (List[TarotCard]) - legal_actions: list of TarotCards available to be played
+                (List[str]) - pot_cards: last few cards (str) played in the pot
+                (str) - target: str-tarotcard of the target card in this pot (potentially None)
+                (List[str]) - others_hand: list of str-tarotcards unknown
         """
         player = players[player_id]
         number_of_played_cards = len(self.played_cards)
@@ -151,7 +164,7 @@ class MainRound(object):
             if player.player_id != player_id:
                 others_hand.extend(player.hand)
         # Dog is also in the others_hand group
-        if self.taking_bid >= 4:
+        if self.taking_bid_order >= 4:
             others_hand.extend(self.new_dog)
         state['others_hand'] = cards2list(others_hand)
         return state

@@ -7,11 +7,11 @@ from rlcard.games.tarot.utils import cards2list
 
 class BidRound(object):
 
-    def __init__(self, num_players, starting_player):
-        """ Initialize the bid round class
-
-        Args:
-            num_players (int): the number of players in game
+    def __init__(self, num_players: int, starting_player: int):
+        """
+        Initialize the bid round class
+        :param num_players: (int) the number of players in game
+        :param starting_player: (int) the starting player
         """
         self.current_player_id = starting_player
         self.num_players = num_players
@@ -28,12 +28,12 @@ class BidRound(object):
                          TarotBid('GARDE_CONTRE')]
         self.max_bid = self.all_bids[self.max_bid_order]
 
-    def proceed_round(self, players: List[TarotPlayer], played_bid: TarotBid):
-        """ proceed bid round with a player bid
-
-        Args:
-            :param played_bid: TarotBid
-            :param players: list of object of TarotPlayer
+    def proceed_round(self, players: List[TarotPlayer], played_bid: TarotBid) -> int:
+        """
+        proceed bid round with a player bid
+        :param players: List of TarotPlayer competing
+        :param played_bid: the TarotBid object chosen by the current_player_id
+        :return: the next player to speak
         """
         player = players[self.current_player_id]
         if player.bid is None:
@@ -73,25 +73,30 @@ class BidRound(object):
                 potential_next = (potential_next + 1) % self.num_players
             return potential_next
 
-    def get_legal_actions(self):
+    def get_legal_actions(self) -> List[TarotBid]:
         """
         Get legal bids
-        :return: list of legals bids
+        :return: list of legals bids (TarotBid objects)
         """
         legal_bids = self.all_bids[(self.max_bid_order + 1):] + [self.all_bids[0]]
-
         return legal_bids
 
-    def get_state(self, players: List[TarotPlayer], player_id):
-        """ Get player's state in the bid round
+    def get_state(self, players: List[TarotPlayer], player_id) -> dict:
+        """
+        Get player's state in the bid round
+        :param players: list of TarotPlayer
+        :param player_id: The id of the player
+        :return: (dict) Dictionary containing :
 
-        Args:
-            :param player_id: The id of the player
-            :param players: list of TarotPlayer
+                (List[str]) - hand: The list of cards in the player_id hand, with their string representation
+                (int) - max_bid: the maximal bid done up to now
+                (TarotBid) - current_personal_bid: current bid from the player_id
+                (List[TarotBid]) - legal_actions: all legal bids that can be said by player_id
+                (List[TarotBid]) - other_bids: all the other bids from other players
         """
         player = players[player_id]
         state = {'hand': cards2list(player.hand), 'max_bid': self.max_bid_order,
-                 'current_personnal_bid': player.bid,
+                 'current_personal_bid': player.bid,
                  'legal_actions': self.get_legal_actions()}
         other_bids = []
         for player in players:

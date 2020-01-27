@@ -1,4 +1,5 @@
 from collections import OrderedDict
+from typing import List
 
 import numpy as np
 
@@ -49,7 +50,7 @@ ACTION_SPACE = OrderedDict(ACTION_DICT)
 ACTION_LIST = list(ACTION_SPACE.keys())
 
 
-def cards2list(cards):
+def cards2list(cards) -> List[str]:
     """ Get the corresponding string representation of cards
 
     Args:

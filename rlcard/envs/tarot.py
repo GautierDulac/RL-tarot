@@ -33,10 +33,10 @@ class TarotEnv(Env):
             print(self.game.bid_game.bid_round.all_bids[state['max_bid']].get_str())
             print('')
             print('============ Current Personnal Bid ===========')
-            if state['current_personnal_bid'] is None:
+            if state['current_personal_bid'] is None:
                 print('No bid yet')
             else:
-                print(state['current_personnal_bid'].get_str())
+                print(state['current_personal_bid'].get_str())
             print('')
             print('========== Actions You Can Choose ============')
             for i, bid in enumerate(state['legal_actions']):
@@ -145,7 +145,7 @@ class TarotEnv(Env):
         if self.game.current_game_part == 'BID':
             obs[0][0][0] = 0
             encode_hand(obs, state['hand'], index_to_encode=1)
-            encode_bid(obs, state['current_personnal_bid'], index_to_encode='2-0')
+            encode_bid(obs, state['current_personal_bid'], index_to_encode='2-0')
             encode_bid(obs, state['other_bids'], index_to_encode='2-1')
             extracted_state['obs'] = obs
         elif self.game.current_game_part == 'DOG':

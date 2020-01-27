@@ -1,6 +1,3 @@
-# CLEAR
-
-
 class TarotCard(object):
     info = {'is_trump': [True, False],
             'color': ['SPADE', 'CLOVER', 'HEART', 'DIAMOND'],

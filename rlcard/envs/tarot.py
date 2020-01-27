@@ -121,6 +121,7 @@ class TarotEnv(Env):
         Args:
             action (str): A string a action
         """
+        print(self.game.current_game_part) # TODO REMOVE
         if self.game.current_game_part == 'BID':
             print(action)
         else:

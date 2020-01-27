@@ -1,10 +1,6 @@
 from rlcard.games.tarot.alpha_and_omega.dealer import TarotDealer as Dealer
 from rlcard.games.tarot.bid.bid_round import BidRound
 
-import random
-
-random.seed(42)  # TODO REMOVE
-
 
 class BidGame(object):
 

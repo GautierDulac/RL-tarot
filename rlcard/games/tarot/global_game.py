@@ -1,14 +1,11 @@
 import random
 
-from rlcard.games.tarot.bid.bid import TarotBid
 from rlcard.games.tarot.alpha_and_omega.player import TarotPlayer as Player
-from rlcard.games.tarot.dog.dog import TarotDog
-
+from rlcard.games.tarot.bid.bid import TarotBid
 from rlcard.games.tarot.bid.bid_game import BidGame
+from rlcard.games.tarot.dog.dog import TarotDog
 from rlcard.games.tarot.dog.dog_game import DogGame
 from rlcard.games.tarot.main_game.main_game import MainGame
-
-random.seed(42)  # TODO REMOVE
 
 
 class GlobalGame(object):
@@ -18,7 +15,8 @@ class GlobalGame(object):
         self.num_players = 4
         self.num_cards_per_player = 18
         self.num_cards_dog = 6
-        self.starting_player = 0  # random.randint(0, self.num_players - 1) TODO - Understand issue when starting_player different from current_player in env ?
+        self.starting_player = random.randint(0,
+                                              self.num_players - 1)  # TODO - Understand issue when starting_player different from current_player in env ?
         self.payoffs = [0 for _ in range(self.num_players)]
         # Initialize a dealer that can deal cards
         self.dealer = None

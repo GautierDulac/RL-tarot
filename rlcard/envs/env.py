@@ -1,8 +1,4 @@
-import random
-
 from rlcard.utils.utils import *
-
-random.seed(42)  # TODO REMOVE
 
 
 # TODO - WARNING - Replacing all self.model by self.model[self.game.current_game_part] to use the relevant game part model
@@ -118,6 +114,7 @@ class Env(object):
             raise ValueError('Reset can only be used in single-agent mode or human mode')
         history = []
         while True:
+            print('\n>> Start a new game!')
             state, player_id = self.game.init_game()
             while not player_id == self.active_player:
                 self.timestep += 1
@@ -127,17 +124,13 @@ class Env(object):
                     action = self.model[self.game.current_game_part].agents[player_id].eval_step(
                         self.extract_state(state))
                     action = self.decode_action(action)
-                if self.human_mode:
-                    history.append((player_id, action))
+                print('\r>> Agent {} chooses '.format(player_id), end='')
+                self.print_action(action.str)
+                print('')
                 state, player_id = self.game.step(action)
 
             if not self.game.is_over():
                 if self.human_mode:
-                    print('\n>> Start a new game!')
-                    for player_id, action in history:
-                        print('\r>> Agent {} chooses '.format(player_id), end='')
-                        self.print_action(action.str)
-                        print('')
                     self.print_state(self.active_player)
                 break
             else:

@@ -57,6 +57,7 @@ class TestTarotEnv(unittest.TestCase):
     def test_human_mode(self):
         env = Env()
         env.set_mode(human_mode=True)
+        #state, player_id = env.init_game()
         state = env.reset()
         self.assertIsInstance(state, dict)
         for i in range(100):

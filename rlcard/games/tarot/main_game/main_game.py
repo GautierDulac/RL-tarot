@@ -102,8 +102,8 @@ class MainGame(object):
         else:
             taker_winner = -1
         # Giving points to the taker
-        self.payoffs[
-            self.taking_player_id] = taker_winner * 3 * total_contract_points  # TODO : Specific to 4 player game
+        self.payoffs[self.taking_player_id] = taker_winner * 3 * total_contract_points
+        # TODO : Specific to 4 player game
         # Giving points to the others
         for player_id in range(self.num_players):
             if player_id != self.taking_player_id:

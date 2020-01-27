@@ -69,10 +69,10 @@ class MainRound(object):
             self.target_card = None
 
             # Printing values for debugging purpose # TODO REMOVE for training
-            # print('================= Winner - '+str(int(len(self.played_cards)/4))+' =================')
-            # print('\r>> Agent {} '.format(winner_id))
-            # print('\r>> winning {} points'.format(pot_value))
-            # print('')
+            print('================= Winner - '+str(int(len(self.played_cards)/4))+' =================')
+            print('\r>> Agent {} '.format(winner_id))
+            print('\r>> winning {} points'.format(pot_value))
+            print('')
 
             # Set game is over if no more card in hands
             if len(self.played_cards) == self.num_players * self.num_card_per_player:
@@ -151,7 +151,6 @@ class MainRound(object):
             if player.player_id != player_id:
                 others_hand.extend(player.hand)
         # Dog is also in the others_hand group
-        print(self.taking_bid) # TODO REMOVE
         if self.taking_bid >= 4:
             others_hand.extend(self.new_dog)
         state['others_hand'] = cards2list(others_hand)

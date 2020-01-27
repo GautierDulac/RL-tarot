@@ -1,8 +1,9 @@
+from collections import OrderedDict
+
 import numpy as np
 
 from rlcard.games.tarot.alpha_and_omega.card import TarotCard as Card
 from rlcard.games.tarot.bid.bid import TarotBid
-from collections import OrderedDict
 
 # a map of color to its index
 
@@ -14,6 +15,12 @@ VALUE_MAP = {'0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7,
 
 BID_SPACE = OrderedDict({'PASSE': 0, 'PETITE': 1, 'POUSSE': 2, 'GARDE': 3, 'GARDE_SANS': 4, 'GARDE_CONTRE': 5})
 BID_LIST = list(BID_SPACE.keys())
+all_bids = [TarotBid('PASSE'),
+            TarotBid('PETITE'),
+            TarotBid('POUSSE'),
+            TarotBid('GARDE'),
+            TarotBid('GARDE_SANS'),
+            TarotBid('GARDE_CONTRE')]
 
 
 def init_deck():

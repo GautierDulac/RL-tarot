@@ -87,7 +87,7 @@ class DogRound(object):
             if player.player_id != player_id:
                 others_hand.extend(player.hand)
         if self.taking_bid < 4:
-            state['all_cards'] = self.all_cards
+            state['all_cards'] = cards2list(self.all_cards)
             state['new_dog'] = cards2list(self.new_dog)
         # otherwise
         else:

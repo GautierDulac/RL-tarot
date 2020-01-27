@@ -83,22 +83,6 @@ class TestTarotBidGameMethods(unittest.TestCase):
         self.assertIsInstance(taking_player_id, int)
         self.assertLessEqual(- game.bid_round.max_bid_order, -1)
 
-    def test_encode_hand(self):
-        # TODO Adapt encode for bid game
-        hand1 = ['SPADE-1', 'TRUMP-3', 'DIAMOND-14', 'TRUMP-0', 'TRUMP-21']
-        encoded_hand1 = np.zeros((6, 5, 22), dtype=int)
-        encode_hand(encoded_hand1, hand1, index_to_encode=0)
-        total = 0
-        for index in range(22):
-            for color in range(5):
-                total += encoded_hand1[0][color][index]
-        self.assertEqual(total, 5)
-        hand2 = hand1
-        encoded_hand2 = np.zeros((6, 5, 22), dtype=int)
-        encode_hand(encoded_hand2, hand2, index_to_encode=2)
-        self.assertEqual(encoded_hand2[2][0][1], 1)  # SPADE-1
-        self.assertEqual(encoded_hand2[2][4][0], 1)  # TRUMP-0
-
     def test_encode_bid(self):
         bids = [TarotBid('PASSE'), TarotBid('PASSE'), TarotBid('GARDE_CONTRE')]
         plane = np.zeros((6, 5, 22), dtype=int)
@@ -112,7 +96,6 @@ class TestTarotBidGameMethods(unittest.TestCase):
         self.assertEqual(plane[2][0][5], 1)
 
     def test_encode_target(self):
-        # TODO Adapt
         encoded_target = np.zeros((6, 5, 22), dtype=int)
         target = 'TRUMP-1'
         encode_target(encoded_target, target, index_to_encode=2)

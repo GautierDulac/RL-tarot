@@ -23,7 +23,7 @@ class GlobalGame(object):
         # Initialize a dealer that can deal cards
         self.dealer = None
         # Initialize four players to play the game
-        self.players = [Player(i) for i in range(self.num_players)]
+        self.players = None
         self.taking_player_id = None
         self.taking_bid = None
         # Initialize a Bid instance
@@ -51,6 +51,12 @@ class GlobalGame(object):
                 (dict): The first state in one game
                 (int): Current bidder's id
         """
+        self.current_game_part = 'BID'
+        self.bid_over = False
+        self.dog_over = False
+        self.main_over = False
+        self.is_game_over = False
+        self.players = [Player(i) for i in range(self.num_players)]
         # Initialize bid Round
         self.bid_game = BidGame(self.players, self.num_players, self.starting_player, self.num_cards_per_player,
                                 self.num_cards_dog, self.dog)
@@ -74,8 +80,6 @@ class GlobalGame(object):
                 (dict): next player's state
                 (int): next plater's id
         """
-        print('avant')
-        print(self.current_game_part)  # TODO REMOVE
         if self.current_game_part == 'BID':
             state, player_id = self.bid_game.step(played_action)
             state = self.bid_game.get_state(player_id)
@@ -121,8 +125,6 @@ class GlobalGame(object):
                 self.is_game_over = True
         else:
             raise AttributeError
-        print('après')
-        print(self.current_game_part)
         return state, player_id
 
     def get_state(self, player_id):

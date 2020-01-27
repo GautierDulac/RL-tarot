@@ -1,6 +1,9 @@
-from rlcard.utils.utils import *
 import random
-random.seed(42) # TODO REMOVE
+
+from rlcard.utils.utils import *
+
+random.seed(42)  # TODO REMOVE
+
 
 # TODO - WARNING - Replacing all self.model by self.model[self.game.current_game_part] to use the relevant game part model
 
@@ -80,16 +83,9 @@ class Env(object):
         """
         reward = 0.
         done = False
-        print('0 - Current game part in env.py')
-        print(self.game.current_game_part)
         self.timestep += 1
         state, player_id = self.game.step(self.decode_action(action))
-        print('1 - Current game part in env.py')
-        print(self.game.current_game_part)
-        print(player_id)
         while not self.game.is_over() and not player_id == self.active_player:
-            print('While - Current game part in env.py')
-            print(self.game.current_game_part)
             self.timestep += 1
             if self.model[self.game.current_game_part].use_raw:
                 action = self.model[self.game.current_game_part].agents[player_id].eval_step(state)
@@ -123,32 +119,16 @@ class Env(object):
         history = []
         while True:
             state, player_id = self.game.init_game()
-            print('1')
-            print(self.game.current_game_part)
-            print('player_id :')
-            print(str(player_id))
             while not player_id == self.active_player:
                 self.timestep += 1
                 if self.model[self.game.current_game_part].use_raw:
-                    print('2')
-                    print(self.game.current_game_part)
                     action = self.model[self.game.current_game_part].agents[player_id].eval_step(state)
-                    print('3')
-                    print(self.game.current_game_part)
                 else:
-                    print('4')
-                    print(self.game.current_game_part)
                     action = self.model[self.game.current_game_part].agents[player_id].eval_step(
                         self.extract_state(state))
-                    print('5')
-                    print(self.game.current_game_part)
                     action = self.decode_action(action)
-                    print('6')
-                    print(self.game.current_game_part)
                 if self.human_mode:
                     history.append((player_id, action))
-                print('env')  # TODO REMOVE
-                print(action.get_str())
                 state, player_id = self.game.step(action)
 
             if not self.game.is_over():

@@ -79,22 +79,6 @@ class TestTarotBidGameMethods(unittest.TestCase):
             self.assertEqual(total_cards, 18)
         self.assertEqual(len(list(state['new_dog'])), num_cards_dog)
 
-    def test_encode_hand(self):
-        # TODO Adapt encode for bid game
-        hand1 = ['SPADE-1', 'TRUMP-3', 'DIAMOND-14', 'TRUMP-0', 'TRUMP-21']
-        encoded_hand1 = np.zeros((3, 5, 22), dtype=int)
-        encode_hand(encoded_hand1, hand1, index_to_encode=0)
-        total = 0
-        for index in range(22):
-            for color in range(5):
-                total += encoded_hand1[0][color][index]
-        self.assertEqual(total, 5)
-        hand2 = hand1
-        encoded_hand2 = np.zeros((3, 5, 22), dtype=int)
-        encode_hand(encoded_hand2, hand2, index_to_encode=2)
-        self.assertEqual(encoded_hand2[2][0][1], 1)  # SPADE-1
-        self.assertEqual(encoded_hand2[2][4][0], 1)  # TRUMP-0
-
     def test_encode_target(self):
         encoded_target = np.zeros((3, 5, 22), dtype=int)
         target = 'TRUMP-1'

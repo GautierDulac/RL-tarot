@@ -48,9 +48,9 @@ class TarotEnv(Env):
             return
         elif self.game.current_game_part == 'DOG':
             print('================= Taking Bid =================')
-            print(self.game.bid_game.bid_round.all_bids[state['taking_bid'].get_bid_order()].get_str())
+            print(self.game.bid_game.bid_round.all_bids[state['taking_bid']].get_str())
             print('')
-            if state['taking_bid'].get_bid_order() < 4:
+            if state['taking_bid'] < 4:
                 # Dog has to be done
                 print('================= Total Hand =================')
                 TarotCard.print_cards(state['all_cards'])
@@ -102,18 +102,17 @@ class TarotEnv(Env):
         """
         payoffs = self.get_payoffs()
         print('===============     Result     ===============')
-        payoffs = sorted(payoffs, key=payoffs.get)
-        print('Taking player : ' + str(self.game.taking_player_id) + ', with a ' +
+        print('Taking player: ' + str(self.game.taking_player_id) + ', with a ' +
               self.game.bid_game.bid_round.all_bids[self.game.taking_bid].get_str())
         print('This player did ' + str(self.game.players[self.game.taking_player_id].points) +
-              ' with ' + str(self.game.players[self.game.taking_player_id].bouts))
-        print('Final winner(s) is/are :' + str(self.game.main_game.main_round.winner))
+              ' with ' + str(self.game.players[self.game.taking_player_id].bouts) + ' bout(s)')
+        print('Final winner(s) is/are: ' + str(self.game.main_game.main_round.winner))
         print('===============     Earned points     ===============')
-        for key, value in enumerate(payoffs):
+        for key, value in payoffs.items():
             if value > 0:
                 print('Player ' + str(key) + ' wins ' + str(value) + ' points !')
             else:
-                print('Player ' + str(key) + 'loses ' + str(- value) + 'points !')
+                print('Player ' + str(key) + ' loses ' + str(- value) + ' points !')
         print('')
 
     def print_action(self, action):

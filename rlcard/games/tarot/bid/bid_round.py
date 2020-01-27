@@ -1,9 +1,9 @@
-from rlcard.games.tarot.bid.bid import TarotBid
-from rlcard.games.tarot.alpha_and_omega.player import TarotPlayer
-from rlcard.games.tarot.utils import cards2list
+import random
 from typing import List
 
-import random
+from rlcard.games.tarot.alpha_and_omega.player import TarotPlayer
+from rlcard.games.tarot.bid.bid import TarotBid
+from rlcard.games.tarot.utils import cards2list
 
 random.seed(43)  # TODO REMOVE
 
@@ -41,9 +41,13 @@ class BidRound(object):
         player = players[self.current_player_id]
         if player.bid is None:
             player.bid = played_bid
-        if player.bid.get_str() != "PASSE":
+        if played_bid.get_str() != "PASSE":
             player.bid = played_bid
             self.taking_player_id = self.current_player_id
+            player.taking = True
+        if played_bid.get_str() == "PASSE":
+            player.bid = played_bid
+            player.taking = False
 
         self.max_bid_order = max(self.max_bid_order, played_bid.get_bid_order())
         self.max_bid = self.all_bids[self.max_bid_order]
@@ -52,20 +56,14 @@ class BidRound(object):
         for player_id in range(self.num_players):
             if players[player_id].bid is not None and players[player_id].bid.get_str() == "PASSE":
                 total_surrendered_players += 1
-                players[player_id].taking = False
-            else:
-                players[player_id].taking = True
+
 
         # Maximal bid encountered
-        if self.max_bid_order == 5:
+        if self.max_bid_order == 5 or (total_surrendered_players == self.num_players - 1 and self.taking_player_id is not None):
             for player_id in range(self.num_players):
-                if player_id != self.current_player_id:
+                if player_id != self.taking_player_id:
                     players[player_id].taking = False
-            self.taking_player_id = self.current_player_id
             self.is_over = True
-        elif total_surrendered_players == self.num_players - 1:
-            if self.taking_player_id is not None:
-                self.is_over = True
         elif total_surrendered_players == self.num_players:
             self.is_dead = True
 

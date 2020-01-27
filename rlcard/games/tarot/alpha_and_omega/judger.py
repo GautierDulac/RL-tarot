@@ -23,8 +23,6 @@ class TarotJudger(object):
         for player_id in range(len(players)):
             counts[player_id] = np.sum(players[player_id].points)
             if players[player_id].taking:
-                print(player_id)
-                print(players[player_id])
                 if players[player_id].bid.get_bid_order() <= 4:
                     counts[player_id] += get_pot_value(new_dog)
                 number_bouts = players[player_id].bouts

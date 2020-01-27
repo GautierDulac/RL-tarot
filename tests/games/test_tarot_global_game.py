@@ -11,7 +11,7 @@ class TestTarotMainGameMethods(unittest.TestCase):
     def test_is_over(self):
         game = GlobalGame()
         game.init_game()
-        self.assertIsInstance(game.is_over, bool)
+        self.assertIsInstance(game.is_over(), bool)
 
     def test_global_over(self):
         game = GlobalGame()
@@ -29,7 +29,8 @@ class TestTarotMainGameMethods(unittest.TestCase):
         went_though_dog = 0
         went_though_main = 0
         iteration = 0
-        while not game.is_over:
+        while not game.is_over():
+            print(game.current_game_part)
             iteration += 1
             action = np.random.choice(game.get_legal_actions())
             print(action.get_str())
@@ -41,7 +42,7 @@ class TestTarotMainGameMethods(unittest.TestCase):
                 self.assertNotEqual(game.taking_bid.get_str(), 'PASSE')
                 went_though_dog += 1
                 self.assertIn(np.random.choice(game.get_legal_actions()).get_str(), ACTION_LIST)
-            if game.current_game_part == 'MAIN' and not game.is_over:
+            if game.current_game_part == 'MAIN' and not game.is_over():
                 went_though_main += 1
                 self.assertIn(np.random.choice(game.get_legal_actions()).get_str(), ACTION_LIST)
         self.assertEqual(went_though_dog, game.num_cards_dog)
@@ -50,7 +51,7 @@ class TestTarotMainGameMethods(unittest.TestCase):
     def test_final_payoff(self):
         game = GlobalGame()
         game.init_game()
-        while not game.is_over:
+        while not game.is_over():
             action = np.random.choice(game.get_legal_actions())
             _, _ = game.step(action)
         payoffs = game.get_payoffs()

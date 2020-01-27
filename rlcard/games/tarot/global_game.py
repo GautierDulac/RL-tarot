@@ -38,7 +38,7 @@ class GlobalGame(object):
         self.main_game = None
         self.main_round = None
         self.main_over = False
-        self.is_over = False
+        self.is_game_over = False
 
     def init_game(self):
         """ Initialize players and state for bid game
@@ -98,7 +98,7 @@ class GlobalGame(object):
             state, player_id = self.main_game.step(played_action)
             if self.main_game.is_over:
                 self.main_over = True
-                self.is_over = True
+                self.is_game_over = True
         else:
             raise AttributeError
 
@@ -176,3 +176,10 @@ class GlobalGame(object):
             return self.dog_game.get_player_id()
         else:
             return self.main_game.get_player_id()
+
+    def is_over(self):
+        """
+
+        :return:
+        """
+        return self.is_game_over

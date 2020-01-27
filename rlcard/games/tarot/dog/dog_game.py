@@ -8,7 +8,7 @@ from typing import List
 class DogGame(object):
 
     def __init__(self, players: List[TarotPlayer], taking_player_id: int,
-                 num_cards_per_player: int, num_cards_dog: int, dog: TarotDog, taking_bid: TarotBid):
+                 num_cards_per_player: int, num_cards_dog: int, dog: TarotDog, taking_bid: int):
         self.num_cards_per_player = num_cards_per_player
         self.num_cards_dog = num_cards_dog
         # Initialize players
@@ -17,8 +17,6 @@ class DogGame(object):
         self.current_player_id = taking_player_id
         # Initialize the dog round
         self.dog_round = DogRound(self.taking_player, taking_player_id, dog, num_cards_dog, taking_bid)
-        # Get the known cards
-        self.known_cards = []
         # Taking bid for the taking player
         self.taking_bid = taking_bid
         # Is over ?
@@ -33,11 +31,6 @@ class DogGame(object):
                 (dict): The first state in one game
                 (int): Current bidder's id
         """
-        if TarotBid.get_bid_order(self.taking_bid) >= 4:
-            self.known_cards = self.taking_player.hand
-        else:
-            self.known_cards = self.dog_round.all_cards
-
         player_id = self.dog_round.taking_player_id
         state = self.get_state(player_id)
 

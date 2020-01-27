@@ -9,7 +9,7 @@ from typing import List
 class DogRound(object):
 
     def __init__(self, taking_player: TarotPlayer, taking_player_id: int, dog: TarotDog, num_cards_dog: int,
-                 taking_bid: TarotBid):
+                 taking_bid: int):
         """ Initialize the round class
 
         Args:
@@ -18,10 +18,14 @@ class DogRound(object):
         self.num_cards_dog = num_cards_dog
         self.taking_player = taking_player
         self.taking_player_id = taking_player_id
-        self.all_cards = taking_player.hand + dog.hand
         self.taking_bid = taking_bid
+        if self.taking_bid < 4:
+            self.all_cards = taking_player.hand + dog.hand
+            self.new_dog = []
+        else:
+            self.all_cards = taking_player.hand
+            self.new_dog = dog.hand
         self.dog = dog
-        self.new_dog = []
         self.is_over = False
 
     def proceed_round(self, players: List[TarotPlayer], played_card: TarotCard):
@@ -52,9 +56,12 @@ class DogRound(object):
         Get all legal cards that can be put in the dog
         :return: list of legals TarotCard
         """
+        if self.taking_bid >= 4:
+            # No dog to be done
+            raise ValueError
         legal_actions = []
         hand = self.all_cards
-        # If without using king / trump, legal_actions >=3
+        # If without using king / trump, legal_actions > 0
         for card in hand:
             if not card.is_trump and card.color_value != 14:
                 legal_actions.append(card)
@@ -72,14 +79,15 @@ class DogRound(object):
             players (list): The list of TarotPlayer
             player_id (int): The id of the player
         """
-        state = {'taking_bid': self.taking_bid.get_bid_order(), 'all_cards': cards2list(self.all_cards),
+        state = {'taking_bid': self.taking_bid,
                  'legal_actions': self.get_legal_actions(), 'hand': cards2list(self.taking_player.hand)}
         # When dog is known
         others_hand = []
         for player in players:
             if player.player_id != player_id:
                 others_hand.extend(player.hand)
-        if self.taking_bid.get_bid_order() < 4:
+        if self.taking_bid < 4:
+            state['all_cards'] = self.all_cards
             state['new_dog'] = cards2list(self.new_dog)
         # otherwise
         else:

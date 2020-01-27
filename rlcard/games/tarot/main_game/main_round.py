@@ -7,7 +7,7 @@ from typing import List
 
 class MainRound(object):
 
-    def __init__(self, starting_player, num_players, num_card_per_player):
+    def __init__(self, starting_player, num_players, num_card_per_player, taking_bid, new_dog):
         """
         Initialize the round class
         :param starting_player:
@@ -18,8 +18,10 @@ class MainRound(object):
         self.num_players = num_players
         self.num_card_per_player = num_card_per_player
         self.direction = 1
+        self.taking_bid = taking_bid
         self.played_cards = []
         self.pot_cards = dict()
+        self.new_dog = new_dog
         self.is_pot_over = False
         self.is_over = False
         self.winner = None
@@ -75,7 +77,7 @@ class MainRound(object):
             # Set game is over if no more card in hands
             if len(self.played_cards) == self.num_players * self.num_card_per_player:
                 self.is_over = True
-                self.winner = TarotJudger.judge_winner(players)
+                self.winner = TarotJudger.judge_winner(players, self.new_dog)
             return winner_id
 
         return (self.current_player_id + 1) % self.num_players
@@ -145,9 +147,12 @@ class MainRound(object):
         else:
             state['target'] = None
         others_hand = []
-        # TODO : Remove dog here
         for player in players:
             if player.player_id != player_id:
                 others_hand.extend(player.hand)
+        # Dog is also in the others_hand group
+        print(self.taking_bid) # TODO REMOVE
+        if self.taking_bid >= 4:
+            others_hand.extend(self.new_dog)
         state['others_hand'] = cards2list(others_hand)
         return state

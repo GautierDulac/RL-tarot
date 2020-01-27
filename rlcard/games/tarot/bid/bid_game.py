@@ -1,6 +1,10 @@
 from rlcard.games.tarot.alpha_and_omega.dealer import TarotDealer as Dealer
 from rlcard.games.tarot.bid.bid_round import BidRound
 
+import random
+
+random.seed(42)  # TODO REMOVE
+
 
 class BidGame(object):
 
@@ -66,7 +70,7 @@ class BidGame(object):
         if self.bid_round.is_over:
             self.bid_over = True
             self.taking_player_id = self.bid_round.taking_player_id
-            self.taking_bid = self.bid_round.max_bid
+            self.taking_bid = self.bid_round.max_bid_order
             return self.get_state(player_id), player_id
         elif self.bid_round.is_dead:
             self.init_game()

@@ -3,6 +3,10 @@ from rlcard.games.tarot.alpha_and_omega.player import TarotPlayer
 from rlcard.games.tarot.utils import cards2list
 from typing import List
 
+import random
+
+random.seed(43)  # TODO REMOVE
+
 
 class BidRound(object):
 
@@ -54,10 +58,14 @@ class BidRound(object):
 
         # Maximal bid encountered
         if self.max_bid_order == 5:
+            for player_id in range(self.num_players):
+                if player_id != self.current_player_id:
+                    players[player_id].taking = False
             self.taking_player_id = self.current_player_id
             self.is_over = True
         elif total_surrendered_players == self.num_players - 1:
-            self.is_over = True
+            if self.taking_player_id is not None:
+                self.is_over = True
         elif total_surrendered_players == self.num_players:
             self.is_dead = True
 

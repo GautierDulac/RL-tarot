@@ -122,6 +122,8 @@ def encode_bid(plane, bid, index_to_encode='2-0'):
     """
     if bid is None:
         return plane
+    if isinstance(bid, TarotBid):
+        bid = [bid]
     bid_values = [BID_SPACE[bid[i].get_str()] for i in range(len(bid)) if bid[i] is not None]
     indexs = [int(index_to_encode.split('-')[i]) for i in [0, 1]]
     plane[indexs[0]][indexs[1]] = np.zeros(22, dtype=int)

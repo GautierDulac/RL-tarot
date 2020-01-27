@@ -12,7 +12,7 @@ class TestTarotEnv(unittest.TestCase):
     def test_init_game_and_extract_state(self):
         env = Env()
         state, _ = env.init_game()
-        self.assertEqual(state['obs'].size, 4 * 5 * 22)
+        self.assertEqual(state['obs'].size, 6 * 5 * 22)
 
     def test_get_legal_actions(self):
         env = Env()
@@ -65,12 +65,10 @@ class TestTarotEnv(unittest.TestCase):
         env.set_mode(human_mode=True)
         state = env.reset()
         self.assertIsInstance(state, dict)
-        print(state)  # TODO REMOVE
         for i in range(100):
+            print('Game')
             print(i)
-            legal_actions = env.get_legal_actions()
-            action = np.random.choice(legal_actions)
-            state, _, _ = env.step(action)
+            state, _, _ = env.step(np.random.choice(env.get_legal_actions()))
 
 
 random.seed(42)

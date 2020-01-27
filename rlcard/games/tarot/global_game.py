@@ -8,6 +8,8 @@ from rlcard.games.tarot.bid.bid_game import BidGame
 from rlcard.games.tarot.dog.dog_game import DogGame
 from rlcard.games.tarot.main_game.main_game import MainGame
 
+random.seed(42)  # TODO REMOVE
+
 
 class GlobalGame(object):
 
@@ -16,7 +18,7 @@ class GlobalGame(object):
         self.num_players = 4
         self.num_cards_per_player = 18
         self.num_cards_dog = 6
-        self.starting_player = random.randint(0, self.num_players - 1)
+        self.starting_player = 0  # random.randint(0, self.num_players - 1) TODO - Understand issue when starting_player different from current_player in env ?
         self.payoffs = [0 for _ in range(self.num_players)]
         # Initialize a dealer that can deal cards
         self.dealer = None
@@ -72,7 +74,8 @@ class GlobalGame(object):
                 (dict): next player's state
                 (int): next plater's id
         """
-        print(self.current_game_part) # TODO REMOVE
+        print('avant')
+        print(self.current_game_part)  # TODO REMOVE
         if self.current_game_part == 'BID':
             state, player_id = self.bid_game.step(played_action)
             state = self.bid_game.get_state(player_id)
@@ -81,21 +84,36 @@ class GlobalGame(object):
                 self.bid_over = True
                 self.taking_player_id = self.bid_game.taking_player_id
                 self.taking_bid = self.bid_game.taking_bid
-                self.current_game_part = 'DOG'
-                player_id = self.taking_player_id
-                self.dog_game = DogGame(self.players, self.taking_player_id, self.num_cards_per_player,
-                                        self.num_cards_dog, self.dog, self.taking_bid)
-                self.dog_game.init_game()
+                if self.taking_bid < 4:
+                    self.current_game_part = 'DOG'
+                    player_id = self.taking_player_id
+                    self.dog_game = DogGame(self.players, self.taking_player_id, self.num_cards_per_player,
+                                            self.num_cards_dog, self.dog, self.taking_bid)
+                    self.dog_game.init_game()
+                    state = self.dog_game.get_state(player_id)
+                else:
+                    self.dog_over = True
+                    self.current_game_part = 'MAIN'
+                    player_id = self.starting_player
+                    self.dog_game = DogGame(self.players, self.taking_player_id, self.num_cards_per_player,
+                                            self.num_cards_dog, self.dog, self.taking_bid)
+                    self.main_game = MainGame(self.num_players, self.num_cards_per_player, self.starting_player,
+                                              self.players, self.bid_game.taking_player_id,
+                                              self.dog_game.dog_round.new_dog)
+                    self.main_game.init_game()
+                    state = self.main_game.get_state(player_id)
         elif self.current_game_part == 'DOG':
             state, player_id = self.dog_game.step(played_action)
             state = self.dog_game.get_state(player_id)
             if self.dog_game.is_over:
                 self.dog_over = True
-                self.known_cards = self.dog_game.known_cards
                 self.current_game_part = 'MAIN'
+                player_id = self.starting_player
                 self.main_game = MainGame(self.num_players, self.num_cards_per_player, self.starting_player,
-                                          self.players, self.bid_game.taking_player_id)
+                                          self.players, self.bid_game.taking_player_id,
+                                          self.dog_game.dog_round.new_dog)
                 self.main_game.init_game()
+                state = self.main_game.get_state(player_id)
         elif self.current_game_part == 'MAIN':
             state, player_id = self.main_game.step(played_action)
             if self.main_game.is_over:
@@ -103,7 +121,8 @@ class GlobalGame(object):
                 self.is_game_over = True
         else:
             raise AttributeError
-
+        print('après')
+        print(self.current_game_part)
         return state, player_id
 
     def get_state(self, player_id):

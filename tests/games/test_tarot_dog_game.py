@@ -18,7 +18,8 @@ players = [Player(i) for i in range(num_players)]
 num_cards_dog = 6
 dog = TarotDog()
 
-taking_bid = [TarotBid('POUSSE'), TarotBid('GARDE_CONTRE')][random.randint(0, 1)]
+taking_bid = [TarotBid('POUSSE'), TarotBid('GARDE_CONTRE')][random.randint(0, 1)].get_bid_order()
+taking_bid = TarotBid('POUSSE').get_bid_order()
 
 bid_game = BidGame(players, num_players, starting_player, num_cards_per_player, num_cards_dog, dog)
 bid_game.init_game()
@@ -95,10 +96,9 @@ class TestTarotBidGameMethods(unittest.TestCase):
         self.assertEqual(encoded_hand2[2][4][0], 1)  # TRUMP-0
 
     def test_encode_target(self):
-        # TODO Adapt
         encoded_target = np.zeros((3, 5, 22), dtype=int)
         target = 'TRUMP-1'
-        encode_target(encoded_target[1], target)
+        encode_target(encoded_target, target, index_to_encode=1)
         self.assertEqual(encoded_target[1][4][1], 1)
 
 

@@ -26,6 +26,8 @@ class TAROTBIDRuleAgentV1(object):
         """
 
         legal_actions = state['legal_actions']
+        print('tarot-bid-rule-model')
+        print(legal_actions) # TODO REMOVE
 
         # We randomly choose one
         action = np.random.choice(legal_actions)

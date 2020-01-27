@@ -4,12 +4,14 @@ from rlcard.games.tarot.main_game.main_round import MainRound
 
 class MainGame(object):
 
-    def __init__(self, num_players, num_cards_per_player, starting_player, players, taking_player_id):
+    def __init__(self, num_players, num_cards_per_player, starting_player, players, taking_player_id, new_dog):
         self.num_players = num_players
         self.num_cards_per_player = num_cards_per_player
         self.starting_player = starting_player
         self.players = players
         self.taking_player_id = taking_player_id
+        self.taking_bid = self.players[self.taking_player_id].bid.get_bid_order()
+        self.new_dog = new_dog
         # Initialize a Round instance
         self.main_round = None
         # End of game
@@ -32,7 +34,8 @@ class MainGame(object):
             self.payoffs[player_id] = 0
 
         # Initialize a Round
-        self.main_round = MainRound(self.starting_player, self.num_players, self.num_cards_per_player)
+        self.main_round = MainRound(self.starting_player, self.num_players, self.num_cards_per_player, self.taking_bid,
+                                    self.new_dog)
 
         player_id = self.main_round.current_player_id
         state = self.get_state(player_id)
@@ -99,7 +102,8 @@ class MainGame(object):
         else:
             taker_winner = -1
         # Giving points to the taker
-        self.payoffs[self.taking_player_id] = taker_winner * 3 * total_contract_points  # TODO : Specific to 4 player game
+        self.payoffs[
+            self.taking_player_id] = taker_winner * 3 * total_contract_points  # TODO : Specific to 4 player game
         # Giving points to the others
         for player_id in range(self.num_players):
             if player_id != self.taking_player_id:

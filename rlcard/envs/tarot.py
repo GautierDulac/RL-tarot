@@ -1,4 +1,5 @@
 import numpy as np
+import random
 
 from rlcard.envs.env import Env
 from rlcard import models
@@ -7,6 +8,8 @@ from rlcard.games.tarot.utils import encode_hand, encode_target, encode_bid, get
     get_TarotBid_from_str
 from rlcard.games.tarot.utils import ACTION_SPACE, ACTION_LIST, BID_SPACE, BID_LIST
 from rlcard.games.tarot.alpha_and_omega.card import TarotCard
+
+random.seed(42)
 
 
 class TarotEnv(Env):
@@ -45,9 +48,9 @@ class TarotEnv(Env):
             return
         elif self.game.current_game_part == 'DOG':
             print('================= Taking Bid =================')
-            print(self.game.bid_game.bid_round.all_bids[state['taking_bid']])
+            print(self.game.bid_game.bid_round.all_bids[state['taking_bid'].get_bid_order()].get_str())
             print('')
-            if state['taking_bid'] < 4:
+            if state['taking_bid'].get_bid_order() < 4:
                 # Dog has to be done
                 print('================= Total Hand =================')
                 TarotCard.print_cards(state['all_cards'])
@@ -100,7 +103,8 @@ class TarotEnv(Env):
         payoffs = self.get_payoffs()
         print('===============     Result     ===============')
         payoffs = sorted(payoffs, key=payoffs.get)
-        print('Taking player : ' + str(self.game.taking_player_id) + ', with a ' + self.game.taking_bid.get_str())
+        print('Taking player : ' + str(self.game.taking_player_id) + ', with a ' +
+              self.game.bid_game.bid_round.all_bids[self.game.taking_bid].get_str())
         print('This player did ' + str(self.game.players[self.game.taking_player_id].points) +
               ' with ' + str(self.game.players[self.game.taking_player_id].bouts))
         print('Final winner(s) is/are :' + str(self.game.main_game.main_round.winner))
@@ -118,20 +122,20 @@ class TarotEnv(Env):
         Args:
             action (str): A string a action
         """
-        print(self.game.current_game_part) # TODO REMOVE
         if self.game.current_game_part == 'BID':
             print(action)
         else:
             TarotCard.print_cards(action)
 
     def load_model(self):
-        # TODO : load model depending on the game part
         """ Load pretrained/rule model
 
         Returns:
             model (Model): A Model object
         """
-        return models.load('tarot-rule-v1')
+        return {'BID': models.load('tarot-bid-rule-v1'),
+                'DOG': models.load('tarot-dog-rule-v1'),
+                'MAIN': models.load('tarot-rule-v1')}
 
     def extract_state(self, state):
         """

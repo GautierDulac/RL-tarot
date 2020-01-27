@@ -45,7 +45,15 @@ class TestTarotMainGameMethods(unittest.TestCase):
             if game.current_game_part == 'MAIN' and not game.is_over():
                 went_though_main += 1
                 self.assertIn(np.random.choice(game.get_legal_actions()).get_str(), ACTION_LIST)
-        self.assertEqual(went_though_dog, game.num_cards_dog)
+        nb_taking = 0
+        for player_id in range(game.num_players):
+            if game.players[player_id].taking:
+                nb_taking += 1
+        self.assertEqual(nb_taking, 1)
+        if game.taking_bid < 4:
+            self.assertEqual(went_though_dog, game.num_cards_dog)
+        else:
+            self.assertEqual(went_though_dog, 0)
         self.assertEqual(went_though_main, 72)
 
     def test_final_payoff(self):

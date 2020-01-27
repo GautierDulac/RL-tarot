@@ -1,18 +1,21 @@
-from rlcard.utils.utils import *
+import random
+from typing import Union
+import numpy as np
 
+# TODO - WARNING - Some changes done compared to initial environment
+from rlcard.games.tarot.alpha_and_omega.card import TarotCard
+from rlcard.games.tarot.bid.bid import TarotBid
+from rlcard.games.tarot.global_game import GlobalGame
+from rlcard.utils.utils import reorganize
 
-# TODO - WARNING - Replacing all self.model by self.model[self.game.current_game_part] to use the relevant game part model
 
 class Env(object):
-    """ The base Env class
-    """
 
-    def __init__(self, game, allow_step_back=False):
-        """ Initialize
-
-        Args:
-            game (Game): The Game class
-            allow_step_back (boolean): True if allowing step_back
+    def __init__(self, game: GlobalGame, allow_step_back=False):
+        """
+        Initialize
+        :param game: GlobalGame object
+        :param allow_step_back: UNUSED
         """
         self.name = None
         self.game = game
@@ -33,11 +36,10 @@ class Env(object):
 
         self.model = None
 
-    def init_game(self):
-        """ Start a new game
-
-        Returns:
-            (tuple): Tuple containing:
+    def init_game(self) -> (np.ndarray, int):
+        """
+        Start a new game
+        :return: (tuple): Tuple containing:
 
                 (numpy.array): The begining state of the game
                 (int): The begining player
@@ -45,14 +47,11 @@ class Env(object):
         state, player_id = self.game.init_game()
         return self.extract_state(state), player_id
 
-    def step(self, action):
-        """ Step forward
-
-        Args:
-            action (int): the action taken by the current player
-
-        Returns:
-            (tuple): Tuple containing:
+    def step(self, action: int) -> (np.ndarray, int):
+        """
+        Step forward
+        :param action: the action id taken by the current player
+        :return: (tuple): Tuple containing:
 
                 (numpy.array): The next state
                 (int): The ID of the next player
@@ -68,17 +67,17 @@ class Env(object):
 
         return self.extract_state(next_state), player_id
 
-    def single_agent_step(self, action):
-        """ Step forward for human/single agent
+    def single_agent_step(self, action: int) -> (np.ndarray, int, bool):
+        """
+        Step forward for human/single agent
+        :param action: id of the chosen action
+        :return: (tuple) containing:
 
-        Args:
-            action (int): the action takem by the current player
-
-        Returns:
-            next_state (numpy.array): The next state
+                (np.ndarray): the next state
+                (int): the reward
+                (bool): a 'done' information # TODO understand done - REMOVED FOR NOW WARNING ?
         """
         reward = 0.
-        done = False
         self.timestep += 1
         state, player_id = self.game.step(self.decode_action(action))
         while not self.game.is_over() and not player_id == self.active_player:
@@ -96,16 +95,15 @@ class Env(object):
 
         if self.game.is_over():
             reward = self.get_payoffs()[self.active_player]
-            done = True
             if self.human_mode:
                 self.print_result()
             state = self.reset()
-            return state, reward, done
+            return state, reward
 
         elif self.human_mode:
             self.print_state(self.active_player)
 
-        return self.extract_state(state), reward, done
+        return self.extract_state(state), reward
 
     def reset(self):
         """ Reset environment in single-agent mode
@@ -345,7 +343,7 @@ class Env(object):
         """
         raise NotImplementedError
 
-    def decode_action(self, action_id):
+    def decode_action(self, action_id: int) -> Union[TarotBid, TarotCard]:
         """ Decode Action id to the action in the game.
 
         Args:

@@ -67,7 +67,7 @@ class Env(object):
 
         return self.extract_state(next_state), player_id
 
-    def single_agent_step(self, action: int) -> (np.ndarray, int, bool):
+    def single_agent_step(self, action: int) -> (np.ndarray, int):
         """
         Step forward for human/single agent
         :param action: id of the chosen action

@@ -17,19 +17,20 @@ class TarotBid(object):
         self.bid = bid
         self.str = bid
 
-    def get_str(self):
+    def get_str(self) -> str:
+        """
+        :return: string representation of the bid
+        """
         return self.bid
 
-    def get_bid_order(self):
+    def get_bid_order(self) -> int:
         """
-
-        :return: bid value
+        :return: bid order (from 0 to 5) - int
         """
         return TarotBid.order[self.bid]
 
-    def get_bid_value(self):
+    def get_bid_value(self) -> int:
         """
-
-        :return: bid value
+        :return: bid value (from 0 to 16)
         """
         return TarotBid.value[self.bid]

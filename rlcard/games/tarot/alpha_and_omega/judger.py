@@ -1,23 +1,21 @@
-# CLEAR
+from typing import List
 
 import numpy as np
 
+from rlcard.games.tarot.alpha_and_omega.card import TarotCard
+from rlcard.games.tarot.alpha_and_omega.player import TarotPlayer
 from rlcard.games.tarot.utils import get_pot_value
 
 
 class TarotJudger(object):
 
     @staticmethod
-    def judge_winner(players, new_dog):
-        """ Judge the winner of the game
-
-        Args:
-            players (list): The list of players who play the game
-
-        Returns:
-            (list): The player id of the winner
-            :param players:
-            :param new_dog:
+    def judge_winner(players: List[TarotPlayer], new_dog: List[TarotCard]):
+        """
+        Judge the winner of the game
+        :param players: All the competing players, a list of TarotPlayer objects
+        :param new_dog: A list with the new_dog (possibly the initial one if GARDE_SANS or GARDE_CONTRE)
+        :return: a list with all (1 or 3) the winners
         """
         counts = dict()
         for player_id in range(len(players)):

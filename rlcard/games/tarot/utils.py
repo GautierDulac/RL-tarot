@@ -89,7 +89,7 @@ def encode_hand(plane, hand, index_to_encode=0):
     return plane
 
 
-def encode_target(plane, target):
+def encode_target(plane, target, index_to_encode=1):
     """ Encode target and represerve it into plane
     Args:
         plane (array): n*5*22 numpy array - we give only one composant to this function
@@ -97,12 +97,29 @@ def encode_target(plane, target):
     Returns:
         (array): n*5*22 numpy array
     """
+    plane[index_to_encode] = np.zeros((5, 22), dtype=int)
     if target is None:
         return plane
     target_info = target.split('-')
     color = COLOR_MAP[target_info[0]]
     value = VALUE_MAP[target_info[1]]
-    plane[color][value] = 1
+    plane[1][color][value] = 1
+    return plane
+
+
+def encode_bid(plane, bid, index_to_encode='2-0'):
+    """
+    index_to_encode gives the path inside plane to encode the given bids
+    :param index_to_encode: Index 2-0 when encoding own personnal max bid, and '2-1' when encoding other bids
+    :param plane:
+    :param bid: List of bids to be encoded
+    :return:
+    """
+    bid_values = [BID_SPACE[bid[i].get_str()] for i in range(len(bid)) if bid[i] is not None]
+    indexs = [int(index_to_encode.split('-')[i]) for i in [0, 1]]
+    plane[indexs[0]][indexs[1]] = np.zeros(22, dtype=int)
+    for bid_value in bid_values:
+        plane[indexs[0]][indexs[1]][bid_value] = 1
     return plane
 
 

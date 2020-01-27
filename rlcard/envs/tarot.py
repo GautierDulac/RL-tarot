@@ -3,7 +3,7 @@ import numpy as np
 from rlcard.envs.env import Env
 from rlcard import models
 from rlcard.games.tarot.global_game import GlobalGame as Game
-from rlcard.games.tarot.utils import encode_hand, encode_target, get_TarotCard_from_str
+from rlcard.games.tarot.utils import encode_hand, encode_target, encode_bid, get_TarotCard_from_str
 from rlcard.games.tarot.utils import ACTION_SPACE, ACTION_LIST, BID_SPACE, BID_LIST
 from rlcard.games.tarot.alpha_and_omega.card import TarotCard
 
@@ -109,13 +109,15 @@ class TarotEnv(Env):
         print('')
 
     def print_action(self, action):
-        # TODO : print depending on the game part
         """ Print out an action in a nice form
 
         Args:
             action (str): A string a action
         """
-        TarotCard.print_cards(action)
+        if self.game.current_game_part == 'BID':
+            print(action)
+        else:
+            TarotCard.print_cards(action)
 
     def load_model(self):
         # TODO : load model depending on the game part
@@ -133,12 +135,22 @@ class TarotEnv(Env):
         :param state:
         :return:
         """
-        obs = np.zeros((4, 5, 22), dtype=int)
-        encode_hand(obs, state['hand'], index_to_encode=0)
-        encode_target(obs[1], state['target'])
-        encode_hand(obs, state['others_hand'], index_to_encode=2)
-        encode_hand(obs, state['pot_cards'], index_to_encode=3)
+        obs = np.zeros((5, 5, 22), dtype=int)
         legal_action_id = self.get_legal_actions()
+        if self.game.current_game_part == 'BID':
+            obs[0][0][0] = 0
+            encode_hand(obs, state['hand'], index_to_encode=1)
+            encode_bid(obs, state['current_personnal_bid'], index_to_encode='2-0')
+            encode_bid(obs, state['other_bids'], index_to_encode='2-1')
+            extracted_state = {'obs': obs, 'legal_actions': legal_action_id}
+        elif self.game.current_game_part == 'DOG':
+            obs[0][0][0] = 1
+            encode
+
+        encode_hand(obs, state['hand'], index_to_encode=1)
+        encode_target(obs[1], state['target'])
+        encode_hand(obs, state['others_hand'], index_to_encode=3)
+        encode_hand(obs, state['pot_cards'], index_to_encode=4)
         extrated_state = {'obs': obs, 'legal_actions': legal_action_id}
         return extrated_state
 

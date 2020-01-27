@@ -79,11 +79,12 @@ class BidRound(object):
             :param players: list of TarotPlayer
         """
         player = players[player_id]
-        state = {'hand': cards2list(player.hand), 'max_bid': self.max_bid_order, 'current_personnal_bid': player.bid,
+        state = {'hand': cards2list(player.hand), 'max_bid': self.max_bid_order,
+                 'current_personnal_bid': player.bid,
                  'legal_actions': self.get_legal_actions()}
         other_bids = []
         for player in players:
             if player.player_id != player_id and player.bid is not None:
-                other_bids.append(player.bid.get_bid_order())
+                other_bids.append(player.bid)
         state['other_bids'] = other_bids
         return state

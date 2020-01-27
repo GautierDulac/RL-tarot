@@ -28,7 +28,7 @@ class BidGame(object):
         self.bid_over = False
         # Taking player ?
         self.taking_player_id = None
-        self.taking_bid = None
+        self.taking_bid_order = None
 
     def init_game(self) -> (dict, int):
         """
@@ -70,7 +70,7 @@ class BidGame(object):
         if self.bid_round.is_over:
             self.bid_over = True
             self.taking_player_id = self.bid_round.taking_player_id
-            self.taking_bid = self.bid_round.max_bid_order
+            self.taking_bid_order = self.bid_round.max_bid_order
             return self.get_state(player_id), player_id
         elif self.bid_round.is_dead:
             self.init_game()

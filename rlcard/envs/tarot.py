@@ -1,15 +1,15 @@
-import numpy as np
-import random
+from typing import List, Union
 
-from rlcard.envs.env import Env
+import numpy as np
+
 from rlcard import models
+from rlcard.envs.env import Env
+from rlcard.games.tarot.alpha_and_omega.card import TarotCard
+from rlcard.games.tarot.bid.bid import TarotBid
 from rlcard.games.tarot.global_game import GlobalGame as Game
+from rlcard.games.tarot.utils import ACTION_SPACE, ACTION_LIST, BID_SPACE, BID_LIST
 from rlcard.games.tarot.utils import encode_hand, encode_target, encode_bid, get_TarotCard_from_str, \
     get_TarotBid_from_str
-from rlcard.games.tarot.utils import ACTION_SPACE, ACTION_LIST, BID_SPACE, BID_LIST
-from rlcard.games.tarot.alpha_and_omega.card import TarotCard
-
-random.seed(42)
 
 
 class TarotEnv(Env):
@@ -18,7 +18,7 @@ class TarotEnv(Env):
         # defining a self.game instance of GlobalGame
         super().__init__(Game())
 
-    def print_state(self, player_id: int):
+    def print_state(self, player_id: int) -> None:
         """
         Print current state for a given player_id
         :param player_id:
@@ -93,7 +93,7 @@ class TarotEnv(Env):
                     print(', ', end='')
             print('\n')
 
-    def print_result(self):
+    def print_result(self) -> None:
         """
         Print the game result when the game is over, not depending on any player_id
         :return: No return
@@ -113,7 +113,7 @@ class TarotEnv(Env):
                 print('Player ' + str(key) + ' loses ' + str(- value) + ' points !')
         print('')
 
-    def print_action(self, action):
+    def print_action(self, action: Union[List[str], str]) -> None:
         """
         Print out an action in a nice form
         :param action: Must be a list of TarotCard strings (ex: 'SPADE-9') or a BID string ('PASSE')
@@ -124,7 +124,7 @@ class TarotEnv(Env):
         else:
             TarotCard.print_cards(action)
 
-    def load_model(self):
+    def load_model(self) -> dict:
         """
         Load pretrained/rule model
         :return: a dictionary with three models corresponding to each game part
@@ -133,9 +133,10 @@ class TarotEnv(Env):
                 'DOG': models.load('tarot-dog-rule-v1'),
                 'MAIN': models.load('tarot-rule-v1')}
 
-    def extract_state(self, state):
+    def extract_state(self, state: dict) -> dict:
         """
-        # TODO : documente the different way to extract state depending on the game part
+        From the different possible state description (depending on the game part), return a dictionary with
+        obs as a ndarray and legal_actions as a list of ids
         :param state: a dictionary with given information regarding the current game part
         :return: a dictionary with two information: obs (a ndarray) and legal_actions (a list)
         """
@@ -167,34 +168,35 @@ class TarotEnv(Env):
             raise ValueError
         return extracted_state
 
-    def get_payoffs(self):
+    def get_payoffs(self) -> dict:
         """
         Give final payoffs of the game
         :return: dictionary with player_id - won points
         """
         return self.game.get_payoffs()
 
-    def decode_action(self, action_id: int):
+    def decode_action(self, action_id: int) -> Union[TarotCard, TarotBid]:
         """
         Transform the selected action id into the relevant TarotBid or TarotCard object depending on the game part
-        :param action_id:
-        :return: TarotCard - chosen action id or a random action in the avaiable ones
-        :return: OR TarotBid
+        :param action_id: chosen ID from the model
+        :return: TarotCard OR TarotBid - chosen action id or a random action in the avaiable ones
+        :return:
         """
         legal_ids = self.get_legal_actions()
         if self.game.current_game_part == 'BID':
             if action_id in legal_ids:
                 return get_TarotBid_from_str(BID_LIST[action_id])
             else:
-                get_TarotBid_from_str(BID_LIST[np.random.choice(legal_ids)])
+                return get_TarotBid_from_str(BID_LIST[np.random.choice(legal_ids)])
         elif self.game.current_game_part in ['DOG', 'MAIN']:
             if action_id in legal_ids:
                 return get_TarotCard_from_str(ACTION_LIST[action_id])
-            return get_TarotCard_from_str(ACTION_LIST[np.random.choice(legal_ids)])
+            else:
+                return get_TarotCard_from_str(ACTION_LIST[np.random.choice(legal_ids)])
         else:
             raise ValueError
 
-    def get_legal_actions(self):
+    def get_legal_actions(self) -> List[int]:
         """
         transform legal actions from game to the action_space legal actions
         :return: legal_ids, a list of int with all legal_ids for action for agents

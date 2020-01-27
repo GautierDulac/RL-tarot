@@ -18,13 +18,13 @@ class TarotEnv(Env):
         # defining a self.game instance of GlobalGame
         super().__init__(Game())
 
-    def print_state(self, player):
-        """ Print out the state of a given player
-
-        Args:
-            player (int): Player id
+    def print_state(self, player_id: int):
         """
-        state = self.game.get_state(player)
+        Print current state for a given player_id
+        :param player_id:
+        :return: No return
+        """
+        state = self.game.get_state(player_id)
         if self.game.current_game_part == 'BID':
             print('================= Your Hand    ===============')
             TarotCard.print_cards(state['hand'])
@@ -93,12 +93,10 @@ class TarotEnv(Env):
                     print(', ', end='')
             print('\n')
 
-    def print_result(self, player):
-        # The Bid game is not printed
-        """ Print the game result when the game is over
-
-        Args:
-            player (int): The human player id
+    def print_result(self):
+        """
+        Print the game result when the game is over, not depending on any player_id
+        :return: No return
         """
         payoffs = self.get_payoffs()
         print('===============     Result     ===============')
@@ -116,22 +114,20 @@ class TarotEnv(Env):
         print('')
 
     def print_action(self, action):
-        """ Print out an action in a nice form
-
-        Args:
-            action (str): A string a action
         """
-        print(self.game.current_game_part) # TODO REMOVE
+        Print out an action in a nice form
+        :param action: Must be a list of TarotCard strings (ex: 'SPADE-9') or a BID string ('PASSE')
+        :return: No return, only print
+        """
         if self.game.current_game_part == 'BID':
             print(action)
         else:
             TarotCard.print_cards(action)
 
     def load_model(self):
-        """ Load pretrained/rule model
-
-        Returns:
-            model (Model): A Model object
+        """
+        Load pretrained/rule model
+        :return: a dictionary with three models corresponding to each game part
         """
         return {'BID': models.load('tarot-bid-rule-v1'),
                 'DOG': models.load('tarot-dog-rule-v1'),
@@ -139,9 +135,9 @@ class TarotEnv(Env):
 
     def extract_state(self, state):
         """
-        # TODO : Get documentation for the different way to extract state depending on the game part
-        :param state:
-        :return:
+        # TODO : documente the different way to extract state depending on the game part
+        :param state: a dictionary with given information regarding the current game part
+        :return: a dictionary with two information: obs (a ndarray) and legal_actions (a list)
         """
         obs = np.zeros((6, 5, 22), dtype=int)
         legal_action_id = self.get_legal_actions()
@@ -178,9 +174,9 @@ class TarotEnv(Env):
         """
         return self.game.get_payoffs()
 
-    def decode_action(self, action_id):
+    def decode_action(self, action_id: int):
         """
-
+        Transform the selected action id into the relevant TarotBid or TarotCard object depending on the game part
         :param action_id:
         :return: TarotCard - chosen action id or a random action in the avaiable ones
         :return: OR TarotBid
@@ -201,7 +197,7 @@ class TarotEnv(Env):
     def get_legal_actions(self):
         """
         transform legal actions from game to the action_space legal actions
-        :return:
+        :return: legal_ids, a list of int with all legal_ids for action for agents
         """
         legal_actions = self.game.get_legal_actions()
         if self.game.current_game_part == 'BID':

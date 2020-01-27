@@ -98,7 +98,7 @@ class Env(object):
             reward = self.get_payoffs()[self.active_player]
             done = True
             if self.human_mode:
-                self.print_result(self.active_player)
+                self.print_result()
             state = self.reset()
             return state, reward, done
 
@@ -299,7 +299,7 @@ class Env(object):
         """
         raise NotImplementedError
 
-    def print_result(self, player):
+    def print_result(self):
         """ Print the game result when the game is over
 
         Args:

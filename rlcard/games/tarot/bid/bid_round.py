@@ -60,7 +60,15 @@ class BidRound(object):
             self.is_over = True
         elif total_surrendered_players == self.num_players:
             self.is_dead = True
-        return (self.current_player_id + 1) % self.num_players
+
+        # Define next speaking player within those that have not passed yet
+        potential_next = (self.current_player_id + 1) % self.num_players
+        if players[potential_next].bid is None:
+            return potential_next
+        else:
+            while players[potential_next].bid.get_str() == 'PASSE':
+                potential_next = (potential_next + 1) % self.num_players
+            return potential_next
 
     def get_legal_actions(self):
         """

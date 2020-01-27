@@ -72,6 +72,7 @@ class GlobalGame(object):
                 (dict): next player's state
                 (int): next plater's id
         """
+        print(self.current_game_part) # TODO REMOVE
         if self.current_game_part == 'BID':
             state, player_id = self.bid_game.step(played_action)
             state = self.bid_game.get_state(player_id)
@@ -81,6 +82,7 @@ class GlobalGame(object):
                 self.taking_player_id = self.bid_game.taking_player_id
                 self.taking_bid = self.bid_game.taking_bid
                 self.current_game_part = 'DOG'
+                player_id = self.taking_player_id
                 self.dog_game = DogGame(self.players, self.taking_player_id, self.num_cards_per_player,
                                         self.num_cards_dog, self.dog, self.taking_bid)
                 self.dog_game.init_game()

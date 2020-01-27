@@ -83,6 +83,7 @@ class DogRound(object):
             state['new_dog'] = cards2list(self.new_dog)
         # otherwise
         else:
+            state['all_cards'] = state['hand']
             state['new_dog'] = None
             others_hand.extend(self.dog.hand)
         state['others_hand'] = cards2list(others_hand)

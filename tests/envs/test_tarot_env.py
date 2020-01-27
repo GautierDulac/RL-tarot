@@ -1,5 +1,6 @@
 import unittest
 import numpy as np
+import random
 
 from rlcard.envs.tarot import TarotEnv as Env
 from rlcard.agents.random_agent import RandomAgent
@@ -64,10 +65,15 @@ class TestTarotEnv(unittest.TestCase):
         env.set_mode(human_mode=True)
         state = env.reset()
         self.assertIsInstance(state, dict)
-        print(state) # TODO REMOVE
-        for _ in range(100):
-            state, _, _ = env.step(np.random.choice(state['legal_actions']))
+        print(state)  # TODO REMOVE
+        for i in range(100):
+            print(i)
+            legal_actions = env.get_legal_actions()
+            action = np.random.choice(legal_actions)
+            state, _, _ = env.step(action)
 
+
+random.seed(42)
 
 if __name__ == '__main__':
     unittest.main()

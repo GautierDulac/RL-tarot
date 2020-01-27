@@ -144,9 +144,9 @@ class TestTarotMainGameMethods(unittest.TestCase):
         self.assertEqual(encoded_hand2[2][4][0], 1)  # TRUMP-0
 
     def test_encode_target(self):
-        encoded_target = np.zeros((3, 5, 22), dtype=int)
+        encoded_target = np.zeros((6, 5, 22), dtype=int)
         target = 'TRUMP-1'
-        encode_target(encoded_target[1], target)
+        encode_target(encoded_target, target, index_to_encode=1)
         self.assertEqual(encoded_target[1][4][1], 1)
 
     def test_player_get_player_id(self):

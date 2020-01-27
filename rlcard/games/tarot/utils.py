@@ -122,7 +122,7 @@ def encode_bid(plane, bid, index_to_encode='2-0'):
     indexs = [int(index_to_encode.split('-')[i]) for i in [0, 1]]
     plane[indexs[0]][indexs[1]] = np.zeros(22, dtype=int)
     for bid_value in bid_values:
-        plane[indexs[0]][indexs[1]][bid_value] = 1
+        plane[indexs[0]][indexs[1]][bid_value] += 1
     return plane
 
 

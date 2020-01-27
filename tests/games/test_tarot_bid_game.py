@@ -7,7 +7,7 @@ from rlcard.games.tarot.bid.bid_game import BidGame
 from rlcard.games.tarot.alpha_and_omega.player import TarotPlayer as Player
 from rlcard.games.tarot.dog.dog import TarotDog
 from rlcard.games.tarot.bid.bid import TarotBid
-from rlcard.games.tarot.utils import encode_hand, encode_target
+from rlcard.games.tarot.utils import encode_hand, encode_target, encode_bid
 
 num_players = 4
 num_cards_per_player = 18
@@ -86,7 +86,7 @@ class TestTarotBidGameMethods(unittest.TestCase):
     def test_encode_hand(self):
         # TODO Adapt encode for bid game
         hand1 = ['SPADE-1', 'TRUMP-3', 'DIAMOND-14', 'TRUMP-0', 'TRUMP-21']
-        encoded_hand1 = np.zeros((3, 5, 22), dtype=int)
+        encoded_hand1 = np.zeros((6, 5, 22), dtype=int)
         encode_hand(encoded_hand1, hand1, index_to_encode=0)
         total = 0
         for index in range(22):
@@ -94,17 +94,29 @@ class TestTarotBidGameMethods(unittest.TestCase):
                 total += encoded_hand1[0][color][index]
         self.assertEqual(total, 5)
         hand2 = hand1
-        encoded_hand2 = np.zeros((3, 5, 22), dtype=int)
+        encoded_hand2 = np.zeros((6, 5, 22), dtype=int)
         encode_hand(encoded_hand2, hand2, index_to_encode=2)
         self.assertEqual(encoded_hand2[2][0][1], 1)  # SPADE-1
         self.assertEqual(encoded_hand2[2][4][0], 1)  # TRUMP-0
 
+    def test_encode_bid(self):
+        bids = [TarotBid('PASSE'), TarotBid('PASSE'), TarotBid('GARDE_CONTRE')]
+        plane = np.zeros((6, 5, 22), dtype=int)
+        encode_bid(plane, bids, index_to_encode='2-0')
+        total = 0
+        for index1 in range(5):
+            for index2 in range(22):
+                total += plane[2][index1][index2]
+        self.assertEqual(total, 3)
+        self.assertEqual(plane[2][0][0], 2)
+        self.assertEqual(plane[2][0][5], 1)
+
     def test_encode_target(self):
         # TODO Adapt
-        encoded_target = np.zeros((3, 5, 22), dtype=int)
+        encoded_target = np.zeros((6, 5, 22), dtype=int)
         target = 'TRUMP-1'
-        encode_target(encoded_target[1], target)
-        self.assertEqual(encoded_target[1][4][1], 1)
+        encode_target(encoded_target, target, index_to_encode=2)
+        self.assertEqual(encoded_target[2][4][1], 1)
 
 
 if __name__ == '__main__':

@@ -145,13 +145,17 @@ class TarotEnv(Env):
             extracted_state = {'obs': obs, 'legal_actions': legal_action_id}
         elif self.game.current_game_part == 'DOG':
             obs[0][0][0] = 1
-            encode
-
-        encode_hand(obs, state['hand'], index_to_encode=1)
-        encode_target(obs[1], state['target'])
-        encode_hand(obs, state['others_hand'], index_to_encode=3)
-        encode_hand(obs, state['pot_cards'], index_to_encode=4)
-        extrated_state = {'obs': obs, 'legal_actions': legal_action_id}
+            encode_hand(obs, state['all_cards'], index_to_encode=1)
+            encode_bid(obs, state['taking_bid'], index_to_encode='2-0')
+            encode_hand(obs, state['new_dog'], index_to_encode=3)
+            encode_hand(obs, state['others_hand'], index_to_encode=4)
+            extracted_state = {'obs': obs, 'legal_actions': legal_action_id}
+        else: # CURRENT IS MAIN
+            encode_hand(obs, state['hand'], index_to_encode=1)
+            encode_target(obs[1], state['target'])
+            encode_hand(obs, state['others_hand'], index_to_encode=3)
+            encode_hand(obs, state['pot_cards'], index_to_encode=4)
+            extrated_state = {'obs': obs, 'legal_actions': legal_action_id}
         return extrated_state
 
     def get_payoffs(self):

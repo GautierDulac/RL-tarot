@@ -48,9 +48,9 @@ class TarotEnv(Env):
             return
         elif self.game.current_game_part == 'DOG':
             print('================= Taking Bid =================')
-            print(self.game.bid_game.bid_round.all_bids[state['taking_bid']].get_str())
+            print(self.game.bid_game.bid_round.all_bids[state['taking_bid_order']].get_str())
             print('')
-            if state['taking_bid'] < 4:
+            if state['taking_bid_order'] < 4:
                 # Dog has to be done
                 print('================= Total Hand =================')
                 TarotCard.print_cards(state['all_cards'])
@@ -101,7 +101,7 @@ class TarotEnv(Env):
         payoffs = self.get_payoffs()
         print('===============     Result     ===============')
         print('Taking player: ' + str(self.game.taking_player_id) + ', with a ' +
-              self.game.bid_game.bid_round.all_bids[self.game.taking_bid].get_str())
+              self.game.bid_game.bid_round.all_bids[self.game.taking_bid_order].get_str())
         print('This player did ' + str(self.game.players[self.game.taking_player_id].points) +
               ' with ' + str(self.game.players[self.game.taking_player_id].bouts) + ' bout(s)')
         print('Final winner(s) is/are: ' + str(self.game.main_game.main_round.winner))
@@ -151,7 +151,7 @@ class TarotEnv(Env):
         elif self.game.current_game_part == 'DOG':
             obs[0][0][0] = 1
             encode_hand(obs, state['all_cards'], index_to_encode=1)
-            encode_bid(obs, state['taking_bid'], index_to_encode='2-0')
+            encode_bid(obs, state['taking_bid_order'], index_to_encode='2-0')
             encode_hand(obs, state['new_dog'], index_to_encode=3)
             encode_hand(obs, state['others_hand'], index_to_encode=4)
             extracted_state['obs'] = obs

@@ -1,5 +1,7 @@
 import random
+from typing import Union, List
 
+from rlcard.games.tarot.alpha_and_omega.card import TarotCard
 from rlcard.games.tarot.alpha_and_omega.player import TarotPlayer as Player
 from rlcard.games.tarot.bid.bid import TarotBid
 from rlcard.games.tarot.bid.bid_game import BidGame
@@ -11,19 +13,21 @@ from rlcard.games.tarot.main_game.main_game import MainGame
 class GlobalGame(object):
 
     def __init__(self):
+        """
+        Initialize a global game object
+        """
         self.current_game_part = 'BID'
         self.num_players = 4
         self.num_cards_per_player = 18
         self.num_cards_dog = 6
-        self.starting_player = random.randint(0,
-                                              self.num_players - 1)  # TODO - Understand issue when starting_player different from current_player in env ?
+        self.starting_player = random.randint(0, self.num_players - 1)
         self.payoffs = [0 for _ in range(self.num_players)]
         # Initialize a dealer that can deal cards
         self.dealer = None
         # Initialize four players to play the game
         self.players = None
         self.taking_player_id = None
-        self.taking_bid = None
+        self.taking_bid_order = None
         # Initialize a Bid instance
         self.bid_game = None
         self.bid_round = None
@@ -40,14 +44,13 @@ class GlobalGame(object):
         self.main_over = False
         self.is_game_over = False
 
-    def init_game(self):
-        """ Initialize players and state for bid game
+    def init_game(self) -> (dict, int):
+        """
+        Initialize players and state for bid game in a globalgame object
+        :return: (tuple): containing :
 
-        Returns:
-            (tuple): Tuple containing:
-
-                (dict): The first state in one game
-                (int): Current bidder's id
+                (dict): the current state
+                (int): next player id
         """
         self.current_game_part = 'BID'
         self.bid_over = False
@@ -66,14 +69,11 @@ class GlobalGame(object):
 
         return state, player_id
 
-    def step(self, played_action):
-        """ Get the next state
-
-        Args:
-            played_action (TarotCard or TarotBid): A specific TarotCard or TarotBid
-
-        Returns:
-            (tuple): Tuple containing:
+    def step(self, played_action: Union[TarotCard, TarotBid]) -> (dict, int):
+        """
+        Get the next state
+        :param played_action: chosen action to be played (TarotCard or TarotBid): A specific TarotCard or TarotBid
+        :return: Tuple containing:
 
                 (dict): next player's state
                 (int): next plater's id
@@ -85,12 +85,12 @@ class GlobalGame(object):
             if self.bid_game.bid_over:
                 self.bid_over = True
                 self.taking_player_id = self.bid_game.taking_player_id
-                self.taking_bid = self.bid_game.taking_bid
-                if self.taking_bid < 4:
+                self.taking_bid_order = self.bid_game.taking_bid_order
+                if self.taking_bid_order < 4:
                     self.current_game_part = 'DOG'
                     player_id = self.taking_player_id
                     self.dog_game = DogGame(self.players, self.taking_player_id, self.num_cards_per_player,
-                                            self.num_cards_dog, self.dog, self.taking_bid)
+                                            self.num_cards_dog, self.dog, self.taking_bid_order)
                     self.dog_game.init_game()
                     state = self.dog_game.get_state(player_id)
                 else:
@@ -98,7 +98,7 @@ class GlobalGame(object):
                     self.current_game_part = 'MAIN'
                     player_id = self.starting_player
                     self.dog_game = DogGame(self.players, self.taking_player_id, self.num_cards_per_player,
-                                            self.num_cards_dog, self.dog, self.taking_bid)
+                                            self.num_cards_dog, self.dog, self.taking_bid_order)
                     self.main_game = MainGame(self.num_players, self.num_cards_per_player, self.starting_player,
                                               self.players, self.bid_game.taking_player_id,
                                               self.dog_game.dog_round.new_dog)
@@ -125,14 +125,11 @@ class GlobalGame(object):
             raise AttributeError
         return state, player_id
 
-    def get_state(self, player_id):
-        """ Return player's state
-
-        Args:
-            player_id (int): player id
-
-        Returns:
-            (dict): The state of the player
+    def get_state(self, player_id: int) -> dict:
+        """
+        Return player's state
+        :param player_id: (int): player id
+        :return: The state of the player
         """
         if self.current_game_part == 'BID':
             state = self.bid_game.get_state(player_id)
@@ -142,20 +139,17 @@ class GlobalGame(object):
             state = self.main_game.get_state(player_id)
         return state
 
-    def get_payoffs(self):
-        """ Return the payoffs of the game
-
-        Returns:
-            (list): Each entry corresponds to the payoff of one player
+    def get_payoffs(self) -> dict:
         """
-
+        Return the payoffs of the game
+        :return: (dict): Each entry corresponds to the payoff of one player
+        """
         return self.main_game.get_payoffs()
 
-    def get_legal_actions(self):
-        """ Return the legal actions for current player
-
-        Returns:
-            (list): A list of legal actions
+    def get_legal_actions(self) -> Union[List[TarotCard], List[TarotDog]]:
+        """
+        Return the legal actions for current player
+        :return: (list): A list of legal actions
         """
         if self.current_game_part == 'BID':
             return self.bid_game.get_legal_actions()
@@ -164,19 +158,17 @@ class GlobalGame(object):
         else:
             return self.main_game.get_legal_actions()
 
-    def get_player_num(self):
-        """ Return the number of players in Tarot
-
-        Returns:
-            (int): The number of players in the game
+    def get_player_num(self) -> int:
+        """
+        Return the number of players in Tarot
+        :return: (int): The number of players in the game
         """
         return self.num_players
 
-    def get_action_num(self):
-        """ Return the number of applicable actions
-
-        Returns:
-            (int): The number of actions. There are 78 actions
+    def get_action_num(self) -> int:
+        """
+        Return the number of applicable actions
+        :return: (int): The number of actions. There are 6 or 78 actions
         """
         if self.current_game_part == 'BID':
             return BidGame.get_action_num()
@@ -185,11 +177,10 @@ class GlobalGame(object):
         else:
             return MainGame.get_action_num()
 
-    def get_player_id(self):
-        """ Return the current player's id
-
-        Returns:
-            (int): current player's id
+    def get_player_id(self) -> int:
+        """
+        Return the current player's id
+        :return: (int): current player's id
         """
         if self.current_game_part == 'BID':
             return self.bid_game.get_player_id()
@@ -198,9 +189,8 @@ class GlobalGame(object):
         else:
             return self.main_game.get_player_id()
 
-    def is_over(self):
+    def is_over(self) -> bool:
         """
-
-        :return:
+        :return: (bool) is the game over
         """
         return self.is_game_over

@@ -125,7 +125,7 @@ def encode_bid(plane: np.ndarray, bid: Union[int, TarotBid, List[TarotBid]], ind
     if isinstance(bid, TarotBid):
         bid = [bid]
     if isinstance(bid, int):
-        bid = all_bids[bid]
+        bid = [all_bids[bid]]
     bid_values = [BID_SPACE[bid[i].get_str()] for i in range(len(bid)) if bid[i] is not None]
     indexs = [int(index_to_encode.split('-')[i]) for i in [0, 1]]
     plane[indexs[0]][indexs[1]] = np.zeros(22, dtype=int)

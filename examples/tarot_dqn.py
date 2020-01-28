@@ -1,4 +1,5 @@
-""" An example of learning a Deep-Q Agent on French Tarot Game
+"""
+An example of learning a Deep-Q Agent on French Tarot Game
 """
 
 import tensorflow as tf
@@ -14,7 +15,7 @@ env = rlcard.make('tarot')
 eval_env = rlcard.make('tarot')
 
 # Set the iterations numbers and how frequently we evaluate/save plot
-evaluate_every = 100
+evaluate_every = 10
 save_plot_every = 1000
 evaluate_num = 1000
 episode_num = 10000

@@ -17,6 +17,7 @@ class TarotEnv(Env):
     def __init__(self):
         # defining a self.game instance of GlobalGame
         super().__init__(Game())
+        self.state_shape = [6, 5, 22]
 
     def print_state(self, player_id: int) -> None:
         """

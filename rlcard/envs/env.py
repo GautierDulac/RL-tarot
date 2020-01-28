@@ -27,7 +27,7 @@ class Env(object):
 
         # Get number of players/actions in this game
         self.player_num = game.get_player_num()
-        self.action_num = game.get_action_num()
+        self.action_num = 78 #game.get_action_num() TODO : Modify for 78 everytime (6 < 78)
 
         # A counter for the timesteps
         self.timestep = 0

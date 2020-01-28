@@ -154,7 +154,7 @@ class DQNAgent(object):
         best_action = np.argmax(probs)
         return best_action
 
-    def predict(self, state):
+    def predict(self, state: np.ndarray) -> np.ndarray:
         """ Predict the action probabilities
 
         Args:

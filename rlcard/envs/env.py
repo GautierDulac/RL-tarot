@@ -198,7 +198,7 @@ class Env(object):
 
         self.agents = agents
 
-    def run(self, is_training: bool = False, seed: int = None) -> (None, dict):  # TODO Reorganise type ?
+    def run(self, is_training: bool = False, seed: int = None) -> (List[List[dict]], dict):
         """
         Run a complete game, either for evaluation or training RL agent.
         :param is_training: (boolean): True if for training purpose.

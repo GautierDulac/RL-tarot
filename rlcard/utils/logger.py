@@ -8,7 +8,8 @@ class Logger(object):
     Logger saves the running results and helps make plots from the results
     """
 
-    def __init__(self, xlabel:str='', ylabel:str='', legend:str='', log_path:str=None, csv_path:str=None):
+    def __init__(self, xlabel: str = '', ylabel: str = '', legend: str = '', log_path: str = None,
+                 csv_path: str = None):
         """
         Initialize the labels, legend and paths of the plot and log file.
         :param xlabel: (string): label of x axis of the plot
@@ -69,7 +70,7 @@ class Logger(object):
             self.csv_file.write(str(x) + ',' + str(y) + '\n')
             self.csv_file.flush()
 
-    def make_plot(self, save_path:str ='') -> None:
+    def make_plot(self, save_path: str = '') -> None:
         """
         Make plot using all stored points
         :param save_path: (string): where to store the plot

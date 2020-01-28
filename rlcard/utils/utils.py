@@ -1,4 +1,5 @@
 import random
+from typing import List
 
 import numpy as np
 
@@ -50,7 +51,7 @@ def set_global_seed(seed: int) -> None:
         random.seed(seed)
 
 
-def remove_illegal(action_probs, legal_actions):
+def remove_illegal(action_probs: np.ndarray, legal_actions: List[int]) -> np.ndarray:
     """
     Remove illegal actions and normalize the
         probability vector

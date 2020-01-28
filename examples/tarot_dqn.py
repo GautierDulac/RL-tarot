@@ -1,6 +1,7 @@
 """
 An example of learning a Deep-Q Agent on French Tarot Game
 """
+import os
 
 import tensorflow as tf
 
@@ -15,21 +16,31 @@ env = rlcard.make('tarot')
 eval_env = rlcard.make('tarot')
 
 # Set the iterations numbers and how frequently we evaluate/save plot
-evaluate_every = 10
-save_plot_every = 1000
-evaluate_num = 1000
-episode_num = 10000
+evaluate_every = 500
+save_plot_every = 500
+evaluate_num = 100
+episode_num = 100000
 
 # Set the the number of steps for collecting normalization statistics
 # and intial memory size
-memory_init_size = 1000
-norm_step = 1000
+memory_init_size = 200
+norm_step = 200
 
 # The paths for saving the logs and learning curves
 root_path = './experiments/tarot_dqn_result/'
 log_path = root_path + 'log.txt'
 csv_path = root_path + 'performance.csv'
 figure_path = root_path + 'figures/'
+
+# Model save path
+if not os.path.exists('models'):
+    os.makedirs('models')
+    if not os.path.exists('models/tarot'):
+        os.makedirs('models/tarot')
+        if not os.path.exists('models/tarot/model'):
+            os.makedirs('models/tarot/model')
+model_path = 'models/tarot/model'
+
 
 # Set a global seed
 set_global_seed(0)
@@ -49,6 +60,8 @@ with tf.Session() as sess:
     random_agent = RandomAgent(action_num=eval_env.action_num)
 
     sess.run(tf.global_variables_initializer())
+
+    saver = tf.train.Saver()
 
     env.set_agents([agent] + [random_agent] * (env.player_num - 1))
     eval_env.set_agents([agent] + [random_agent] * (env.player_num - 1))
@@ -77,12 +90,14 @@ with tf.Session() as sess:
 
         # Evaluate the performance. Play with random agents.
         if episode % evaluate_every == 0:
+            # Save Model
+            saver.save(sess, 'models/tarot/model')
             reward = 0
             for eval_episode in range(evaluate_num):
                 _, payoffs = eval_env.run(is_training=False)
                 reward += payoffs[0]
 
-            logger.log('\n########## Evaluation ##########')
+            logger.log('\n########## Evaluation - Episode {} ##########'.format(episode))
             logger.log('Timestep: {} Average reward is {}'.format(env.timestep, float(reward) / evaluate_num))
 
             # Add point to logger

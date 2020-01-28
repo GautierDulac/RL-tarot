@@ -1,24 +1,24 @@
-import matplotlib.pyplot as plt
 import os
 
+import matplotlib.pyplot as plt
+
+
 class Logger(object):
-    ''' Logger saves the running results and helps make plots from the results
-    '''
+    """
+    Logger saves the running results and helps make plots from the results
+    """
 
-    def __init__(self, xlabel = '', ylabel = '', legend = '', log_path = None, csv_path = None):
-        ''' Initialize the labels, legend and paths of the plot and log file.
-
-        Args:
-            xlabel (string): label of x axis of the plot
-            ylabel (string): label of y axis of the plot
-            legend (string): name of the curve
-            log_path (string): where to store the log file
-            csv_path (string): where to store the csv file
-
-        Note:
-            1. log_path must be provided to use the log() method. If the log file already exists, it will be deleted when Logger is initialized.
-            2. If csv_path is provided, then one record will be write to the file everytime add_point() method is called.
-        '''
+    def __init__(self, xlabel:str='', ylabel:str='', legend:str='', log_path:str=None, csv_path:str=None):
+        """
+        Initialize the labels, legend and paths of the plot and log file.
+        :param xlabel: (string): label of x axis of the plot
+        :param ylabel: (string): label of y axis of the plot
+        :param legend: (string): name of the curve
+        :param log_path: (string): where to store the log file
+        :param csv_path: (string): where to store the csv file
+        1. log_path must be provided to use the log() method. If the log file already exists, it will be deleted when Logger is initialized.
+        2. If csv_path is provided, then one record will be write to the file everytime add_point() method is called.
+        """
         self.xlabel = xlabel
         self.ylabel = ylabel
         self.legend = legend
@@ -38,26 +38,26 @@ class Logger(object):
             if not os.path.exists(csv_dir):
                 os.makedirs(csv_dir)
             self.csv_file = open(csv_path, 'w')
-            self.csv_file.write(xlabel+','+ylabel+'\n')
+            self.csv_file.write(xlabel + ',' + ylabel + '\n')
             self.csv_file.flush()
 
-    def log(self, text):
-        ''' Write the text to log file then print it.
-
-        Args:
-            text(string): text to log
-        '''
-        self.log_file.write(text+'\n')
+    def log(self, text: str) -> None:
+        """
+        Write the text to log file then print it.
+        :param text: text(string): text to log
+        :return: None
+        """
+        self.log_file.write(text + '\n')
         self.log_file.flush()
         print(text)
 
-    def add_point(self, x = None, y = None):
-        ''' Add a point to the plot
-
-        Args:
-            x (Number): x coordinate value
-            y (Number): y coordinate value
-        '''
+    def add_point(self, x=None, y=None) -> None:
+        """
+        Add a point to the plot
+        :param x: x coordinate value
+        :param y: y coordinate value
+        :return:
+        """
         if x is not None and y is not None:
             self.xs.append(x)
             self.ys.append(y)
@@ -66,15 +66,15 @@ class Logger(object):
 
         # If csv_path is not None then write x and y to file
         if self.csv_path is not None:
-            self.csv_file.write(str(x)+','+str(y)+'\n')
+            self.csv_file.write(str(x) + ',' + str(y) + '\n')
             self.csv_file.flush()
 
-    def make_plot(self, save_path = ''):
-        ''' Make plot using all stored points
-
-        Args:
-            save_path (string): where to store the plot
-        '''
+    def make_plot(self, save_path:str ='') -> None:
+        """
+        Make plot using all stored points
+        :param save_path: (string): where to store the plot
+        :return:
+        """
         fig, ax = plt.subplots()
         ax.plot(self.xs, self.ys, label=self.legend)
         ax.set(xlabel=self.xlabel, ylabel=self.ylabel)
@@ -87,9 +87,11 @@ class Logger(object):
 
         fig.savefig(save_path)
 
-    def close_file(self):
-        ''' Close the created file objects
-        '''
+    def close_file(self) -> None:
+        """
+        Close the created file objects
+        :return: None
+        """
         if self.log_path is not None:
             self.log_file.close()
         if self.csv_path is not None:

@@ -112,7 +112,7 @@ def encode_target(plane: np.ndarray, target: str, index_to_encode: int = 2) -> n
     return plane
 
 
-def encode_bid(plane: np.ndarray, bid: List[TarotBid], index_to_encode: str = '2-0') -> np.ndarray:
+def encode_bid(plane: np.ndarray, bid: Union[int, TarotBid, List[TarotBid]], index_to_encode: str = '2-0') -> np.ndarray:
     """
     index_to_encode gives the path inside plane to encode the given bids
     :param plane: n*5*22 numpy ndarray
@@ -124,6 +124,8 @@ def encode_bid(plane: np.ndarray, bid: List[TarotBid], index_to_encode: str = '2
         return plane
     if isinstance(bid, TarotBid):
         bid = [bid]
+    if isinstance(bid, int):
+        bid = all_bids[bid]
     bid_values = [BID_SPACE[bid[i].get_str()] for i in range(len(bid)) if bid[i] is not None]
     indexs = [int(index_to_encode.split('-')[i]) for i in [0, 1]]
     plane[indexs[0]][indexs[1]] = np.zeros(22, dtype=int)

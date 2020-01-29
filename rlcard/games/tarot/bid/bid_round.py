@@ -74,11 +74,13 @@ class BidRound(object):
             return potential_next
 
     def get_legal_actions(self) -> List[TarotBid]:
+        #TODO REMOVE CONSTRAINTS THAT FORCE ONLY PASSE OU PETITE
         """
         Get legal bids
         :return: list of legals bids (TarotBid objects)
         """
-        legal_bids = self.all_bids[(self.max_bid_order + 1):] + [self.all_bids[0]]
+        #legal_bids = self.all_bids[(self.max_bid_order + 1):] + [self.all_bids[0]]
+        legal_bids = self.all_bids[(self.max_bid_order + 1):2] + [self.all_bids[0]]
         return legal_bids
 
     def get_state(self, players: List[TarotPlayer], player_id) -> dict:

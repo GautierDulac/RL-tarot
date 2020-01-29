@@ -193,7 +193,7 @@ class DQNAgent(object):
         # Update the target estimator
         if self.train_t % self.update_target_estimator_every == 0:
             copy_model_parameters(self.sess, self.q_estimator, self.target_estimator)
-            print("\nINFO - Copied model parameters to target network.")
+            # print("\nINFO - Copied model parameters to target network.")
 
         self.train_t += 1
         return loss

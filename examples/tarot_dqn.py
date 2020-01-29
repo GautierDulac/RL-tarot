@@ -17,8 +17,8 @@ eval_env = rlcard.make('tarot')
 
 # Set the iterations numbers and how frequently we evaluate/save plot
 evaluate_every = 25
-save_plot_every = 500
-evaluate_num = 10
+save_plot_every = 250
+evaluate_num = 25
 episode_num = 10000
 
 # Set the the number of steps for collecting normalization statistics

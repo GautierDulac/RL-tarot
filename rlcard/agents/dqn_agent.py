@@ -308,7 +308,7 @@ class Estimator():
         # The TD target value
         self.y_pl = tf.compat.v1.placeholder(shape=[None], dtype=tf.float32, name="y")
         # Integer id of which action was selected
-        self.actions_pl = tf.placeholder(shape=[None], dtype=tf.int32, name="actions")
+        self.actions_pl = tf.compat.v1.placeholder(shape=[None], dtype=tf.int32, name="actions")
 
         batch_size = tf.shape(self.X_pl)[0]
 
@@ -408,9 +408,9 @@ def copy_model_parameters(sess, estimator1, estimator2):
         estimator1 (Estimator): Estimator to copy the paramters from
         estimator2 (Estimator): Estimator to copy the parameters to
     """
-    e1_params = [t for t in tf.trainable_variables() if t.name.startswith(estimator1.scope)]
+    e1_params = [t for t in tf.compat.v1.trainable_variables() if t.name.startswith(estimator1.scope)]
     e1_params = sorted(e1_params, key=lambda v: v.name)
-    e2_params = [t for t in tf.trainable_variables() if t.name.startswith(estimator2.scope)]
+    e2_params = [t for t in tf.compat.v1.trainable_variables() if t.name.startswith(estimator2.scope)]
     e2_params = sorted(e2_params, key=lambda v: v.name)
 
     update_ops = []

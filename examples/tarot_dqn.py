@@ -16,9 +16,9 @@ env = rlcard.make('tarot')
 eval_env = rlcard.make('tarot')
 
 # Set the iterations numbers and how frequently we evaluate/save plot
-evaluate_every = 100
-save_plot_every = 100
-evaluate_num = 1000
+evaluate_every = 50
+save_plot_every = 50
+evaluate_num = 200
 episode_num = 10000
 
 # Set the the number of steps for collecting normalization statistics
@@ -44,7 +44,7 @@ model_path = 'models/tarot/model'
 # Set a global seed
 set_global_seed(0)
 
-with tf.Session() as sess:
+with tf.compat.v1.Session() as sess:
     # Set agents
     global_step = tf.Variable(0, name='global_step', trainable=False)
     agent = DQNAgent(sess,
@@ -58,9 +58,9 @@ with tf.Session() as sess:
 
     random_agent = RandomAgent(action_num=eval_env.action_num)
 
-    sess.run(tf.global_variables_initializer())
+    sess.run(tf.compat.v1.global_variables_initializer())
 
-    saver = tf.train.Saver()
+    saver = tf.compat.v1.train.Saver()
 
     env.set_agents([agent] + [random_agent] * (env.player_num - 1))
     eval_env.set_agents([agent] + [random_agent] * (env.player_num - 1))

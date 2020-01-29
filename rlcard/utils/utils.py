@@ -39,7 +39,7 @@ def set_global_seed(seed: int) -> None:
         # We only require Tensorflow or PyTorch, not both
         try:
             import tensorflow as tf
-            tf.set_random_seed(seed)
+            tf.compat.v1.set_random_seed(seed)
         except:
             pass
         try:

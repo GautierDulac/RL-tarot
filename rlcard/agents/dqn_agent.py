@@ -289,11 +289,11 @@ class Estimator():
         self.state_shape = state_shape
         self.mlp_layers = mlp_layers
 
-        with tf.variable_scope(scope):
+        with tf.compat.v1.variable_scope(scope):
             # Build the graph
             self._build_model()
         # Optimizer Parameters from original paper
-        self.optimizer = tf.train.AdamOptimizer(learning_rate=self.learning_rate, name='dqn_adam')
+        self.optimizer = tf.compat.v1.train.AdamOptimizer(learning_rate=self.learning_rate, name='dqn_adam')
 
         self.train_op = self.optimizer.minimize(self.loss, global_step=tf.contrib.framework.get_global_step())
 
@@ -304,9 +304,9 @@ class Estimator():
         # Our input are 4 RGB frames of shape 160, 160 each
         input_shape = [None]
         input_shape.extend(self.state_shape)
-        self.X_pl = tf.placeholder(shape=input_shape, dtype=tf.float32, name="X")
+        self.X_pl = tf.compat.v1.placeholder(shape=input_shape, dtype=tf.float32, name="X")
         # The TD target value
-        self.y_pl = tf.placeholder(shape=[None], dtype=tf.float32, name="y")
+        self.y_pl = tf.compat.v1.placeholder(shape=[None], dtype=tf.float32, name="y")
         # Integer id of which action was selected
         self.actions_pl = tf.placeholder(shape=[None], dtype=tf.int32, name="actions")
 
@@ -323,7 +323,7 @@ class Estimator():
         self.action_predictions = tf.gather(tf.reshape(self.predictions, [-1]), gather_indices)
 
         # Calculate the loss
-        self.losses = tf.squared_difference(self.y_pl, self.action_predictions)
+        self.losses = tf.math.squared_difference(self.y_pl, self.action_predictions)
         self.loss = tf.reduce_mean(self.losses)
 
     def predict(self, sess, s):

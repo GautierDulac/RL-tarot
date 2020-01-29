@@ -25,9 +25,10 @@ SOFTWARE.
 """
 
 import random
+from collections import namedtuple
+
 import numpy as np
 import tensorflow as tf
-from collections import namedtuple
 
 from rlcard.utils.utils import remove_illegal
 

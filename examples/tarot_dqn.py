@@ -17,7 +17,7 @@ eval_env = rlcard.make('tarot')
 
 # Set the iterations numbers and how frequently we evaluate/save plot
 evaluate_every = 25
-save_plot_every = 100
+save_plot_every = 500
 evaluate_num = 10
 episode_num = 10000
 
@@ -72,6 +72,7 @@ with tf.compat.v1.Session() as sess:
     logger = Logger(xlabel='timestep', ylabel='reward', legend='DQN on TAROT', log_path=log_path, csv_path=csv_path)
 
     for episode in range(episode_num):
+        print('\rEPISODE {}'.format(episode), end='')
 
         # Generate data from the environment
         trajectories, _ = env.run(is_training=True)
@@ -85,7 +86,7 @@ with tf.compat.v1.Session() as sess:
             train_count = step_counter - (memory_init_size + norm_step)
             if train_count > 0:
                 loss = agent.train()
-                print('\rINFO - Step {}, loss: {}'.format(step_counter, loss), end='')
+                #print('\rINFO - Step {}, loss: {}'.format(step_counter, loss), end='')
 
         # Evaluate the performance. Play with random agents.
         if episode % evaluate_every == 0:

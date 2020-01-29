@@ -28,7 +28,7 @@ class Env(object):
 
         # Get number of players/actions in this game
         self.player_num = game.get_player_num()
-        self.action_num = 78 #game.get_action_num() TODO : Modify for 78 everytime (6 < 78)
+        self.action_num = 78  # game.get_action_num() TODO : Modify for 78 everytime (6 < 78)
 
         # A counter for the timesteps
         self.timestep = 0
@@ -226,7 +226,9 @@ class Env(object):
 
         # Loop to play the game
         trajectories[player_id].append(state)
+
         while not self.is_over():
+
             # Agent plays
             if not is_training:
                 action = self.agents[player_id].eval_step(state)

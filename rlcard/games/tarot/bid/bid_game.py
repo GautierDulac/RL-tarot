@@ -67,13 +67,13 @@ class BidGame(object):
                 (int): next plater's id
         """
         player_id = self.bid_round.proceed_round(self.players, played_bid)
-        if self.bid_round.is_over:
+        if self.bid_round.is_dead:
+            return None, None
+        elif self.bid_round.is_over:
             self.bid_over = True
             self.taking_player_id = self.bid_round.taking_player_id
             self.taking_bid_order = self.bid_round.max_bid_order
             return self.get_state(player_id), player_id
-        elif self.bid_round.is_dead:
-            self.init_game()
         else:
             state = self.get_state(player_id)
             self.bid_round.current_player_id = player_id

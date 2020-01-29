@@ -38,8 +38,8 @@ class TestTarotMainGameMethods(unittest.TestCase):
             if game.current_game_part == 'BID':
                 self.assertIn(np.random.choice(game.get_legal_actions()).get_str(), TarotBid.order.keys())
             if game.current_game_part == 'DOG':
-                self.assertIsNotNone(game.taking_bid)
-                self.assertNotEqual(game.taking_bid.get_str(), 'PASSE')
+                self.assertIsNotNone(game.taking_bid_order)
+                self.assertNotEqual(game.taking_bid_order, 0)
                 went_though_dog += 1
                 self.assertIn(np.random.choice(game.get_legal_actions()).get_str(), ACTION_LIST)
             if game.current_game_part == 'MAIN' and not game.is_over():
@@ -50,7 +50,7 @@ class TestTarotMainGameMethods(unittest.TestCase):
             if game.players[player_id].taking:
                 nb_taking += 1
         self.assertEqual(nb_taking, 1)
-        if game.taking_bid < 4:
+        if game.taking_bid_order < 4:
             self.assertEqual(went_though_dog, game.num_cards_dog)
         else:
             self.assertEqual(went_though_dog, 0)
@@ -61,6 +61,8 @@ class TestTarotMainGameMethods(unittest.TestCase):
         game.init_game()
         while not game.is_over():
             action = np.random.choice(game.get_legal_actions())
+            print(game.current_game_part)
+            print(action.get_str())
             _, _ = game.step(action)
         payoffs = game.get_payoffs()
         print(payoffs)

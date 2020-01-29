@@ -80,6 +80,8 @@ class GlobalGame(object):
         """
         if self.current_game_part == 'BID':
             state, player_id = self.bid_game.step(played_action)
+            if state is None:
+                return self.init_game()
             state = self.bid_game.get_state(player_id)
             self.bid_game.bid_round.current_player_id = player_id
             if self.bid_game.bid_over:

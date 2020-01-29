@@ -20,6 +20,7 @@ class Env(object):
         :param game: GlobalGame object
         :param allow_step_back: UNUSED
         """
+        self.state_shape = None
         self.name = None
         self.game = game
         self.allow_step_back = allow_step_back

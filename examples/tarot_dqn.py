@@ -8,23 +8,23 @@ import tensorflow as tf
 import rlcard
 from rlcard.agents.dqn_agent import DQNAgent
 from rlcard.agents.random_agent import RandomAgent
-from rlcard.utils.utils import set_global_seed
 from rlcard.utils.logger import Logger
+from rlcard.utils.utils import set_global_seed
 
 # Make environment
 env = rlcard.make('tarot')
 eval_env = rlcard.make('tarot')
 
 # Set the iterations numbers and how frequently we evaluate/save plot
-evaluate_every = 500
-save_plot_every = 500
-evaluate_num = 100
-episode_num = 100000
+evaluate_every = 100
+save_plot_every = 100
+evaluate_num = 1000
+episode_num = 10000
 
 # Set the the number of steps for collecting normalization statistics
 # and intial memory size
-memory_init_size = 200
-norm_step = 200
+memory_init_size = 1000
+norm_step = 100
 
 # The paths for saving the logs and learning curves
 root_path = './experiments/tarot_dqn_result/'
@@ -41,7 +41,6 @@ if not os.path.exists('models'):
             os.makedirs('models/tarot/model')
 model_path = 'models/tarot/model'
 
-
 # Set a global seed
 set_global_seed(0)
 
@@ -50,7 +49,7 @@ with tf.Session() as sess:
     global_step = tf.Variable(0, name='global_step', trainable=False)
     agent = DQNAgent(sess,
                      scope='dqn',
-                     action_num=78, #env.action_num,
+                     action_num=78,  # env.action_num,
                      replay_memory_size=20000,
                      replay_memory_init_size=memory_init_size,
                      norm_step=norm_step,

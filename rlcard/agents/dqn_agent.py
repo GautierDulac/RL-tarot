@@ -150,7 +150,6 @@ class DQNAgent(object):
         Returns:
             action (int): an action id
         """
-        # TODO UNDERSTAND WHY THIS TAKES SO MUCH TIME
         q_values = self.q_estimator.predict(self.sess, np.expand_dims(self.normalizer.normalize(state['obs']), 0))[0]
         probs = remove_illegal(np.exp(q_values), state['legal_actions'])
         best_action = np.argmax(probs)

@@ -90,7 +90,7 @@ with tf.compat.v1.Session() as sess:
                 # print('\rINFO - Step {}, loss: {}'.format(step_counter, loss), end='')
 
         # Evaluate the performance. Play with random agents.
-        if episode != 0 and episode % evaluate_every == 0:
+        if episode % evaluate_every == 0:
             # Save Model
             saver.save(sess, model_path)
             reward = 0

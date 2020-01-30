@@ -77,18 +77,54 @@ def time_difference_good_format(t1: float, t2: float) -> str:
     """
     delta_t = int(t2 - t1)
     if delta_t < 60:
-        return '{} seconds'.format(delta_t)
+        if delta_t <= 1:
+            return '{} second'.format(delta_t)
+        else:
+            return '{} seconds'.format(delta_t)
     elif delta_t < 3600:
         minutes = int(delta_t / 60)
         sec = delta_t % 60
-        return '{} minutes and {} seconds'.format(minutes, sec)
+        if minutes <= 1:
+            if sec <= 1:
+                return '{} minute and {} second'.format(minutes, sec)
+            else:
+                return '{} minute and {} seconds'.format(minutes, sec)
+        else:
+            if sec <= 1:
+                return '{} minutes and {} second'.format(minutes, sec)
+            else:
+                return '{} minutes and {} seconds'.format(minutes, sec)
     elif delta_t < 3600 * 24:
         hours = int(delta_t / 3600)
+        if hours <= 1:
+            hours_s = ''
+        else:
+            hours_s = 's'
         minutes = int((delta_t % 3600) / 60)
+        if minutes <= 1:
+            minutes_s = ''
+        else:
+            minutes_s = 's'
         sec = delta_t % 60
-        return '{} hours, {} minutes and {} seconds'.format(hours, minutes, sec)
+        if sec <= 1:
+            sec_s = ''
+        else:
+            sec_s = 's'
+        return '{} hour{}, {} minute{} and {} second{}'.format(hours, hours_s, minutes, minutes_s, sec, sec_s)
     else:
         days = int(delta_t / 3600 * 24)
+        if days <= 1:
+            days_s = ''
+        else:
+            days_s = 's'
         hours = int((delta_t % (3600 * 24)) / 3600)
+        if hours <=1 :
+            hours_s = ''
+        else:
+            hours_s = 's'
         minutes = int((delta_t % 3600) / 60)
-        return '{} days, {} hours and {} minutes'.format(days, hours, minutes)
+        if minutes <= 1:
+            minutes_s = ''
+        else:
+            minutes_s = 's'
+        return '{} day{}, {} hour{} and {} minute{}'.format(days, days_s, hours, hours_s, minutes, minutes_s)

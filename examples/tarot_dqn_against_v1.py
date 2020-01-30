@@ -7,7 +7,6 @@ import tensorflow as tf
 
 import rlcard
 from rlcard.agents.dqn_agent import DQNAgent
-from rlcard.agents.random_agent import RandomAgent
 from rlcard.models.pretrained_models_tarot_v1 import TarotDQNModelV1
 from rlcard.utils.logger import Logger
 from rlcard.utils.utils import set_global_seed
@@ -19,9 +18,9 @@ env = rlcard.make('tarot')
 eval_env = rlcard.make('tarot')
 
 # Set the iterations numbers and how frequently we evaluate/save plot
-evaluate_every = 75
-save_plot_every = 300
-evaluate_num = 150
+evaluate_every = 50
+save_plot_every = 100
+evaluate_num = 50
 episode_num = 1500
 
 # Set the the number of steps for collecting normalization statistics
@@ -59,14 +58,14 @@ with tf.compat.v1.Session() as sess:
                      state_shape=env.state_shape,
                      mlp_layers=[512, 512])
 
-    random_agent = TarotDQNModelV1().dqn_agents[0]
+    opponent_agent = TarotDQNModelV1().dqn_agents[0]
 
     sess.run(tf.compat.v1.global_variables_initializer())
 
     saver = tf.compat.v1.train.Saver()
 
-    env.set_agents([agent] + [random_agent] * (env.player_num - 1))
-    eval_env.set_agents([agent] + [random_agent] * (env.player_num - 1))
+    env.set_agents([agent] + [opponent_agent] * (env.player_num - 1))
+    eval_env.set_agents([agent] + [opponent_agent] * (env.player_num - 1))
 
     # Count the number of steps
     step_counter = 0

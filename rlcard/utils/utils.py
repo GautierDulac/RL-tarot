@@ -66,3 +66,29 @@ def remove_illegal(action_probs: np.ndarray, legal_actions: List[int]) -> np.nda
     else:
         probs /= sum(probs)
     return probs
+
+
+def time_difference_good_format(t1: float, t2: float) -> str:
+    """
+    From two seconds time, compute the difference and give a relevant string of that time delta
+    :param t1: first time
+    :param t2: second time, higher than first
+    :return: string with 'hours', 'minutes', 'secondes'
+    """
+    delta_t = int(t2 - t1)
+    if delta_t < 60:
+        return '{} seconds'.format(delta_t)
+    elif delta_t < 3600:
+        minutes = int(delta_t / 60)
+        sec = delta_t % 60
+        return '{} minutes and {} seconds'.format(minutes, sec)
+    elif delta_t < 3600 * 24:
+        hours = int(delta_t / 3600)
+        minutes = int((delta_t % 3600) / 60)
+        sec = delta_t % 60
+        return '{} hours, {} minutes and {} seconds'.format(hours, minutes, sec)
+    else:
+        days = int(delta_t / 3600 * 24)
+        hours = int((delta_t % (3600 * 24)) / 3600)
+        minutes = int((delta_t % 3600) / 60)
+        return '{} days, {} hours and {} minutes'.format(days, hours, minutes)

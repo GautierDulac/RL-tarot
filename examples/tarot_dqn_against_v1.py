@@ -49,16 +49,9 @@ set_global_seed(0)
 with tf.compat.v1.Session() as sess:
     # Set agents
     global_step = tf.Variable(0, name='global_step', trainable=False)
-    agent = DQNAgent(sess,
-                     scope='dqn',
-                     action_num=78,  # env.action_num,
-                     replay_memory_size=20000,
-                     replay_memory_init_size=memory_init_size,
-                     norm_step=norm_step,
-                     state_shape=env.state_shape,
-                     mlp_layers=[512, 512])
+    agent = TarotDQNModelV1().dqn_agent
 
-    opponent_agent = TarotDQNModelV1().dqn_agents[0]
+    opponent_agent = agent
 
     sess.run(tf.compat.v1.global_variables_initializer())
 
@@ -93,7 +86,7 @@ with tf.compat.v1.Session() as sess:
         # Evaluate the performance. Play with random agents.
         if episode % evaluate_every == 0:
             # Save Model
-            saver.save(sess, 'models/tarot/model')
+            saver.save(sess, model_path)
             reward = 0
             for eval_episode in range(evaluate_num):
                 _, payoffs = eval_env.run(is_training=False)

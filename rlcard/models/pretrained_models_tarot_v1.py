@@ -2,7 +2,7 @@
 """
 
 import os
-from typing import List
+from typing import List, Union
 
 import tensorflow as tf
 
@@ -30,39 +30,36 @@ class TarotDQNModelV1(Model):
         """
         super().__init__()
         self.graph = tf.Graph()
-        self.sess = tf.Session(graph=self.graph)
+        self.sess = tf.compat.v1.Session(graph=self.graph)
 
         env = rlcard.make('tarot')
         with self.graph.as_default():
-            self.dqn_agents = []
-            for i in range(env.player_num):
-                agent = DQNAgent(self.sess,
-                                 scope='dqn',
-                                 action_num=78,  # env.action_num,
-                                 replay_memory_size=20000,
-                                 replay_memory_init_size=memory_init_size,
-                                 norm_step=norm_step,
-                                 state_shape=env.state_shape,
-                                 mlp_layers=[512, 512])
-                self.dqn_agents.append(agent)
-            normalize(env, self.dqn_agents, 1000)
-            self.sess.run(tf.global_variables_initializer())
+            self.dqn_agent = DQNAgent(self.sess,
+                                      scope='dqn',
+                                      action_num=78,  # env.action_num,
+                                      replay_memory_size=20000,
+                                      replay_memory_init_size=memory_init_size,
+                                      norm_step=norm_step,
+                                      state_shape=env.state_shape,
+                                      mlp_layers=[512, 512])
+            normalize(env, self.dqn_agent, 1000)
+            self.sess.run(tf.compat.v1.global_variables_initializer())
 
         check_point_path = os.path.join(ROOT_PATH, 'tarot_v1')
         with self.sess.as_default():
             with self.graph.as_default():
-                saver = tf.train.Saver(tf.model_variables())
+                saver = tf.compat.v1.train.Saver(tf.compat.v1.model_variables())
                 saver.restore(self.sess, tf.train.latest_checkpoint(check_point_path))
 
     @property
-    def agents(self) -> List[DQNAgent]:
+    def agents(self) -> Union[DQNAgent, List[DQNAgent]]:
         """
          Get a list of agents for each position in a the game
-        :return: agents (list): A list of agents
+        :return: agents (list): A list of agents or an agent
         Note: Each agent should be just like RL agent with step and eval_step
               functioning well.
         """
-        return self.dqn_agents
+        return self.dqn_agent
 
     @property
     def use_raw(self) -> bool:
@@ -73,14 +70,16 @@ class TarotDQNModelV1(Model):
         return False
 
 
-def normalize(e: Env, agents: List[DQNAgent], num: int) -> None:
+def normalize(e: Env, agents: Union[DQNAgent, List[DQNAgent]], num: int) -> None:
     """
     Feed random data to normalizer
     :param e: AN Env class
-    :param agents: A list of Agent object
+    :param agents: A list of Agent object or an Agent object
     :param num: The number of steps to be normalized
     :return:
     """
+    if isinstance(agents, DQNAgent):
+        agents = [agents]
     begin_step = e.timestep
     e.set_agents([RandomAgent(e.action_num) for _ in range(e.player_num)])
     while e.timestep - begin_step < num:

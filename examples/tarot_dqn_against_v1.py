@@ -2,14 +2,14 @@
 An example of learning a Deep-Q Agent on French Tarot Game
 """
 import os
+import time
 
 import tensorflow as tf
 
 import rlcard
-from rlcard.agents.dqn_agent import DQNAgent
 from rlcard.models.pretrained_models_tarot_v1 import TarotDQNModelV1
 from rlcard.utils.logger import Logger
-from rlcard.utils.utils import set_global_seed
+from rlcard.utils.utils import set_global_seed, time_difference_good_format
 
 record_number = 3
 
@@ -18,10 +18,10 @@ env = rlcard.make('tarot')
 eval_env = rlcard.make('tarot')
 
 # Set the iterations numbers and how frequently we evaluate/save plot
-evaluate_every = 50
-save_plot_every = 100
-evaluate_num = 50
-episode_num = 1500
+evaluate_every = 500
+save_plot_every = 1000
+evaluate_num = 100
+episode_num = 5000
 
 # Set the the number of steps for collecting normalization statistics
 # and intial memory size
@@ -39,9 +39,9 @@ if not os.path.exists('rlcard/models'):
     os.makedirs('rlcard/models')
     if not os.path.exists('rlcard/models/pretrained'):
         os.makedirs('rlcard/models/pretrained')
-        if not os.path.exists('rlcard/models/pretrained/tarot_v'+str(record_number)):
-            os.makedirs('rlcard/models/pretrained/tarot_v'+str(record_number))
-model_path = 'rlcard/models/pretrained/tarot_v'+str(record_number)
+        if not os.path.exists('rlcard/models/pretrained/tarot_v' + str(record_number)):
+            os.makedirs('rlcard/models/pretrained/tarot_v' + str(record_number))
+model_path = 'rlcard/models/pretrained/tarot_v' + str(record_number) + '/tarot_v' + str(record_number)
 
 # Set a global seed
 set_global_seed(0)
@@ -66,11 +66,17 @@ with tf.compat.v1.Session() as sess:
     # Init a Logger to plot the learning curve
     logger = Logger(xlabel='timestep', ylabel='reward', legend='DQN on TAROT', log_path=log_path, csv_path=csv_path)
 
+    total_game_played = 0
+    seconds = time.time()
+
     for episode in range(episode_num):
-        print('\rEPISODE {}'.format(episode), end='')
+        print('\rEPISODE {} - Number of game played {} - {}'.format(episode, total_game_played,
+                                                                    time_difference_good_format(seconds, time.time())),
+              end='')
 
         # Generate data from the environment
         trajectories, _ = env.run(is_training=True)
+        total_game_played += 1
 
         # Feed transitions into agent memory, and train the agent
         for ts in trajectories[0]:
@@ -81,15 +87,23 @@ with tf.compat.v1.Session() as sess:
             train_count = step_counter - (memory_init_size + norm_step)
             if train_count > 0:
                 loss = agent.train()
-                #print('\rINFO - Step {}, loss: {}'.format(step_counter, loss), end='')
+                # print('\rINFO - Step {}, loss: {}'.format(step_counter, loss), end='')
 
         # Evaluate the performance. Play with random agents.
-        if episode % evaluate_every == 0:
+        if episode != 0 and episode % evaluate_every == 0:
             # Save Model
             saver.save(sess, model_path)
             reward = 0
             for eval_episode in range(evaluate_num):
+                print('\rEPISODE {} - Eval {} over {} - Number of game played {} - {}'.format(episode, eval_episode,
+                                                                                              evaluate_num,
+                                                                                              total_game_played,
+                                                                                              time_difference_good_format(
+                                                                                                  seconds,
+                                                                                                  time.time())),
+                      end='')
                 _, payoffs = eval_env.run(is_training=False)
+                total_game_played += 1
                 reward += payoffs[0]
 
             logger.log('\n########## Evaluation - Episode {} ##########'.format(episode))

@@ -150,6 +150,7 @@ class DQNAgent(object):
         Returns:
             action (int): an action id
         """
+        # TODO UNDERSTAND WHY THIS TAKES SO MUCH TIME
         q_values = self.q_estimator.predict(self.sess, np.expand_dims(self.normalizer.normalize(state['obs']), 0))[0]
         probs = remove_illegal(np.exp(q_values), state['legal_actions'])
         best_action = np.argmax(probs)
@@ -182,8 +183,8 @@ class DQNAgent(object):
         q_values_next = self.q_estimator.predict(self.sess, next_state_batch)
         best_actions = np.argmax(q_values_next, axis=1)
         q_values_next_target = self.target_estimator.predict(self.sess, next_state_batch)
-        target_batch = reward_batch + np.invert(done_batch).astype(np.float32) * \
-                       self.discount_factor * q_values_next_target[np.arange(self.batch_size), best_actions]
+        target_batch = reward_batch + np.invert(done_batch).astype(np.float32) * self.discount_factor * \
+                       q_values_next_target[np.arange(self.batch_size), best_actions]
 
         # Perform gradient descent update
         state_batch = np.array(state_batch)
@@ -233,7 +234,7 @@ class DQNAgent(object):
 
 
 class Normalizer(object):
-    """ Normalizer class that tracks the running statistics for normlization
+    """ Normalizer class that tracks the running statistics for normalization
     """
 
     def __init__(self):
@@ -296,7 +297,8 @@ class Estimator():
         # Optimizer Parameters from original paper
         self.optimizer = tf.compat.v1.train.AdamOptimizer(learning_rate=self.learning_rate, name='dqn_adam')
 
-        self.train_op = self.optimizer.minimize(self.loss, global_step=tf.contrib.framework.get_global_step())
+        self.train_op = self.optimizer.minimize(self.loss,
+                                                global_step=tf.compat.v1.train.get_global_step())  # Change with recommendations
 
     def _build_model(self):
         """ Build an MLP model.
@@ -354,7 +356,7 @@ class Estimator():
         """
         feed_dict = {self.X_pl: s, self.y_pl: y, self.actions_pl: a}
         _, _, loss = sess.run(
-            [tf.contrib.framework.get_global_step(), self.train_op, self.loss],
+            [tf.compat.v1.train.get_global_step(), self.train_op, self.loss],
             feed_dict)
         return loss
 

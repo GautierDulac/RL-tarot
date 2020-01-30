@@ -16,10 +16,10 @@ env = rlcard.make('tarot')
 eval_env = rlcard.make('tarot')
 
 # Set the iterations numbers and how frequently we evaluate/save plot
-evaluate_every = 25
-save_plot_every = 250
-evaluate_num = 25
-episode_num = 10000
+evaluate_every = 75
+save_plot_every = 300
+evaluate_num = 150
+episode_num = 1500
 
 # Set the the number of steps for collecting normalization statistics
 # and intial memory size
@@ -33,13 +33,13 @@ csv_path = root_path + 'performance.csv'
 figure_path = root_path + 'figures/'
 
 # Model save path
-if not os.path.exists('models'):
-    os.makedirs('models')
-    if not os.path.exists('models/tarot'):
-        os.makedirs('models/tarot')
-        if not os.path.exists('models/tarot/model'):
-            os.makedirs('models/tarot/model')
-model_path = 'models/tarot/model'
+if not os.path.exists('rlcard/models'):
+    os.makedirs('rlcard/models')
+    if not os.path.exists('rlcard/models/pretrained'):
+        os.makedirs('rlcard/models/pretrained')
+        if not os.path.exists('rlcard/models/pretrained/tarot'):
+            os.makedirs('rlcard/models/pretrained/tarot')
+model_path = 'rlcard/models/pretrained/tarot'
 
 # Set a global seed
 set_global_seed(0)

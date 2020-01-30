@@ -49,7 +49,7 @@ set_global_seed(0)
 with tf.compat.v1.Session() as sess:
     # Set agents
     global_step = tf.Variable(0, name='global_step', trainable=False)
-    agent = TarotDQNModelV1().dqn_agent
+    agent = TarotDQNModelV1(sess.graph, sess).dqn_agent
 
     opponent_agent = agent
 

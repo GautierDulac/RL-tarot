@@ -1,0 +1,75 @@
+
+########## Evaluation - Episode 0 ##########
+Timestep: 82 Average reward is 2.566666666666667
+
+########## Evaluation - Episode 10 ##########
+Timestep: 884 Average reward is 0.24666666666666667
+
+########## Evaluation - Episode 20 ##########
+Timestep: 1691 Average reward is 1.2266666666666666
+
+########## Evaluation - Episode 30 ##########
+Timestep: 2494 Average reward is -0.32
+
+########## Evaluation - Episode 40 ##########
+Timestep: 3298 Average reward is 0.7466666666666667
+
+########## Evaluation - Episode 50 ##########
+Timestep: 4104 Average reward is 0.5066666666666667
+
+########## Evaluation - Episode 60 ##########
+Timestep: 4912 Average reward is -0.08
+
+########## Evaluation - Episode 70 ##########
+Timestep: 5711 Average reward is -0.8066666666666666
+
+########## Evaluation - Episode 80 ##########
+Timestep: 6509 Average reward is -0.18
+
+########## Evaluation - Episode 90 ##########
+Timestep: 7312 Average reward is 1.7066666666666668
+
+########## Evaluation - Episode 100 ##########
+Timestep: 8114 Average reward is 1.7533333333333334
+
+########## Evaluation - Episode 110 ##########
+Timestep: 8921 Average reward is 1.3666666666666667
+
+########## Evaluation - Episode 120 ##########
+Timestep: 9728 Average reward is 0.14
+
+########## Evaluation - Episode 130 ##########
+Timestep: 10535 Average reward is 0.23333333333333334
+
+########## Evaluation - Episode 140 ##########
+Timestep: 11329 Average reward is 0.49333333333333335
+
+########## Evaluation - Episode 150 ##########
+Timestep: 12130 Average reward is 0.38666666666666666
+
+########## Evaluation - Episode 160 ##########
+Timestep: 12938 Average reward is 0.44666666666666666
+
+########## Evaluation - Episode 170 ##########
+Timestep: 13742 Average reward is 0.4066666666666667
+
+########## Evaluation - Episode 180 ##########
+Timestep: 14541 Average reward is -0.37333333333333335
+
+########## Evaluation - Episode 190 ##########
+Timestep: 15346 Average reward is -1.1933333333333334
+
+########## Evaluation - Episode 200 ##########
+Timestep: 16152 Average reward is 2.1533333333333333
+
+########## Evaluation - Episode 210 ##########
+Timestep: 16953 Average reward is 0.9466666666666667
+
+########## Evaluation - Episode 220 ##########
+Timestep: 17761 Average reward is -0.06
+
+########## Evaluation - Episode 230 ##########
+Timestep: 18557 Average reward is 0.10666666666666667
+
+########## Evaluation - Episode 240 ##########
+Timestep: 19357 Average reward is -0.76

@@ -11,17 +11,18 @@ from rlcard.models.pretrained_models_tarot_v1 import TarotDQNModelV1
 from rlcard.utils.logger import Logger
 from rlcard.utils.utils import set_global_seed, time_difference_good_format
 
-record_number = 3
+record_number = 6
 
 # Make environment
 env = rlcard.make('tarot')
 eval_env = rlcard.make('tarot')
 
 # Set the iterations numbers and how frequently we evaluate/save plot
-evaluate_every = 500
-save_plot_every = 1000
-evaluate_num = 100
-episode_num = 5000
+evaluate_every = 5
+save_plot_every = 100
+evaluate_num = 25
+
+episode_num = 1000
 
 # Set the the number of steps for collecting normalization statistics
 # and intial memory size
@@ -41,7 +42,7 @@ if not os.path.exists('rlcard/models'):
         os.makedirs('rlcard/models/pretrained')
         if not os.path.exists('rlcard/models/pretrained/tarot_v' + str(record_number)):
             os.makedirs('rlcard/models/pretrained/tarot_v' + str(record_number))
-model_path = 'rlcard/models/pretrained/tarot_v' + str(record_number) + '/tarot_v' + str(record_number)
+model_path = 'rlcard/models/pretrained/tarot_v' + str(record_number) + '/model'
 
 # Set a global seed
 set_global_seed(0)

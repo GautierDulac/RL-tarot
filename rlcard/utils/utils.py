@@ -112,7 +112,7 @@ def time_difference_good_format(t1: float, t2: float) -> str:
             sec_s = 's'
         return '{} hour{}, {} minute{} and {} second{}'.format(hours, hours_s, minutes, minutes_s, sec, sec_s)
     else:
-        days = int(delta_t / 3600 * 24)
+        days = int(delta_t / (3600 * 24))
         if days <= 1:
             days_s = ''
         else:

@@ -2,7 +2,7 @@
 An example of learning a Deep-Q Agent on French Tarot Game
 """
 import tensorflow as tf
-
+import random
 import rlcard
 from rlcard.models.pretrained_models_tarot_v1 import TarotDQNModelV1
 
@@ -10,7 +10,6 @@ from rlcard.models.pretrained_models_tarot_v1 import TarotDQNModelV1
 env = rlcard.make('tarot')
 
 env.set_mode(human_mode=True)
-
 
 with tf.compat.v1.Session() as sess:
     # Set agents

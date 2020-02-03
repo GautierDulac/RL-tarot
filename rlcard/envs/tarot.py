@@ -1,3 +1,4 @@
+import time
 from typing import List, Union
 
 import numpy as np
@@ -45,8 +46,8 @@ class TarotEnv(Env):
                 print(bid.get_str() + ', ', end='')
                 if i < len(state['legal_actions']) - 1:
                     print(' ', end='')
-            print('\n')
-            return
+                else:
+                    print('\n')
         elif self.game.current_game_part == 'DOG':
             print('================= Taking Bid =================')
             print(self.game.bid_game.bid_round.all_bids[state['taking_bid_order']].get_str())
@@ -65,14 +66,14 @@ class TarotEnv(Env):
                     TarotCard.print_cards(action.get_str())
                     if i < len(state['legal_actions']) - 1:
                         print(', ', end='')
-                print('\n')
+                    else:
+                        print('\n')
             else:
                 # No dog to be done
                 print('================= Your Hand  =================')
                 TarotCard.print_cards(state['hand'])
                 print('')
                 print('NO ACTION TO BE DONE')
-            return
         elif self.game.current_game_part == 'MAIN':
             print('================= Your Hand    ===============')
             TarotCard.print_cards(state['hand'])
@@ -92,7 +93,8 @@ class TarotEnv(Env):
                 TarotCard.print_cards(action.get_str())
                 if i < len(state['legal_actions']) - 1:
                     print(', ', end='')
-            print('\n')
+                else:
+                    print('\n')
 
     def print_result(self) -> None:
         """

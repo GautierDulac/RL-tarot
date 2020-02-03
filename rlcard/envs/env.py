@@ -1,4 +1,5 @@
 import random
+import time
 from typing import Union, List
 
 import numpy as np
@@ -62,6 +63,7 @@ class Env(object):
         """
         if self.single_agent_mode or self.human_mode:
             print('\r>> Agent 0 (Human) chooses ', end='')
+            action = int(input('\n Chosen action id:\n')) # TODO TEST - REMOVE IF NECESSARY
             self.print_action(self.decode_action(action).get_str())
             print('')
             return self.single_agent_step(action)
@@ -91,7 +93,7 @@ class Env(object):
                 action = self.model[self.game.current_game_part].agents[player_id].eval_step(self.extract_state(state))
                 action = self.decode_action(action)
             if self.human_mode:
-                print('\r>> Agent {} chooses '.format(player_id), end='')
+                print('>> Agent {} chooses '.format(player_id), end='')
                 self.print_action(action.get_str())
                 print('')
             state, player_id = self.game.step(action)
@@ -105,6 +107,7 @@ class Env(object):
 
         elif self.human_mode:
             self.print_state(self.active_player)
+            time.sleep(1)
 
         return self.extract_state(state), reward
 
@@ -135,6 +138,7 @@ class Env(object):
             if not self.game.is_over():
                 if self.human_mode:
                     self.print_state(self.active_player)
+                    time.sleep(1)
                 break
             else:
                 if self.human_mode:

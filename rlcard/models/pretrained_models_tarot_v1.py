@@ -31,9 +31,6 @@ class TarotDQNModelV1(Model):
         super().__init__()
         self.graph = graph
         self.sess = sess
-        # TODO REMOVE if ok
-        # self.graph = tf.Graph()
-        # self.sess = tf.compat.v1.Session(graph=self.graph)
 
         env = rlcard.make('tarot')
         with self.graph.as_default():

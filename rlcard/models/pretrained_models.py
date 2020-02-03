@@ -69,7 +69,6 @@ class LeducHoldemNFSPModel(Model):
 
 
 def normalize(e, agents, num):
-    # TODO : UNDERSTAND IT
     """ Feed random data to normalizer
 
     Args:

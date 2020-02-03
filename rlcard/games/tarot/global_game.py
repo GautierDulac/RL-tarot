@@ -69,7 +69,7 @@ class GlobalGame(object):
 
         return state, player_id
 
-    def step(self, played_action: Union[TarotCard, TarotBid]) -> (dict, int):
+    def step(self, played_action: Union[TarotCard, TarotBid, None]) -> (dict, int):
         """
         Get the next state
         :param played_action: chosen action to be played (TarotCard or TarotBid): A specific TarotCard or TarotBid

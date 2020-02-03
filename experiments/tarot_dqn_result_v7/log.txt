@@ -241,3 +241,63 @@ Timestep: 63522 Average reward is 2.6066666666666665
 
 ########## Evaluation - Episode 800 ##########
 Timestep: 64325 Average reward is 2.533333333333333
+
+########## Evaluation - Episode 810 ##########
+Timestep: 65128 Average reward is 2.8933333333333335
+
+########## Evaluation - Episode 820 ##########
+Timestep: 65929 Average reward is 2.566666666666667
+
+########## Evaluation - Episode 830 ##########
+Timestep: 66735 Average reward is 2.6466666666666665
+
+########## Evaluation - Episode 840 ##########
+Timestep: 67534 Average reward is 2.7066666666666666
+
+########## Evaluation - Episode 850 ##########
+Timestep: 68336 Average reward is 1.9933333333333334
+
+########## Evaluation - Episode 860 ##########
+Timestep: 69139 Average reward is 3.1133333333333333
+
+########## Evaluation - Episode 870 ##########
+Timestep: 69948 Average reward is 2.3866666666666667
+
+########## Evaluation - Episode 880 ##########
+Timestep: 70758 Average reward is 1.6066666666666667
+
+########## Evaluation - Episode 890 ##########
+Timestep: 71553 Average reward is 2.5733333333333333
+
+########## Evaluation - Episode 900 ##########
+Timestep: 72357 Average reward is 2.9266666666666667
+
+########## Evaluation - Episode 910 ##########
+Timestep: 73161 Average reward is 2.72
+
+########## Evaluation - Episode 920 ##########
+Timestep: 73961 Average reward is 2.9
+
+########## Evaluation - Episode 930 ##########
+Timestep: 74780 Average reward is 2.506666666666667
+
+########## Evaluation - Episode 940 ##########
+Timestep: 75584 Average reward is 2.5
+
+########## Evaluation - Episode 950 ##########
+Timestep: 76383 Average reward is 2.8333333333333335
+
+########## Evaluation - Episode 960 ##########
+Timestep: 77184 Average reward is 3.006666666666667
+
+########## Evaluation - Episode 970 ##########
+Timestep: 77991 Average reward is 2.24
+
+########## Evaluation - Episode 980 ##########
+Timestep: 78788 Average reward is 2.74
+
+########## Evaluation - Episode 990 ##########
+Timestep: 79592 Average reward is 2.0533333333333332
+
+########## Evaluation - Episode 1000 ##########
+Timestep: 80391 Average reward is 3.0733333333333333

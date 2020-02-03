@@ -79,7 +79,6 @@ class Env(object):
 
                 (np.ndarray): the next state
                 (int): the reward
-                (bool): a 'done' information # TODO understand done - REMOVED FOR NOW WARNING ?
         """
         reward = 0.
         self.timestep += 1

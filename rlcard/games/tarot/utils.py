@@ -112,7 +112,8 @@ def encode_target(plane: np.ndarray, target: str, index_to_encode: int = 2) -> n
     return plane
 
 
-def encode_bid(plane: np.ndarray, bid: Union[int, TarotBid, List[TarotBid]], index_to_encode: str = '2-0') -> np.ndarray:
+def encode_bid(plane: np.ndarray, bid: Union[int, TarotBid, List[TarotBid]],
+               index_to_encode: str = '2-0') -> np.ndarray:
     """
     index_to_encode gives the path inside plane to encode the given bids
     :param plane: n*5*22 numpy ndarray
@@ -216,6 +217,32 @@ def get_pot_value(pot_cards: dict) -> float:
         total_points += pot_cards[player_id].get_value()
 
     return total_points
+
+
+def get_hand_value(hand_cards: List[TarotCard]) -> float:
+    """
+    Get the value of the cards in hand
+    :param hand_cards: list of TarotCards (from player.hand)
+    :return: a float value of all the cards in hand
+    """
+    total_points = 0
+    for card in hand_cards:
+        total_points += card.get_value()
+
+    return total_points
+
+
+def get_nb_bouts(hand_cards: List[TarotCard]) -> int:
+    """
+    Get the number of bouts in the hand
+    :param hand_cards: list of TarotCards (from player.hand)
+    :return: the int value of the number of bouts
+    """
+    total_bouts = 0
+    for card in hand_cards:
+        total_bouts += card.is_bout()
+
+    return total_bouts
 
 
 def get_nb_bouts(pot_cards: dict) -> int:

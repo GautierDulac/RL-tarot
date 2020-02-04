@@ -8,12 +8,13 @@ class Logger(object):
     Logger saves the running results and helps make plots from the results
     """
 
-    def __init__(self, xlabel: str = '', ylabel: str = '', legend: str = '', log_path: str = None,
+    def __init__(self, xlabel: str = '', ylabel: str = '', zlabel: str = None, legend: str = '', log_path: str = None,
                  csv_path: str = None):
         """
         Initialize the labels, legend and paths of the plot and log file.
         :param xlabel: (string): label of x axis of the plot
         :param ylabel: (string): label of y axis of the plot
+        :param zlabel: (string): if provided, create a third column in the csv record
         :param legend: (string): name of the curve
         :param log_path: (string): where to store the log file
         :param csv_path: (string): where to store the csv file
@@ -22,9 +23,11 @@ class Logger(object):
         """
         self.xlabel = xlabel
         self.ylabel = ylabel
+        self.zlabel = zlabel
         self.legend = legend
         self.xs = []
         self.ys = []
+        self.zs = []
         self.log_path = log_path
         self.csv_path = csv_path
         self.log_file = None
@@ -39,7 +42,10 @@ class Logger(object):
             if not os.path.exists(csv_dir):
                 os.makedirs(csv_dir)
             self.csv_file = open(csv_path, 'w')
-            self.csv_file.write(xlabel + ',' + ylabel + '\n')
+            if zlabel is not None:
+                self.csv_file.write(xlabel + ',' + ylabel + ',' + zlabel + '\n')
+            else:
+                self.csv_file.write(xlabel + ',' + ylabel + '\n')
             self.csv_file.flush()
 
     def log(self, text: str) -> None:
@@ -52,22 +58,25 @@ class Logger(object):
         self.log_file.flush()
         print(text)
 
-    def add_point(self, x=None, y=None) -> None:
+    def add_point(self, x=None, y=None, z=None) -> None:
         """
         Add a point to the plot
         :param x: x coordinate value
         :param y: y coordinate value
+        :param z: z coordinate value if given
         :return:
         """
         if x is not None and y is not None:
             self.xs.append(x)
             self.ys.append(y)
+            if z is not None:
+                self.zs.append(z)
         else:
             raise ValueError('x and y should not be None.')
 
         # If csv_path is not None then write x and y to file
         if self.csv_path is not None:
-            self.csv_file.write(str(x) + ',' + str(y) + '\n')
+            self.csv_file.write(str(x) + ',' + str(y) + ',' + str(z) + '\n')
             self.csv_file.flush()
 
     def make_plot(self, save_path: str = '') -> None:

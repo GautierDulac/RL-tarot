@@ -11,6 +11,7 @@ from rlcard.models.pretrained_models_tarot_v1 import TarotDQNModelV1
 from rlcard.utils.logger import Logger
 
 num_tests = 100000
+log_limit = 1000
 stats_on_model = 1
 
 save_path = 'examples/statistics/tarot_v{}/'.format(str(stats_on_model))
@@ -46,6 +47,7 @@ with tf.compat.v1.Session() as sess:
         records[1].append(bouts_in_hand)
         action = env.decode_action(agent.step(state))
         records[2].append(action.get_bid_order())
+        if i < log_limit:
+            logger_taking.log(
+                'Saying {} with {} points in hand and {} bouts'.format(action.get_str(), points_in_hand, bouts_in_hand))
         logger_taking.add_point(x=points_in_hand, y=bouts_in_hand, z=action.get_bid_order())
-        logger_taking.log(
-            'Saying {} with {} points in hand and {} bouts'.format(action.get_str(), points_in_hand, bouts_in_hand))

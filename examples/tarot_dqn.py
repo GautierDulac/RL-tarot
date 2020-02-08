@@ -17,17 +17,17 @@ env = rlcard.make('tarot')
 eval_env = rlcard.make('tarot')
 
 # Set the iterations numbers and how frequently we evaluate/save plot
-evaluate_every = 10
-save_plot_every = 100
-evaluate_num = 150
-episode_num = 1500
+evaluate_every = 500
+save_plot_every = 1000
+evaluate_num = 1000
+episode_num = 10000
 
-record_number = 7
+record_number = 9
 
 # Set the the number of steps for collecting normalization statistics
 # and intial memory size
-memory_init_size = 1000
-norm_step = 100
+memory_init_size = 5000
+norm_step = 1000
 
 # The paths for saving the logs and learning curves
 root_path = './experiments/tarot_dqn_result_v{}/'.format(str(record_number))

@@ -1,0 +1,6 @@
+
+########## Evaluation - Episode 0 ##########
+Timestep: 79 Average reward is -0.25
+
+########## Evaluation - Episode 100 ##########
+Timestep: 8099 Average reward is -0.79

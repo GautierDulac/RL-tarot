@@ -13,7 +13,7 @@ from rlcard.utils.logger import Logger
 
 num_tests = 1000000
 num_games = 100000
-stats_on_model = 10
+stats_on_model = 0
 models = {'0': RandomAgent, '1': TarotDQNModelV1, '10': TarotDQNModelV10}
 
 # Model save path

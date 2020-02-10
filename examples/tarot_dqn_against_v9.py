@@ -95,6 +95,7 @@ with tf.compat.v1.Session() as sess:
             # Save Model
             saver.save(sess, model_path)
             reward = 0
+            reward_list = []
             for eval_episode in range(evaluate_num):
                 print('\rEPISODE {} - Eval {} over {} - Number of game played {} - {}'.format(episode, eval_episode,
                                                                                               evaluate_num,
@@ -105,6 +106,7 @@ with tf.compat.v1.Session() as sess:
                       end='')
                 _, payoffs = eval_env.run(is_training=False)
                 total_game_played += 1
+                reward_list.append(payoffs[0])
                 reward += payoffs[0]
 
             logger.log('\n########## Evaluation - Episode {} ##########'.format(episode))
@@ -116,6 +118,9 @@ with tf.compat.v1.Session() as sess:
         # Make plot
         if episode % save_plot_every == 0 and episode > 0:
             logger.make_plot(save_path=figure_path + str(episode) + '.png')
-
+            logger.make_plot_hist(save_path_1=figure_path + str(episode) + '_hist.png',
+                                  save_path_2=figure_path + str(episode) + '_freq.png', reward_list=reward_list)
     # Make the final plot
     logger.make_plot(save_path=figure_path + 'final_' + str(episode) + '.png')
+    logger.make_plot_hist(save_path_1=figure_path + str(episode) + '_hist.png',
+                          save_path_2=figure_path + str(episode) + '_freq.png', reward_list=reward_list)

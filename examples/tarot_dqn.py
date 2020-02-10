@@ -126,7 +126,10 @@ with tf.compat.v1.Session() as sess:
         # Make plot
         if episode % save_plot_every == 0:
             logger.make_plot(save_path=figure_path + str(episode) + '.png')
-            logger.make_plot_hist(save_path=figure_path + str(episode) + '_hist.png', reward_list=reward_list)
+            logger.make_plot_hist(save_path_1=figure_path + str(episode) + '_hist.png',
+                                  save_path_2=figure_path + str(episode) + '_freq.png', reward_list=reward_list)
 
     # Make the final plot
     logger.make_plot(save_path=figure_path + 'final_' + str(episode) + '.png')
+    logger.make_plot_hist(save_path_1=figure_path + str(episode) + '_hist.png',
+                          save_path_2=figure_path + str(episode) + '_freq.png', reward_list=reward_list)

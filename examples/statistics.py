@@ -12,9 +12,9 @@ from rlcard.models.pretrained_models_tarot_v_ import TarotDQNModelV1, TarotDQNMo
     TarotDQNModelV100
 from rlcard.utils.logger import Logger
 
-num_tests = 100
-num_games = 10
-stats_on_model = 100
+num_tests = 100000
+num_games = 1000
+stats_on_model = 0
 models = {'0': RandomAgent(4), '1': TarotDQNModelV1, '4': TarotDQNModelV4, '9': TarotDQNModelV9,
           '100': TarotDQNModelV100}
 

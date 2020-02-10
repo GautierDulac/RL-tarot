@@ -27,6 +27,8 @@ class MainRound(object):
         self.taking_bid_order = taking_bid_order
         self.played_cards = []
         self.pot_cards = dict()
+        self.excuse_played = False
+        self.excuse_player = None
         self.new_dog = new_dog
         self.is_pot_over = False
         self.is_over = False
@@ -40,6 +42,10 @@ class MainRound(object):
         :return:
         """
         player = players[self.current_player_id]
+
+        if played_card.get_str() == 'TRUMP-0':
+            self.excuse_played = True
+            self.excuse_player = self.current_player_id
 
         # remove corresponding card
         remove_index = None
@@ -69,8 +75,18 @@ class MainRound(object):
         # When pot is over
         if len(self.played_cards) % self.num_players == 0:
             winner_id, pot_value, nb_bout = get_end_pot_information(self.pot_cards)
-            players[winner_id].points += pot_value
-            players[winner_id].bouts += nb_bout
+            if self.excuse_played:
+                players[winner_id].points += pot_value - 4
+                players[winner_id].bouts += nb_bout - 1
+                players[self.excuse_player].points += 4
+                players[self.excuse_player].bouts += 1
+                # Erasing info about excuse
+                self.excuse_player = None
+                self.excuse_played = False
+            else:
+                players[winner_id].points += pot_value
+                players[winner_id].bouts += nb_bout
+
             # Erasing target_card
             self.target_card = None
 

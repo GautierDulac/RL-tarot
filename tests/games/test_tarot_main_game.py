@@ -1,15 +1,16 @@
-import unittest
-import numpy as np
 import random
+import unittest
 
+import numpy as np
+
+from rlcard.games.tarot.alpha_and_omega.card import TarotCard as Card
+from rlcard.games.tarot.alpha_and_omega.player import TarotPlayer as Player
+from rlcard.games.tarot.bid.bid import TarotBid
+from rlcard.games.tarot.bid.bid_game import BidGame
+from rlcard.games.tarot.dog.dog import TarotDog
 from rlcard.games.tarot.global_game import GlobalGame
 from rlcard.games.tarot.main_game.main_game import MainGame
-from rlcard.games.tarot.bid.bid_game import BidGame
-from rlcard.games.tarot.alpha_and_omega.player import TarotPlayer as Player
-from rlcard.games.tarot.alpha_and_omega.card import TarotCard as Card
-from rlcard.games.tarot.dog.dog import TarotDog
-from rlcard.games.tarot.bid.bid import TarotBid
-from rlcard.games.tarot.utils import ACTION_LIST, get_end_pot_information
+from rlcard.games.tarot.utils import ACTION_LIST, get_end_pot_information, get_nb_bouts
 from rlcard.games.tarot.utils import hand2dict, encode_hand, encode_target, get_TarotCard_from_str
 
 num_players = 4
@@ -168,13 +169,62 @@ class TestTarotMainGameMethods(unittest.TestCase):
         self.assertEqual(card.get_value(), .5)
         card = Card(False, color='SPADE', color_value=12)
         self.assertEqual(card.get_value(), 2.5)
+        list_card = [Card(True, trump_value=0),Card(True, trump_value=1),Card(True, trump_value=21)]
+        self.assertEqual(get_nb_bouts(list_card),3)
 
     def test_is_bout(self):
         card = Card(True, trump_value=0)
         self.assertEqual(card.is_bout(), True)
+        card = Card(True, trump_value=1)
+        self.assertEqual(card.is_bout(), True)
+        card = Card(True, trump_value=21)
+        self.assertEqual(card.is_bout(), True)
         card = Card(True, trump_value=2)
         self.assertEqual(card.is_bout(), False)
 
+    def test_get_end_pot_info(self):
+        pot_cards = {'target': Card(True, trump_value=1), 0: Card(True, trump_value=21),
+                     1: Card(True, trump_value=1), 2: Card(True, trump_value=19),
+                     3: Card(True, trump_value=20)}
+        winner_id, pot_value, nb_bout = get_end_pot_information(pot_cards)
+        self.assertEqual(winner_id, 0)
+        self.assertEqual(nb_bout, 2)
+        self.assertEqual(pot_value, 10)
+        pot_cards = {'target': Card(True, trump_value=21), 0: Card(True, trump_value=21),
+                     1: Card(True, trump_value=0), 2: Card(True, trump_value=19),
+                     3: Card(True, trump_value=1)}
+        winner_id, pot_value, nb_bout = get_end_pot_information(pot_cards)
+        self.assertEqual(winner_id, 0)
+        self.assertEqual(nb_bout, 3)
+        self.assertEqual(pot_value, 14)
+        pot_cards = {'target': Card(False, color_value=14, color='SPADE'), 0: Card(False, color_value=14, color='SPADE'),
+                     1: Card(True, trump_value=0), 2: Card(False, color_value=1, color='SPADE'),
+                     3: Card(False, color_value=2, color='SPADE')}
+        winner_id, pot_value, nb_bout = get_end_pot_information(pot_cards)
+        self.assertEqual(winner_id, 0)
+        self.assertEqual(nb_bout, 1)
+        self.assertEqual(pot_value, 10)
+        pot_cards = {'target': Card(False, color_value=14, color='SPADE'), 0: Card(False, color_value=3, color='SPADE'),
+                     1: Card(True, trump_value=0), 2: Card(True, trump_value=1),
+                     3: Card(False, color_value=2, color='SPADE')}
+        winner_id, pot_value, nb_bout = get_end_pot_information(pot_cards)
+        self.assertEqual(winner_id, 2)
+        self.assertEqual(nb_bout, 2)
+        self.assertEqual(pot_value, 10)
+        pot_cards = {'target': Card(False, color_value=14, color='SPADE'), 0: Card(False, color_value=3, color='SPADE'),
+                     1: Card(True, trump_value=0), 2: Card(True, trump_value=21),
+                     3: Card(False, color_value=2, color='SPADE')}
+        winner_id, pot_value, nb_bout = get_end_pot_information(pot_cards)
+        self.assertEqual(winner_id, 2)
+        self.assertEqual(nb_bout, 2)
+        self.assertEqual(pot_value, 10)
+        pot_cards = {'target': Card(True, trump_value=20), 0: Card(True, trump_value=20),
+                     1: Card(True, trump_value=12), 2: Card(True, trump_value=21),
+                     3: Card(True, trump_value=17)}
+        winner_id, pot_value, nb_bout = get_end_pot_information(pot_cards)
+        self.assertEqual(winner_id, 2)
+        self.assertEqual(nb_bout, 1)
+        self.assertEqual(pot_value, 6)
 
 
 if __name__ == '__main__':

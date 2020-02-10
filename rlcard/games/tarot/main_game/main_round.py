@@ -43,9 +43,16 @@ class MainRound(object):
         """
         player = players[self.current_player_id]
 
+        # Printing values for debugging purpose # TODO REMOVE for training
+        # print('================= Played card - ' + str(int(len(self.played_cards))) + ' =================')
+        # print('\r>> Agent {} '.format(self.current_player_id))
+        # print('\r>> playing {} '.format(played_card.get_str()))
+        # print('')
+
         if played_card.get_str() == 'TRUMP-0':
+            player.bouts += 1
+            player.points += 4
             self.excuse_played = True
-            self.excuse_player = self.current_player_id
 
         # remove corresponding card
         remove_index = None
@@ -70,7 +77,7 @@ class MainRound(object):
 
         # Keeping the highest trump of the pot
         if played_card.is_trump:
-            self.highest_trump = max(self.highest_trump, int(played_card.trump_value))
+            self.highest_trump = max(self.highest_trump, played_card.trump_value)
 
         # When pot is over
         if len(self.played_cards) % self.num_players == 0:
@@ -78,20 +85,17 @@ class MainRound(object):
             if self.excuse_played:
                 players[winner_id].points += pot_value - 4
                 players[winner_id].bouts += nb_bout - 1
-                players[self.excuse_player].points += 4
-                players[self.excuse_player].bouts += 1
-                # Erasing info about excuse
-                self.excuse_player = None
-                self.excuse_played = False
             else:
                 players[winner_id].points += pot_value
                 players[winner_id].bouts += nb_bout
 
+            # Erasing info about excuse
+            self.excuse_played = False
             # Erasing target_card
             self.target_card = None
 
             # Printing values for debugging purpose # TODO REMOVE for training
-            # print('================= Winner - '+str(int(len(self.played_cards)/4))+' =================')
+            # print('================= Winner - ' + str(int(len(self.played_cards) / 4)) + ' =================')
             # print('\r>> Agent {} '.format(winner_id))
             # print('\r>> winning {} points'.format(pot_value))
             # print('')

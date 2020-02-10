@@ -70,7 +70,7 @@ class TarotDQNModelV1(Model):
         return False
 
 
-class TarotDQNModelV4(Model):
+class TarotDQNModelV10(Model):
     """ A pretrained model on Tarot with DQN
     """
 
@@ -94,7 +94,7 @@ class TarotDQNModelV4(Model):
             normalize(env, self.dqn_agent, 1000)
             self.sess.run(tf.compat.v1.global_variables_initializer())
 
-        check_point_path = os.path.join(ROOT_PATH, 'tarot_v4')
+        check_point_path = os.path.join(ROOT_PATH, 'tarot_v10')
         with self.sess.as_default():
             with self.graph.as_default():
                 saver = tf.compat.v1.train.Saver(tf.compat.v1.model_variables())

@@ -8,13 +8,13 @@ import tensorflow as tf
 import rlcard
 from rlcard.agents.random_agent import RandomAgent
 from rlcard.games.tarot.utils import get_hand_value, get_nb_bouts
-from rlcard.models.pretrained_models_tarot_v_ import TarotDQNModelV1
+from rlcard.models.pretrained_models_tarot_v_ import TarotDQNModelV1, TarotDQNModelV10
 from rlcard.utils.logger import Logger
 
-num_tests = 100000
-num_games = 2000
-stats_on_model = 0
-models = {'0': RandomAgent, '1': TarotDQNModelV1}
+num_tests = 1000000
+num_games = 100000
+stats_on_model = 10
+models = {'0': RandomAgent, '1': TarotDQNModelV1, '10': TarotDQNModelV10}
 
 # Model save path
 save_path = 'examples/statistics/tarot_v{}/'.format(str(stats_on_model))

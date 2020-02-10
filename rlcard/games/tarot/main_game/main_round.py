@@ -57,7 +57,7 @@ class MainRound(object):
         _ = player.hand.pop(remove_index)
 
         # When starting a new pot
-        if len(self.played_cards) % self.num_players == 0:
+        if self.target_card is None and played_card.get_str() != 'TRUMP-0':
             self.highest_trump = -1
             self.target_card = played_card
             self.pot_cards['target'] = played_card

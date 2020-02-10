@@ -15,7 +15,7 @@ from rlcard.utils.logger import Logger
 num_tests = 100000
 num_games = 1000
 stats_on_model = 0
-models = {'0': RandomAgent(4), '1': TarotDQNModelV1, '4': TarotDQNModelV4, '9': TarotDQNModelV9,
+models = {'0': RandomAgent, '1': TarotDQNModelV1, '4': TarotDQNModelV4, '9': TarotDQNModelV9,
           '100': TarotDQNModelV100}
 
 # Make environment
@@ -44,7 +44,10 @@ logger_game = Logger(
 with tf.compat.v1.Session() as sess:
     # Set agents
     global_step = tf.Variable(0, name='global_step', trainable=False)
-    agent = models[str(stats_on_model)](sess.graph, sess).dqn_agent
+    if stats_on_model == 0:
+        agent = models[str(stats_on_model)](env.game.get_action_num())
+    else:
+        agent = models[str(stats_on_model)](sess.graph, sess).dqn_agent
     sess.run(tf.compat.v1.global_variables_initializer())
 
     # STATS ON TAKING BID FOR FIRST PLAYER TO SPEAK

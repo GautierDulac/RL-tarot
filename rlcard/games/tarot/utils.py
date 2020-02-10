@@ -193,7 +193,7 @@ def get_end_pot_information(pot_cards: dict) -> (int, float, int):
     else:
         trump_used = False
         for player_id in range(len(pot_cards) - 1):
-            if colors[player_id] == 'TRUMP':
+            if colors[player_id] == 'TRUMP' and trump_values[player_id] != 0:
                 trump_used = True
         if trump_used:
             winner_id = max(trump_values, key=trump_values.get)

@@ -124,6 +124,7 @@ class Logger(object):
             os.makedirs(save_dir)
 
         fig.savefig(save_path)
+        fig.clf()
 
     def make_plot_hist(self, save_path_1: str = '', save_path_2: str = '', reward_list=List[int]) -> None:
         """
@@ -163,6 +164,7 @@ class Logger(object):
             os.makedirs(save_dir)
 
         plt.savefig(save_path_2)
+        plt.clf()
 
     def close_file(self) -> None:
         """

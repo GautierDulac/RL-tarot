@@ -11,8 +11,8 @@ from rlcard.games.tarot.utils import get_hand_value, get_nb_bouts
 from rlcard.models.pretrained_models_tarot_v_ import TarotDQNModelV1
 from rlcard.utils.logger import Logger
 
-num_tests = 10
-num_games = 500
+num_tests = 100000
+num_games = 2000
 stats_on_model = 0
 models = {'0': RandomAgent, '1': TarotDQNModelV1}
 

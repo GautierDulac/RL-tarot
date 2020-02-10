@@ -18,8 +18,7 @@ stats_on_model = 0
 models = {'0': RandomAgent, '1': TarotDQNModelV1, '4': TarotDQNModelV4, '9': TarotDQNModelV9,
           '100': TarotDQNModelV100}
 
-# Make environment
-env = rlcard.make('tarot')
+
 
 # Model save path
 save_path = 'examples/statistics/tarot_v{}/'.format(str(stats_on_model))
@@ -43,6 +42,8 @@ logger_game = Logger(
 
 # Testing bid strategy of this agent
 with tf.compat.v1.Session() as sess:
+    # Make environment
+    env = rlcard.make('tarot')
     # Set agents
     global_step = tf.Variable(0, name='global_step', trainable=False)
     if stats_on_model == 0:
@@ -64,14 +65,22 @@ with tf.compat.v1.Session() as sess:
         action = env.decode_action(agent.step(state))
         logger_taking.add_point(x=points_in_hand, y=bouts_in_hand, z=action.get_bid_order())
 
-    sess.run(tf.compat.v1.global_variables_initializer())
     print('\n------------------------')
     print('---- Stats on Games ----')
     print('------------------------')
+    # Make environment
+    env = rlcard.make('tarot')
+    global_step = tf.Variable(0, name='global_step', trainable=False)
+    if stats_on_model == 0:
+        agent = models[str(stats_on_model)](env.game.get_action_num())
+    else:
+        agent = models[str(stats_on_model)](sess.graph, sess).dqn_agent
+    sess.run(tf.compat.v1.global_variables_initializer())
     # Showing usual results against himself for this agent
     for i in range(num_games):
         hand_value = dict()
         nb_bouts = dict()
+        # PRINTS HERE TO FORCE THE CODE TO CONTINUE (WEIRD PROBLEM IS NOTHING IS ASKED TO BE PRINTED HERE)
         if (i * 1000) % num_games == 0:
             print('\rProgress Games: {}%'.format(round(i * 100 / num_games, 2)), end='')
 

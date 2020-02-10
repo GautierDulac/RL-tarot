@@ -82,7 +82,7 @@ class Logger(object):
         :param z: z coordinate value if given
         :return:
         """
-        if list is not None:
+        if write_list is not None:
             if len(write_list) != len(self.label_list):
                 raise ValueError('List of parameters to add should be the same length as the label list')
             else:

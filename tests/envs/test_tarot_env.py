@@ -55,6 +55,7 @@ class TestTarotEnv(unittest.TestCase):
             state, _ = env.step(np.random.choice(state['legal_actions']))
 
     def test_human_mode(self):
+        # TODO ENSURE IT WORKS
         env = Env()
         env.set_mode(human_mode=True)
         state = env.reset()

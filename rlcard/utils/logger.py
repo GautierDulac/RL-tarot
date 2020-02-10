@@ -90,7 +90,6 @@ class Logger(object):
                 for value in write_list[:-1]:
                     line = line + str(value) + ','
                 line = line + str(write_list[-1]) + '\n'
-                self.csv_file.write(line)
         else:
             if x is not None and y is not None:
                 self.xs.append(x)

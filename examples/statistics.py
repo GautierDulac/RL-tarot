@@ -31,6 +31,13 @@ csv_path_taking = save_path + 'taking_stats.csv'
 logger_taking = Logger(xlabel='hand_value', ylabel='nb_bouts', zlabel='taking_bid_order', legend='',
                        csv_path=csv_path_taking)
 
+csv_path_game = save_path + 'games_stats.csv'
+
+logger_game = Logger(
+    label_list=['hand_value', 'nb_bouts', 'taking', 'taking_bid_order', 'number_of_points_achieved', 'reward'],
+    legend='',
+    csv_path=csv_path_game)
+
 # Testing bid strategy of this agent
 with tf.compat.v1.Session() as sess:
     # Set agents
@@ -52,20 +59,7 @@ with tf.compat.v1.Session() as sess:
         records[2].append(action.get_bid_order())
         logger_taking.add_point(x=points_in_hand, y=bouts_in_hand, z=action.get_bid_order())
 
-csv_path_game = save_path + 'games_stats.csv'
-
-logger_game = Logger(
-    label_list=['hand_value', 'nb_bouts', 'taking', 'taking_bid_order', 'number_of_points_achieved', 'reward'],
-    legend='',
-    csv_path=csv_path_game)
-
-# Showing usual results against himself for this agent
-with tf.compat.v1.Session() as sess:
-    # Set agents
-    global_step = tf.Variable(0, name='global_step', trainable=False)
-    agent = models[str(stats_on_model)](sess.graph, sess).dqn_agent
-    sess.run(tf.compat.v1.global_variables_initializer())
-
+    # Showing usual results against himself for this agent
     for i in range(num_games):
         if i * 100 % num_games == 0:
             print('\rProgress Games: {}%'.format(int(i * 100 / num_games)), end='')

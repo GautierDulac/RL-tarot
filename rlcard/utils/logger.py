@@ -124,7 +124,7 @@ class Logger(object):
             os.makedirs(save_dir)
 
         fig.savefig(save_path)
-        fig.clf()
+        plt.close()
 
     def make_plot_hist(self, save_path_1: str = '', save_path_2: str = '', reward_list=List[int]) -> None:
         """
@@ -149,7 +149,7 @@ class Logger(object):
             os.makedirs(save_dir)
 
         fig.savefig(save_path_1)
-        fig.clf()
+        plt.close()
 
         ax = sns.kdeplot(reward_list, label=self.legend_hist, bw=0.5)
         plt.xlim((-24, 24))
@@ -163,7 +163,7 @@ class Logger(object):
             os.makedirs(save_dir)
 
         plt.savefig(save_path_2)
-        plt.clf()
+        plt.close()
 
     def close_file(self) -> None:
         """

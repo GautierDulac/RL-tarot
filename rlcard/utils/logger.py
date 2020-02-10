@@ -1,6 +1,9 @@
 import os
 
+from typing import List
+
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 class Logger(object):
@@ -99,7 +102,7 @@ class Logger(object):
 
         fig.savefig(save_path)
 
-    def make_plot_hist(self, save_path: str = '', reward_list=list) -> None:
+    def make_plot_hist(self, save_path: str = '', reward_list=List[int]) -> None:
         """
         Make plot using last reward list
         :param save_path: (string): where to store the plot
@@ -107,7 +110,9 @@ class Logger(object):
         :return:
         """
         fig, ax = plt.subplots()
-        ax.hist(reward_list, label=self.legend_hist, bins=float(1))
+        min_bin = np.min(np.array(reward_list))
+        max_bin = np.max(np.array(reward_list))
+        ax.hist(reward_list, label=self.legend_hist, bins=np.linspace(min_bin, max_bin, max_bin-min_bin+1))
         ax.set(xlabel='Points won', ylabel='Frenquency')
         ax.legend()
         ax.grid()

@@ -17,12 +17,12 @@ env = rlcard.make('tarot')
 eval_env = rlcard.make('tarot')
 
 # Set the iterations numbers and how frequently we evaluate/save plot
-evaluate_every = 500
-save_plot_every = 1000
-evaluate_num = 1000
+evaluate_every = 10
+save_plot_every = 10
+evaluate_num = 100
 episode_num = 10000
 
-record_number = 9
+record_number = 11
 
 # Set the the number of steps for collecting normalization statistics
 # and intial memory size
@@ -119,15 +119,14 @@ with tf.compat.v1.Session() as sess:
 
             logger.log('\n########## Evaluation - Episode {} ##########'.format(episode))
             logger.log('Timestep: {} Average reward is {}'.format(env.timestep, float(reward) / evaluate_num))
-            logger.log('')
 
             # Add point to logger
             logger.add_point(x=env.timestep, y=float(reward) / evaluate_num)
 
         # Make plot
-        if episode % save_plot_every == 0 and episode > 0:
+        if episode % save_plot_every == 0:
             logger.make_plot(save_path=figure_path + str(episode) + '.png')
-            logger.make_plot_hist(save_path=figure_path + str(episode) + '_hist.png')
+            logger.make_plot_hist(save_path=figure_path + str(episode) + '_hist.png', reward_list=reward_list)
 
     # Make the final plot
     logger.make_plot(save_path=figure_path + 'final_' + str(episode) + '.png')

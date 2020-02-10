@@ -91,16 +91,17 @@ class Logger(object):
                     line = line + str(value) + ','
                 line = line + str(write_list[-1]) + '\n'
                 self.csv_file.write(line)
-        if x is not None and y is not None:
-            self.xs.append(x)
-            self.ys.append(y)
-            if z is not None:
-                self.zs.append(z)
-                line = str(x) + ',' + str(y) + ',' + str(z) + '\n'
-            else:
-                line = str(x) + ',' + str(y) + '\n'
         else:
-            raise ValueError('x and y should not be None.')
+            if x is not None and y is not None:
+                self.xs.append(x)
+                self.ys.append(y)
+                if z is not None:
+                    self.zs.append(z)
+                    line = str(x) + ',' + str(y) + ',' + str(z) + '\n'
+                else:
+                    line = str(x) + ',' + str(y) + '\n'
+            else:
+                raise ValueError('x and y should not be None.')
 
         # If csv_path is not None then write x and y to file
         if self.csv_path is not None:

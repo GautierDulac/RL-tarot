@@ -127,7 +127,7 @@ class DQNAgent(object):
             self.feed_memory(state['obs'], action, reward, next_state['obs'], done)
         self.total_t += 1
 
-    def step(self, state):
+    def step(self, state) -> int:
         """ Predict the action for genrating training data
 
         Args:

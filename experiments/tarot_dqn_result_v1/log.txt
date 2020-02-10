@@ -34,3 +34,12 @@ Timestep: 80691 Average reward is 3.74
 
 ########## Evaluation - Episode 1100 ##########
 Timestep: 88768 Average reward is 2.78
+
+########## Evaluation - Episode 1200 ##########
+Timestep: 96853 Average reward is 3.17
+
+########## Evaluation - Episode 1300 ##########
+Timestep: 104953 Average reward is 3.54
+
+########## Evaluation - Episode 1400 ##########
+Timestep: 113032 Average reward is 3.47

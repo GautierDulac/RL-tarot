@@ -1,7 +1,7 @@
 import unittest
 
 from rlcard.models.model import Model
-from rlcard.models.pretrained_models_tarot_v1 import TarotDQNModelV1
+from rlcard.models.pretrained_models_tarot_v_ import TarotDQNModelV1
 import tensorflow as tf
 
 

@@ -1,6 +1,9 @@
 import os
+from typing import List
 
 import matplotlib.pyplot as plt
+import numpy as np
+import seaborn as sns
 
 
 class Logger(object):
@@ -8,7 +11,8 @@ class Logger(object):
     Logger saves the running results and helps make plots from the results
     """
 
-    def __init__(self, xlabel: str = '', ylabel: str = '', zlabel: str = None, legend: str = '', log_path: str = None,
+    def __init__(self, xlabel: str = '', ylabel: str = '', zlabel: str = None, legend: str = '', legend_hist: str = '',
+                 log_path: str = None,
                  csv_path: str = None):
         """
         Initialize the labels, legend and paths of the plot and log file.
@@ -25,6 +29,7 @@ class Logger(object):
         self.ylabel = ylabel
         self.zlabel = zlabel
         self.legend = legend
+        self.legend_hist = legend_hist
         self.xs = []
         self.ys = []
         self.zs = []
@@ -96,6 +101,45 @@ class Logger(object):
             os.makedirs(save_dir)
 
         fig.savefig(save_path)
+
+    def make_plot_hist(self, save_path_1: str = '', save_path_2: str = '', reward_list=List[int]) -> None:
+        """
+        Make plot using last reward list
+        :param save_path_1: (string): where to save the hist
+        :param save_path_2: (string): where to save the density
+        :param reward_list: (list of int): list of last rewards during the evaluation round
+        :return:
+        """
+        fig, ax = plt.subplots()
+        min_bin = np.min(np.array(reward_list))
+        max_bin = np.max(np.array(reward_list))
+        ax.hist(reward_list, label=self.legend_hist, bins=np.linspace(min_bin, max_bin, max_bin - min_bin + 1))
+        plt.xlim((-24, 24))
+        plt.ylim((0, int(len(reward_list) * 0.3)))
+        ax.set(xlabel='Points won', ylabel='Frenquency')
+        ax.legend()
+        ax.grid()
+
+        save_dir = os.path.dirname(save_path_1)
+        if not os.path.exists(save_dir):
+            os.makedirs(save_dir)
+
+        fig.savefig(save_path_1)
+        fig.clf()
+
+        sns.set_style('whitegrid')
+        ax = sns.kdeplot(reward_list, label=self.legend_hist, bw=0.5)
+        plt.xlim((-24, 24))
+        plt.ylim((0, 0.3))
+        ax.set(xlabel='Points won', ylabel='Frenquency')
+        ax.legend()
+        ax.grid()
+
+        save_dir = os.path.dirname(save_path_2)
+        if not os.path.exists(save_dir):
+            os.makedirs(save_dir)
+
+        plt.savefig(save_path_2)
 
     def close_file(self) -> None:
         """

@@ -7,11 +7,13 @@ import time
 import tensorflow as tf
 
 import rlcard
-from rlcard.models.pretrained_models_tarot_v9 import TarotDQNModelV9
 from rlcard.utils.logger import Logger
 from rlcard.utils.utils import set_global_seed, time_difference_good_format
+from rlcard.models.pretrained_models_tarot_v_ import TarotDQNModelV1, TarotDQNModelV4, TarotDQNModelV9
 
+against_model = 9
 record_number = 10
+models = {'1': TarotDQNModelV1, '4': TarotDQNModelV4, '9': TarotDQNModelV9}
 
 # Make environment
 env = rlcard.make('tarot')
@@ -50,7 +52,7 @@ set_global_seed(0)
 with tf.compat.v1.Session() as sess:
     # Set agents
     global_step = tf.Variable(0, name='global_step', trainable=False)
-    agent = TarotDQNModelV9(sess.graph, sess).dqn_agent
+    agent = models[str(against_model)](sess.graph, sess).dqn_agent
 
     opponent_agent = agent
 
@@ -95,6 +97,7 @@ with tf.compat.v1.Session() as sess:
             # Save Model
             saver.save(sess, model_path)
             reward = 0
+            reward_list = []
             for eval_episode in range(evaluate_num):
                 print('\rEPISODE {} - Eval {} over {} - Number of game played {} - {}'.format(episode, eval_episode,
                                                                                               evaluate_num,
@@ -105,6 +108,7 @@ with tf.compat.v1.Session() as sess:
                       end='')
                 _, payoffs = eval_env.run(is_training=False)
                 total_game_played += 1
+                reward_list.append(payoffs[0])
                 reward += payoffs[0]
 
             logger.log('\n########## Evaluation - Episode {} ##########'.format(episode))
@@ -116,6 +120,9 @@ with tf.compat.v1.Session() as sess:
         # Make plot
         if episode % save_plot_every == 0 and episode > 0:
             logger.make_plot(save_path=figure_path + str(episode) + '.png')
-
+            logger.make_plot_hist(save_path_1=figure_path + str(episode) + '_hist.png',
+                                  save_path_2=figure_path + str(episode) + '_freq.png', reward_list=reward_list)
     # Make the final plot
     logger.make_plot(save_path=figure_path + 'final_' + str(episode) + '.png')
+    logger.make_plot_hist(save_path_1=figure_path + str(episode) + '_hist.png',
+                          save_path_2=figure_path + str(episode) + '_freq.png', reward_list=reward_list)

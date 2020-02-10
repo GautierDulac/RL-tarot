@@ -67,7 +67,8 @@ with tf.compat.v1.Session() as sess:
     step_counter = 0
 
     # Init a Logger to plot the learning curve
-    logger = Logger(xlabel='timestep', ylabel='reward', legend='DQN on TAROT', log_path=log_path, csv_path=csv_path)
+    logger = Logger(xlabel='timestep', ylabel='reward', legend='DQN on TAROT',
+                    legend_hist='Histogram of last evaluations', log_path=log_path, csv_path=csv_path)
 
     total_game_played = 0
     seconds = time.time()
@@ -122,6 +123,7 @@ with tf.compat.v1.Session() as sess:
             logger.make_plot(save_path=figure_path + str(episode) + '.png')
             logger.make_plot_hist(save_path_1=figure_path + str(episode) + '_hist.png',
                                   save_path_2=figure_path + str(episode) + '_freq.png', reward_list=reward_list)
+
     # Make the final plot
     logger.make_plot(save_path=figure_path + 'final_' + str(episode) + '.png')
     logger.make_plot_hist(save_path_1=figure_path + str(episode) + '_hist.png',

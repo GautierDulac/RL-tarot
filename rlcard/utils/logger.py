@@ -140,7 +140,7 @@ class Logger(object):
         ax.hist(reward_list, label=self.legend_hist, bins=np.linspace(min_bin, max_bin, max_bin - min_bin + 1))
         plt.xlim((-24, 24))
         plt.ylim((0, int(len(reward_list) * 0.4)))
-        ax.set(xlabel='Points won', ylabel='Frenquency')
+        ax.set(xlabel='Points won', ylabel='Occurencies')
         ax.legend()
         ax.grid()
 

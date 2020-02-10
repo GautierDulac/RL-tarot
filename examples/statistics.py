@@ -72,8 +72,8 @@ with tf.compat.v1.Session() as sess:
     for i in range(num_games):
         hand_value = dict()
         nb_bouts = dict()
-        if i * 100 % num_games == 0:
-            print('\rProgress Games: {}%'.format(int(i * 100 / num_games)), end='')
+        if i * 1000 % num_games == 0:
+            print('\rProgress Games: {}%'.format(round(i * 100 / num_games), 1), end='')
 
         state, player_id = env.init_game()
         for player_id in range(0, env.game.get_player_num()):

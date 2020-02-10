@@ -6,15 +6,17 @@ import os
 import tensorflow as tf
 
 import rlcard
+from rlcard.agents.random_agent import RandomAgent
 from rlcard.games.tarot.utils import get_hand_value, get_nb_bouts
 from rlcard.models.pretrained_models_tarot_v_ import TarotDQNModelV1, TarotDQNModelV4, TarotDQNModelV9, \
     TarotDQNModelV100
 from rlcard.utils.logger import Logger
 
-num_tests = 1000
-num_games = 100
+num_tests = 100
+num_games = 10
 stats_on_model = 100
-models = {'1': TarotDQNModelV1, '4': TarotDQNModelV4, '9': TarotDQNModelV9, '100': TarotDQNModelV100}
+models = {'0': RandomAgent(4), '1': TarotDQNModelV1, '4': TarotDQNModelV4, '9': TarotDQNModelV9,
+          '100': TarotDQNModelV100}
 
 # Make environment
 env = rlcard.make('tarot')
@@ -46,6 +48,9 @@ with tf.compat.v1.Session() as sess:
     sess.run(tf.compat.v1.global_variables_initializer())
 
     # STATS ON TAKING BID FOR FIRST PLAYER TO SPEAK
+    print('\n------------------------')
+    print('---- Stats on Bids -----')
+    print('------------------------')
     for i in range(num_tests):
         if i * 100 % num_tests == 0:
             print('\rProgress Bids: {}%'.format(int(i * 100 / num_tests)), end='')
@@ -57,15 +62,25 @@ with tf.compat.v1.Session() as sess:
 
     sess.run(tf.compat.v1.global_variables_initializer())
     env.set_agents([agent] * env.player_num)
+    print('\n------------------------')
+    print('---- Stats on Games ----')
+    print('------------------------')
     # Showing usual results against himself for this agent
     for i in range(num_games):
+        hand_value = dict()
+        nb_bouts = dict()
         if i * 100 % num_games == 0:
             print('\rProgress Games: {}%'.format(int(i * 100 / num_games)), end='')
 
-        _, payoffs = env.run(is_training=False)
+        state, player_id = env.init_game()
         for player_id in range(0, env.game.get_player_num()):
-            hand_value = get_hand_value(env.game.players[player_id].hand)
-            nb_bouts = get_nb_bouts(env.game.players[player_id].hand)
+            hand_value[player_id] = get_hand_value(env.game.players[player_id].hand)
+            nb_bouts[player_id] = get_nb_bouts(env.game.players[player_id].hand)
+        while not env.is_over():
+            action = agent.step(state)
+            state, player_id = env.step(action)
+        payoffs = env.get_payoffs()
+        for player_id in range(0, env.game.get_player_num()):
             if player_id == env.game.taking_player_id:
                 taking = 1
                 taking_bid_order = env.game.taking_bid_order
@@ -79,4 +94,5 @@ with tf.compat.v1.Session() as sess:
             number_of_points_achieved = env.game.players[player_id].points
             reward = payoffs[player_id]
             logger_game.add_point(
-                write_list=[hand_value, nb_bouts, taking, taking_bid_order, number_of_points_achieved, reward])
+                write_list=[hand_value[player_id], nb_bouts[player_id], taking, taking_bid_order,
+                            number_of_points_achieved, reward])

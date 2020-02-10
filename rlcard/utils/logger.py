@@ -151,7 +151,6 @@ class Logger(object):
         fig.savefig(save_path_1)
         fig.clf()
 
-        sns.set_style('whitegrid')
         ax = sns.kdeplot(reward_list, label=self.legend_hist, bw=0.5)
         plt.xlim((-24, 24))
         plt.ylim((0, 0.3))

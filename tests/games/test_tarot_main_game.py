@@ -9,7 +9,7 @@ from rlcard.games.tarot.alpha_and_omega.player import TarotPlayer as Player
 from rlcard.games.tarot.alpha_and_omega.card import TarotCard as Card
 from rlcard.games.tarot.dog.dog import TarotDog
 from rlcard.games.tarot.bid.bid import TarotBid
-from rlcard.games.tarot.utils import ACTION_LIST
+from rlcard.games.tarot.utils import ACTION_LIST, get_end_pot_information
 from rlcard.games.tarot.utils import hand2dict, encode_hand, encode_target, get_TarotCard_from_str
 
 num_players = 4
@@ -174,6 +174,7 @@ class TestTarotMainGameMethods(unittest.TestCase):
         self.assertEqual(card.is_bout(), True)
         card = Card(True, trump_value=2)
         self.assertEqual(card.is_bout(), False)
+
 
 
 if __name__ == '__main__':

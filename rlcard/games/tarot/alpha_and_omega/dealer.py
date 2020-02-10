@@ -27,5 +27,6 @@ class TarotDealer(object):
         :param player: The player whom to deal cards
         :param num: Number of card to be given
         """
+        player.hand = []
         for _ in range(num):
             player.hand.append(self.deck.pop())

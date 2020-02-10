@@ -36,7 +36,8 @@ logger_taking = Logger(xlabel='hand_value', ylabel='nb_bouts', zlabel='taking_bi
 csv_path_game = save_path + 'games_stats.csv'
 
 logger_game = Logger(
-    label_list=['hand_value', 'nb_bouts', 'taking', 'taking_bid_order', 'number_of_points_achieved', 'reward'],
+    label_list=['hand_value', 'nb_bouts', 'taking', 'taking_bid_order', 'number_of_points_achieved',
+                'nb_bouts_achieved', 'reward'],
     legend='',
     csv_path=csv_path_game)
 
@@ -64,7 +65,6 @@ with tf.compat.v1.Session() as sess:
         logger_taking.add_point(x=points_in_hand, y=bouts_in_hand, z=action.get_bid_order())
 
     sess.run(tf.compat.v1.global_variables_initializer())
-    env.set_agents([agent] * env.player_num)
     print('\n------------------------')
     print('---- Stats on Games ----')
     print('------------------------')
@@ -72,8 +72,8 @@ with tf.compat.v1.Session() as sess:
     for i in range(num_games):
         hand_value = dict()
         nb_bouts = dict()
-        if i * 1000 % num_games == 0:
-            print('\rProgress Games: {}%'.format(round(i * 100 / num_games), 1), end='')
+        if (i * 1000) % num_games == 0:
+            print('\rProgress Games: {}%'.format(round(i * 100 / num_games, 2)), end='')
 
         state, player_id = env.init_game()
         for player_id in range(0, env.game.get_player_num()):
@@ -95,7 +95,8 @@ with tf.compat.v1.Session() as sess:
                 else:
                     taking_bid_order = 0
             number_of_points_achieved = env.game.players[player_id].points
+            nb_bouts_achieved = env.game.players[player_id].bouts
             reward = payoffs[player_id]
             logger_game.add_point(
                 write_list=[hand_value[player_id], nb_bouts[player_id], taking, taking_bid_order,
-                            number_of_points_achieved, reward])
+                            number_of_points_achieved, nb_bouts_achieved, reward])

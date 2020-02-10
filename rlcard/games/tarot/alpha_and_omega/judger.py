@@ -4,7 +4,7 @@ import numpy as np
 
 from rlcard.games.tarot.alpha_and_omega.card import TarotCard
 from rlcard.games.tarot.alpha_and_omega.player import TarotPlayer
-from rlcard.games.tarot.utils import get_pot_value
+from rlcard.games.tarot.utils import get_pot_value, get_nb_bouts
 
 
 class TarotJudger(object):
@@ -23,7 +23,9 @@ class TarotJudger(object):
             if players[player_id].taking:
                 if players[player_id].bid.get_bid_order() <= 4:
                     counts[player_id] += get_pot_value(new_dog)
-                number_bouts = players[player_id].bouts
+                    number_bouts = players[player_id].bouts + get_nb_bouts(new_dog)
+                else:
+                    number_bouts = players[player_id].bouts
                 if (number_bouts == 3 and counts[player_id] >= 36) \
                         or (number_bouts == 2 and counts[player_id] >= 41) \
                         or (number_bouts == 1 and counts[player_id] >= 51) \

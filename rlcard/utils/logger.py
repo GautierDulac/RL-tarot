@@ -8,7 +8,8 @@ class Logger(object):
     Logger saves the running results and helps make plots from the results
     """
 
-    def __init__(self, xlabel: str = '', ylabel: str = '', zlabel: str = None, legend: str = '', log_path: str = None,
+    def __init__(self, xlabel: str = '', ylabel: str = '', zlabel: str = None, legend: str = '', legend_hist: str = '',
+                 log_path: str = None,
                  csv_path: str = None):
         """
         Initialize the labels, legend and paths of the plot and log file.
@@ -25,6 +26,7 @@ class Logger(object):
         self.ylabel = ylabel
         self.zlabel = zlabel
         self.legend = legend
+        self.legend_hist = legend_hist
         self.xs = []
         self.ys = []
         self.zs = []
@@ -88,6 +90,25 @@ class Logger(object):
         fig, ax = plt.subplots()
         ax.plot(self.xs, self.ys, label=self.legend)
         ax.set(xlabel=self.xlabel, ylabel=self.ylabel)
+        ax.legend()
+        ax.grid()
+
+        save_dir = os.path.dirname(save_path)
+        if not os.path.exists(save_dir):
+            os.makedirs(save_dir)
+
+        fig.savefig(save_path)
+
+    def make_plot_hist(self, save_path: str = '', reward_list=list) -> None:
+        """
+        Make plot using last reward list
+        :param save_path: (string): where to store the plot
+        :param reward_list: (list of int): list of last rewards during the evaluation round
+        :return:
+        """
+        fig, ax = plt.subplots()
+        ax.hist(reward_list, label=self.legend_hist, bins=float(1))
+        ax.set(xlabel='Points won', ylabel='Frenquency')
         ax.legend()
         ax.grid()
 

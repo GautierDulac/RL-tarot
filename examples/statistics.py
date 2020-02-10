@@ -7,13 +7,14 @@ import tensorflow as tf
 
 import rlcard
 from rlcard.games.tarot.utils import get_hand_value, get_nb_bouts
-from rlcard.models.pretrained_models_tarot_v_ import TarotDQNModelV1, TarotDQNModelV4, TarotDQNModelV9
+from rlcard.models.pretrained_models_tarot_v_ import TarotDQNModelV1, TarotDQNModelV4, TarotDQNModelV9, \
+    TarotDQNModelV100
 from rlcard.utils.logger import Logger
 
 num_tests = 100000
 num_games = 1000
-stats_on_model = 4
-models = {'1': TarotDQNModelV1, '4': TarotDQNModelV4, '9': TarotDQNModelV9}
+stats_on_model = 100
+models = {'1': TarotDQNModelV1, '4': TarotDQNModelV4, '9': TarotDQNModelV9, '100': TarotDQNModelV100}
 
 # Make environment
 env = rlcard.make('tarot')

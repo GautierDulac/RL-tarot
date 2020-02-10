@@ -139,7 +139,7 @@ class Logger(object):
         max_bin = np.max(np.array(reward_list))
         ax.hist(reward_list, label=self.legend_hist, bins=np.linspace(min_bin, max_bin, max_bin - min_bin + 1))
         plt.xlim((-24, 24))
-        plt.ylim((0, int(len(reward_list) * 0.3)))
+        plt.ylim((0, int(len(reward_list) * 0.4)))
         ax.set(xlabel='Points won', ylabel='Frenquency')
         ax.legend()
         ax.grid()
@@ -153,7 +153,7 @@ class Logger(object):
 
         ax = sns.kdeplot(reward_list, label=self.legend_hist, bw=0.5)
         plt.xlim((-24, 24))
-        plt.ylim((0, 0.3))
+        plt.ylim((0, 0.4))
         ax.set(xlabel='Points won', ylabel='Frenquency')
         ax.legend()
         ax.grid()

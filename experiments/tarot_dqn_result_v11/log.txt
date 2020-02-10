@@ -1,0 +1,9 @@
+
+########## Evaluation - Episode 0 ##########
+Timestep: 81 Average reward is 0.139
+
+########## Evaluation - Episode 1000 ##########
+Timestep: 80360 Average reward is -1.988
+
+########## Evaluation - Episode 2000 ##########
+Timestep: 160681 Average reward is -0.037

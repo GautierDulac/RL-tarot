@@ -34,7 +34,7 @@ class GlobalGame(object):
         self.bid_over = False
         # Initialize the dog
         self.dog_game = None
-        self.dog = TarotDog()
+        self.dog = None
         self.dog_over = False
         # Depending on the bid and dog, the known cards differ:
         self.known_cards = []
@@ -58,6 +58,7 @@ class GlobalGame(object):
         self.main_over = False
         self.is_game_over = False
         self.players = [Player(i) for i in range(self.num_players)]
+        self.dog = TarotDog()
         # Initialize bid Round
         self.bid_game = BidGame(self.players, self.num_players, self.starting_player, self.num_cards_per_player,
                                 self.num_cards_dog, self.dog)

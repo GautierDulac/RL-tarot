@@ -5,6 +5,7 @@ from rlcard.games.tarot.alpha_and_omega.player import TarotPlayer
 from rlcard.games.tarot.bid.bid import TarotBid
 from rlcard.games.tarot.bid.bid_round import BidRound
 from rlcard.games.tarot.dog.dog import TarotDog
+from rlcard.games.tarot.utils import get_nb_bouts
 
 
 class BidGame(object):
@@ -50,6 +51,16 @@ class BidGame(object):
 
         # Deal 6 cards to the dog
         self.dealer.deal_cards(self.dog, self.num_cards_dog)
+
+        # Sanity check
+        if len(self.dealer.deck) != 0:
+            raise ValueError('Dealer should have 0 card in deck at that stage')
+        number_bouts = 0
+        for player in self.players:
+            number_bouts += get_nb_bouts(player.hand)
+        number_bouts += get_nb_bouts(self.dog.hand)
+        if number_bouts != 3:
+            raise ValueError("Given number of bouts should be 3")
 
         player_id = self.bid_round.current_player_id
         state = self.get_state(player_id)

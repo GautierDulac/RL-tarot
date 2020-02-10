@@ -11,7 +11,8 @@ class Logger(object):
     Logger saves the running results and helps make plots from the results
     """
 
-    def __init__(self, xlabel: str = '', ylabel: str = '', zlabel: str = None, legend: str = '', legend_hist: str = '',
+    def __init__(self, xlabel: str = '', ylabel: str = '', zlabel: str = None, label_list: List[str] = None,
+                 legend: str = '', legend_hist: str = '',
                  log_path: str = None,
                  csv_path: str = None):
         """
@@ -19,6 +20,7 @@ class Logger(object):
         :param xlabel: (string): label of x axis of the plot
         :param ylabel: (string): label of y axis of the plot
         :param zlabel: (string): if provided, create a third column in the csv record
+        :param label_list: (List[str]): if provided, erase x,y,z labels and used as multi columns input
         :param legend: (string): name of the curve
         :param log_path: (string): where to store the log file
         :param csv_path: (string): where to store the csv file
@@ -28,6 +30,7 @@ class Logger(object):
         self.xlabel = xlabel
         self.ylabel = ylabel
         self.zlabel = zlabel
+        self.label_list = label_list
         self.legend = legend
         self.legend_hist = legend_hist
         self.xs = []
@@ -47,10 +50,17 @@ class Logger(object):
             if not os.path.exists(csv_dir):
                 os.makedirs(csv_dir)
             self.csv_file = open(csv_path, 'w')
-            if zlabel is not None:
-                self.csv_file.write(xlabel + ',' + ylabel + ',' + zlabel + '\n')
+            if label_list is not None:
+                first_line = ''
+                for name in label_list[:-1]:
+                    first_line = first_line + name + ','
+                first_line = first_line + label_list[-1] + '\n'
+                self.csv_file.write(first_line)
             else:
-                self.csv_file.write(xlabel + ',' + ylabel + '\n')
+                if zlabel is not None:
+                    self.csv_file.write(xlabel + ',' + ylabel + ',' + zlabel + '\n')
+                else:
+                    self.csv_file.write(xlabel + ',' + ylabel + '\n')
             self.csv_file.flush()
 
     def log(self, text: str) -> None:
@@ -63,25 +73,38 @@ class Logger(object):
         self.log_file.flush()
         print(text)
 
-    def add_point(self, x=None, y=None, z=None) -> None:
+    def add_point(self, x=None, y=None, z=None, write_list=None) -> None:
         """
         Add a point to the plot
+        :param write_list: list of coordinate to save when multiples
         :param x: x coordinate value
         :param y: y coordinate value
         :param z: z coordinate value if given
         :return:
         """
+        if list is not None:
+            if len(write_list) != len(self.label_list):
+                raise ValueError('List of parameters to add should be the same length as the label list')
+            else:
+                line = ''
+                for value in write_list[:-1]:
+                    line = line + str(value) + ','
+                line = line + str(write_list[-1]) + '\n'
+                self.csv_file.write(line)
         if x is not None and y is not None:
             self.xs.append(x)
             self.ys.append(y)
             if z is not None:
                 self.zs.append(z)
+                line = str(x) + ',' + str(y) + ',' + str(z) + '\n'
+            else:
+                line = str(x) + ',' + str(y) + '\n'
         else:
             raise ValueError('x and y should not be None.')
 
         # If csv_path is not None then write x and y to file
         if self.csv_path is not None:
-            self.csv_file.write(str(x) + ',' + str(y) + ',' + str(z) + '\n')
+            self.csv_file.write(line)
             self.csv_file.flush()
 
     def make_plot(self, save_path: str = '') -> None:

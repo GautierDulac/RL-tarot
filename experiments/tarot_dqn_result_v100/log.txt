@@ -58,3 +58,15 @@ Timestep: 145491 Average reward is 2.33
 
 ########## Evaluation - Episode 1900 ##########
 Timestep: 153611 Average reward is 2.8
+
+########## Evaluation - Episode 2000 ##########
+Timestep: 161732 Average reward is 2.35
+
+########## Evaluation - Episode 2100 ##########
+Timestep: 169858 Average reward is 2.99
+
+########## Evaluation - Episode 2200 ##########
+Timestep: 178004 Average reward is 3.3
+
+########## Evaluation - Episode 2300 ##########
+Timestep: 186135 Average reward is 2.23

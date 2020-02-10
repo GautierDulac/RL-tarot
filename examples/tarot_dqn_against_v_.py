@@ -7,11 +7,13 @@ import time
 import tensorflow as tf
 
 import rlcard
-from rlcard.models.pretrained_models_tarot_v9 import TarotDQNModelV9
 from rlcard.utils.logger import Logger
 from rlcard.utils.utils import set_global_seed, time_difference_good_format
+from rlcard.models.pretrained_models_tarot_v_ import TarotDQNModelV1, TarotDQNModelV4, TarotDQNModelV9
 
+against_model = 9
 record_number = 10
+models = {'1': TarotDQNModelV1, '4': TarotDQNModelV4, '9': TarotDQNModelV9}
 
 # Make environment
 env = rlcard.make('tarot')
@@ -50,7 +52,7 @@ set_global_seed(0)
 with tf.compat.v1.Session() as sess:
     # Set agents
     global_step = tf.Variable(0, name='global_step', trainable=False)
-    agent = TarotDQNModelV9(sess.graph, sess).dqn_agent
+    agent = models[str(against_model)](sess.graph, sess).dqn_agent
 
     opponent_agent = agent
 

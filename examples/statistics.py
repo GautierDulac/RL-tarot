@@ -7,8 +7,7 @@ import tensorflow as tf
 
 import rlcard
 from rlcard.games.tarot.utils import get_hand_value, get_nb_bouts
-from rlcard.models.pretrained_models_tarot_v1 import TarotDQNModelV1
-from rlcard.models.pretrained_models_tarot_v4 import TarotDQNModelV4
+from rlcard.models.pretrained_models_tarot_v_ import TarotDQNModelV1, TarotDQNModelV4, TarotDQNModelV9
 from rlcard.utils.logger import Logger
 
 num_tests = 100000
@@ -19,7 +18,7 @@ save_path = 'examples/statistics/tarot_v{}/'.format(str(stats_on_model))
 log_path_taking = save_path + 'log.txt'
 csv_path_taking = save_path + 'taking_stats.csv'
 
-models = {'1': TarotDQNModelV1, '4': TarotDQNModelV4}
+models = {'1': TarotDQNModelV1, '4': TarotDQNModelV4, '9': TarotDQNModelV9}
 
 # Make environment
 env = rlcard.make('tarot')

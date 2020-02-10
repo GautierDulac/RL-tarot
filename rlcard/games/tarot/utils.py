@@ -245,14 +245,19 @@ def get_nb_bouts(hand_cards: List[TarotCard]) -> int:
     return total_bouts
 
 
-def get_nb_bouts(pot_cards: dict) -> int:
+def get_nb_bouts(pot_cards: Union[dict, list]) -> int:
     """
     Compute the number of bouts in the pot
     :param pot_cards: dict cards of all players + THE TARGET CARD NOT TO BE COUNTED
     :return: number of bouts in the pot (int)
     """
-    total_bouts = 0
-    for player_id in range(len(pot_cards) - 1):
-        total_bouts += pot_cards[player_id].is_bout()
+    if isinstance(pot_cards, dict):
+        total_bouts = 0
+        for player_id in range(len(pot_cards) - 1):
+            total_bouts += pot_cards[player_id].is_bout()
+    if isinstance(pot_cards, list):
+        total_bouts = 0
+        for card in pot_cards:
+            total_bouts += card.is_bout()
 
     return total_bouts

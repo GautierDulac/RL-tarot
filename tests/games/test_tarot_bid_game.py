@@ -65,10 +65,10 @@ class TestTarotBidGameMethods(unittest.TestCase):
         game = BidGame(players, num_players, starting_player, num_cards_per_player, num_cards_dog, dog)
         game.init_game()
         action = np.random.choice(game.get_legal_actions())
-        state, next_player_id = game.step(action)
         current = game.bid_round.current_player_id
+        state, next_player_id = game.step(action)
         self.assertLessEqual(len(state['other_bids']), num_players)
-        self.assertEqual(next_player_id, current)
+        self.assertEqual(next_player_id, (current + 1) % num_players)
 
     def test_get_final_bid(self):
         game = BidGame(players, num_players, starting_player, num_cards_per_player, num_cards_dog, dog)

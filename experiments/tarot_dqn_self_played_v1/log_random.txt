@@ -1,0 +1,3 @@
+
+########## Evaluation Against Random - Episode 0 ##########
+Timestep: 80 Average reward against random is -5.722

@@ -1,0 +1,3 @@
+No bias on Bid game
+Seems that player is always taking the maximal bid (Pousse)
+100 training with 1000 evaluation -> bad results -9 avg reward on the 2 eval

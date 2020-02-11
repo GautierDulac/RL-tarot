@@ -1,0 +1,2 @@
+No bias on Bid game
+500 training with 1000 evaluation 

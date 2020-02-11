@@ -63,7 +63,6 @@ class Env(object):
         """
         if self.single_agent_mode or self.human_mode:
             print('\r>> Agent 0 (Human) chooses ', end='')
-            # action = int(input('\n Chosen action id:\n')) # TODO TEST - REMOVE IF NECESSARY
             self.print_action(self.decode_action(action).get_str())
             print('')
             return self.single_agent_step(action)

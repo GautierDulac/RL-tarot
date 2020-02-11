@@ -1,4 +1,3 @@
-import time
 from typing import List, Union
 
 import numpy as np
@@ -207,6 +206,11 @@ class TarotEnv(Env):
         legal_actions = self.game.get_legal_actions()
         if self.game.current_game_part == 'BID':
             legal_ids = [BID_SPACE[bid.get_str()] for bid in legal_actions]
+            # TODO REMOVE IF UNRELEVANT - Adding a bias in the bid selection
+            number_of_legal_actions = len(legal_ids)
+            biased_legal_ids = []
+            for index, bid_id in enumerate(legal_ids):
+                biased_legal_ids = biased_legal_ids + [bid_id] * 2 ** (number_of_legal_actions - index - 1)
             return legal_ids
         elif self.game.current_game_part in ['DOG', 'MAIN']:
             legal_ids = [ACTION_SPACE[action.get_str()] for action in legal_actions]

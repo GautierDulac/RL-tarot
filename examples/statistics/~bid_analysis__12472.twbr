@@ -16,7 +16,7 @@
       <connection class='federated'>
         <named-connections>
           <named-connection caption='taking_stats' name='textscan.1yvoo4o0ru4c3a17wwd521cn83dp'>
-            <connection class='textscan' directory='D:/0 - Boulot/5 - X4/14. Personnal Project/RL-tarot/examples/statistics/tarot_v0' filename='taking_stats.csv' password='' server='' />
+            <connection class='textscan' directory='D:/0 - Boulot/5 - X4/14. Personnal Project/RL-tarot/examples/statistics/tarot_v10018' filename='taking_stats.csv' password='' server='' />
           </named-connection>
         </named-connections>
         <relation connection='textscan.1yvoo4o0ru4c3a17wwd521cn83dp' name='taking_stats.csv' table='[taking_stats#csv]' type='table'>
@@ -263,7 +263,7 @@
             <column-instance column='[hand_value,nb_bouts,taking_bid_order - Split 2]' derivation='None' name='[none:hand_value,nb_bouts,taking_bid_order - Split 2:ok]' pivot='key' type='ordinal' />
           </datasource-dependencies>
           <filter class='quantitative' column='[federated.1xxi2pl0zkmvyg171irt70ijphcl].[cnt:Calculation_81909233610477568:qk]' included-values='in-range'>
-            <min>510</min>
+            <min>978</min>
           </filter>
           <slices>
             <column>[federated.1xxi2pl0zkmvyg171irt70ijphcl].[cnt:Calculation_81909233610477568:qk]</column>
@@ -438,7 +438,7 @@
     </dashboard>
   </dashboards>
   <windows source-height='37'>
-    <window class='worksheet' maximized='true' name='Taking bid'>
+    <window class='worksheet' name='Taking bid'>
       <cards>
         <edge name='left'>
           <strip size='160'>
@@ -548,7 +548,7 @@
       </cards>
       <simple-id uuid='{816B390A-A411-4615-AD23-2D47DBD057A2}' />
     </window>
-    <window class='dashboard' name='Dashboard 1'>
+    <window class='dashboard' maximized='true' name='Dashboard 1'>
       <viewpoints>
         <viewpoint name='Taking bid'>
           <zoom type='entire-view' />

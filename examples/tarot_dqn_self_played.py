@@ -8,13 +8,11 @@ import tensorflow as tf
 
 import rlcard
 from rlcard.agents.random_agent import RandomAgent
-from rlcard.models.pretrained_models_tarot_v_ import TarotDQNModelV1
+from rlcard.agents.dqn_agent import DQNAgent
 from rlcard.utils.logger import Logger
 from rlcard.utils.utils import set_global_seed, time_difference_good_format
 
 record_number = 1
-starting_model = 1
-models = {'1': TarotDQNModelV1}
 
 # Make environment
 env = rlcard.make('tarot')
@@ -23,9 +21,9 @@ eval_env = rlcard.make('tarot')
 # Set the iterations numbers and how frequently we evaluate/save plot
 evaluate_every = 100
 # save_plot_every = 100
-evaluate_num = 100  # Should be 10000
+evaluate_num = 1000
 
-episode_num = 10000
+episode_num = 100000
 
 self_play = 1
 total_self_play_eval = int(episode_num / evaluate_every)
@@ -67,7 +65,14 @@ random_agent = RandomAgent(action_num=eval_env.action_num)
 with tf.compat.v1.Session() as sess:
     # Set agents
     global_step = tf.Variable(0, name='global_step', trainable=False)
-    agent = models[str(starting_model)](sess.graph, sess).dqn_agent
+    agent = DQNAgent(sess,
+                     scope='dqn',
+                     action_num=78,  # env.action_num,
+                     replay_memory_size=20000,
+                     replay_memory_init_size=memory_init_size,
+                     norm_step=norm_step,
+                     state_shape=env.state_shape,
+                     mlp_layers=[512, 512])
 
     opponent_agent = agent
 

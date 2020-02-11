@@ -327,7 +327,7 @@
               </zone>
             </zone>
             <zone fixed-size='304' h='97916' id='6' is-fixed='true' param='vert' type='layout-flow' w='22255' x='77159' y='1042'>
-              <zone h='14844' id='8' name='Taking bid depending on hand value and number of bouts' pane-specification-id='0' param='[federated.1xxi2pl0zkmvyg171irt70ijphcl].[avg:Calculation_81909233610477568:qk]' type='size' w='22255' x='77159' y='1042'>
+              <zone h='17578' id='8' name='Taking bid depending on hand value and number of bouts' pane-specification-id='0' param='[federated.1xxi2pl0zkmvyg171irt70ijphcl].[avg:Calculation_81909233610477568:qk]' type='size' w='22255' x='77159' y='1042'>
                 <zone-style>
                   <format attr='border-color' value='#000000' />
                   <format attr='border-style' value='none' />
@@ -335,7 +335,7 @@
                   <format attr='margin' value='4' />
                 </zone-style>
               </zone>
-              <zone h='70962' id='10' name='Taking bid' w='22255' x='77159' y='15886'>
+              <zone h='68228' id='10' name='Taking bid' w='22255' x='77159' y='18620'>
                 <layout-cache cell-count-w='3' minheight='195' non-cell-size-w='69' type-h='scalable' type-w='cell' />
                 <zone-style>
                   <format attr='border-color' value='#000000' />

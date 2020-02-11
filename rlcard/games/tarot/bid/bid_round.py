@@ -56,7 +56,7 @@ class BidRound(object):
 
         # Maximal bid encountered
         # TODO REMOVE CONSTRAINTS THAT FORCE ONLY PASSE OU PETITE (2)
-        if self.max_bid_order >= 2 or (
+        if self.max_bid_order >= 1 or (
                 total_surrendered_players == self.num_players - 1 and self.taking_player_id is not None):
             for player_id in range(self.num_players):
                 if player_id != self.taking_player_id:
@@ -82,7 +82,7 @@ class BidRound(object):
         :return: list of legals bids (TarotBid objects)
         """
         # legal_bids = self.all_bids[(self.max_bid_order + 1):] + [self.all_bids[0]]
-        legal_bids = self.all_bids[(self.max_bid_order + 1):3] + [self.all_bids[0]]
+        legal_bids = self.all_bids[(self.max_bid_order + 1):2] + [self.all_bids[0]]
         return legal_bids
 
     def get_state(self, players: List[TarotPlayer], player_id) -> dict:

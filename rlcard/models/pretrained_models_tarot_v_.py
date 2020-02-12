@@ -119,7 +119,7 @@ class TarotDQNModelV10018(Model):
         return False
 
 
-class TarotDQNModelV9(Model):
+class TarotDQNModelV60073(Model):
     """ A pretrained model on Tarot with DQN
     """
 
@@ -139,11 +139,11 @@ class TarotDQNModelV9(Model):
                                       replay_memory_init_size=memory_init_size,
                                       norm_step=norm_step,
                                       state_shape=env.state_shape,
-                                      mlp_layers=[512, 512])
+                                      mlp_layers=[512, 1024, 512])
             normalize(env, self.dqn_agent, 1000)
             self.sess.run(tf.compat.v1.global_variables_initializer())
 
-        check_point_path = os.path.join(ROOT_PATH, 'tarot_v9')
+        check_point_path = os.path.join(ROOT_PATH, 'tarot_v60073')
         with self.sess.as_default():
             with self.graph.as_default():
                 saver = tf.compat.v1.train.Saver(tf.compat.v1.model_variables())

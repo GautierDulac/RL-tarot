@@ -1,3 +1,6 @@
 Tentative with MLP layers 512 - 1024 - 512 and memory_init_size = 1000000
 
 IMPORTANT - First test without POUSSE
+
+
+Interesting results, quite stable, around 0.6 against Random and 2 against Last Agent, still weird

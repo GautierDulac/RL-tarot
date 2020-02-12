@@ -34,3 +34,27 @@ Timestep: 80062 Average reward against random is 0.377
 
 ########## Evaluation Against Random - Episode 1100 ##########
 Timestep: 88060 Average reward against random is 0.84
+
+########## Evaluation Against Random - Episode 1200 ##########
+Timestep: 96082 Average reward against random is 0.455
+
+########## Evaluation Against Random - Episode 1300 ##########
+Timestep: 104064 Average reward against random is 0.673
+
+########## Evaluation Against Random - Episode 1400 ##########
+Timestep: 112076 Average reward against random is 0.533
+
+########## Evaluation Against Random - Episode 1500 ##########
+Timestep: 120052 Average reward against random is 0.568
+
+########## Evaluation Against Random - Episode 1600 ##########
+Timestep: 128060 Average reward against random is 0.431
+
+########## Evaluation Against Random - Episode 1700 ##########
+Timestep: 136033 Average reward against random is 0.852
+
+########## Evaluation Against Random - Episode 1800 ##########
+Timestep: 144035 Average reward against random is 0.813
+
+########## Evaluation Against Random - Episode 1900 ##########
+Timestep: 152021 Average reward against random is 0.833

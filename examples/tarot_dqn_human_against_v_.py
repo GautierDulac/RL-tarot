@@ -24,5 +24,5 @@ with tf.compat.v1.Session() as sess:
     while not env.is_over():
         action = agent.step(state)
         if player_id == 0:
-            action = input('Choose an action id')
+            action = input('Choose an action id') #TODO repair the choice that gives wrong card (kings eg)
         state, player_id = env.step(action)

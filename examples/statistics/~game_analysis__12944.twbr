@@ -15,7 +15,7 @@
       <connection class='federated'>
         <named-connections>
           <named-connection caption='games_stats' name='textscan.1aneu4e0hsdqk919y3sqo0vuw4hu'>
-            <connection class='textscan' cleaning='yes' compat='no' csvFile='D:\0 - Boulot\5 - X4\14. Personnal Project\RL-tarot\examples\statistics\tarot_v0\games_stats.csv' dataRefreshTime='' directory='D:/0 - Boulot/5 - X4/14. Personnal Project/RL-tarot/examples/statistics/tarot_v10018' filename='games_stats.csv' interpretationMode='8' password='' server='' validate='no' />
+            <connection class='textscan' cleaning='yes' compat='no' csvFile='D:\0 - Boulot\5 - X4\14. Personnal Project\RL-tarot\examples\statistics\tarot_v0\games_stats.csv' dataRefreshTime='' directory='D:/0 - Boulot/5 - X4/14. Personnal Project/RL-tarot/examples/statistics/tarot_v60073' filename='games_stats.csv' interpretationMode='8' password='' server='' validate='no' />
           </named-connection>
         </named-connections>
         <relation connection='textscan.1aneu4e0hsdqk919y3sqo0vuw4hu' name='games_stats.csv' table='[D:\0 - Boulot\5 - X4\14. Personnal Project\RL-tarot\examples\statistics\tarot_v0\games_stats#csv]' type='table'>
@@ -160,7 +160,6 @@
         <calculation class='tableau' formula='1' />
       </column>
       <column datatype='integer' name='[game_id]' role='measure' type='quantitative' />
-      <column aggregation='Sum' datatype='real' name='[hand_value]' role='dimension' type='ordinal' />
       <column aggregation='Sum' datatype='integer' name='[nb_bouts]' role='dimension' type='ordinal' />
       <column datatype='integer' name='[nb_bouts_achieved]' role='measure' type='quantitative' />
       <column aggregation='Sum' datatype='integer' name='[nb_bouts_dog]' role='dimension' type='ordinal' />
@@ -234,7 +233,7 @@
     </datasource>
   </datasources>
   <worksheets>
-    <worksheet name='Average Reward depending on hand value'>
+    <worksheet name='Achieved points depending on number of bouts and hand value'>
       <table>
         <view>
           <datasources>
@@ -242,9 +241,48 @@
           </datasources>
           <datasource-dependencies datasource='federated.06z7erb06w4o361bwo0k20cz3v54'>
             <column-instance column='[reward]' derivation='Avg' name='[avg:reward:qk]' pivot='key' type='quantitative' />
+            <column datatype='real' name='[hand_value]' role='measure' type='quantitative' />
+            <column aggregation='Sum' datatype='integer' name='[nb_bouts]' role='dimension' type='ordinal' />
+            <column-instance column='[hand_value]' derivation='None' name='[none:hand_value:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[nb_bouts]' derivation='None' name='[none:nb_bouts:ok]' pivot='key' type='ordinal' />
+            <column-instance column='[number_of_points_achieved]' derivation='None' name='[none:number_of_points_achieved:qk]' pivot='key' type='quantitative' />
+            <column datatype='real' name='[number_of_points_achieved]' role='measure' type='quantitative' />
+            <column datatype='integer' name='[reward]' role='measure' type='quantitative' />
+          </datasource-dependencies>
+          <aggregation value='true' />
+        </view>
+        <style>
+          <style-rule element='mark'>
+            <encoding attr='color' field='[federated.06z7erb06w4o361bwo0k20cz3v54].[avg:reward:qk]' palette='orange_blue_diverging_10_0' reverse='true' type='interpolated' />
+          </style-rule>
+        </style>
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Automatic' />
+            <encodings>
+              <color column='[federated.06z7erb06w4o361bwo0k20cz3v54].[avg:reward:qk]' />
+            </encodings>
+          </pane>
+        </panes>
+        <rows>[federated.06z7erb06w4o361bwo0k20cz3v54].[none:number_of_points_achieved:qk]</rows>
+        <cols>([federated.06z7erb06w4o361bwo0k20cz3v54].[none:nb_bouts:ok] * [federated.06z7erb06w4o361bwo0k20cz3v54].[none:hand_value:qk])</cols>
+      </table>
+      <simple-id uuid='{0857298E-724E-4846-8C73-DD4E0C52AEB1}' />
+    </worksheet>
+    <worksheet name='Average Reward depending on hand value'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='games_stats' name='federated.06z7erb06w4o361bwo0k20cz3v54' />
+          </datasources>
+          <datasource-dependencies datasource='federated.06z7erb06w4o361bwo0k20cz3v54'>
             <column-instance column='[game_id]' derivation='Count' name='[cnt:game_id:qk]' pivot='key' type='quantitative' />
             <column datatype='integer' name='[game_id]' role='measure' type='quantitative' />
-            <column aggregation='Sum' datatype='real' name='[hand_value]' role='dimension' type='ordinal' />
+            <column datatype='real' name='[hand_value]' role='measure' type='quantitative' />
+            <column-instance column='[reward]' derivation='Median' name='[med:reward:qk]' pivot='key' type='quantitative' />
             <column-instance column='[hand_value]' derivation='None' name='[none:hand_value:ok]' pivot='key' type='ordinal' />
             <column-instance column='[taking]' derivation='None' name='[none:taking:ok]' pivot='key' type='ordinal' />
             <column datatype='integer' name='[reward]' role='measure' type='quantitative' />
@@ -264,14 +302,14 @@
             <view>
               <breakdown value='auto' />
             </view>
-            <mark class='Line' />
+            <mark class='Bar' />
             <encodings>
               <color column='[federated.06z7erb06w4o361bwo0k20cz3v54].[none:taking:ok]' />
               <size column='[federated.06z7erb06w4o361bwo0k20cz3v54].[cnt:game_id:qk]' />
             </encodings>
           </pane>
         </panes>
-        <rows>[federated.06z7erb06w4o361bwo0k20cz3v54].[avg:reward:qk]</rows>
+        <rows>[federated.06z7erb06w4o361bwo0k20cz3v54].[med:reward:qk]</rows>
         <cols>[federated.06z7erb06w4o361bwo0k20cz3v54].[none:hand_value:ok]</cols>
       </table>
       <simple-id uuid='{E33FB3D5-31EF-4426-A4BA-23FB4B33298B}' />
@@ -283,14 +321,15 @@
             <datasource caption='games_stats' name='federated.06z7erb06w4o361bwo0k20cz3v54' />
           </datasources>
           <datasource-dependencies datasource='federated.06z7erb06w4o361bwo0k20cz3v54'>
+            <column-instance column='[game_id]' derivation='Count' name='[cnt:game_id:qk]' pivot='key' type='quantitative' />
             <column datatype='integer' name='[game_id]' role='measure' type='quantitative' />
             <column aggregation='Sum' datatype='integer' name='[nb_bouts]' role='dimension' type='ordinal' />
             <column datatype='integer' name='[nb_bouts_achieved]' role='measure' type='quantitative' />
             <column aggregation='Sum' datatype='integer' name='[nb_bouts_dog]' role='dimension' type='ordinal' />
-            <column-instance column='[game_id]' derivation='None' name='[none:game_id:ok]' pivot='key' type='ordinal' />
             <column-instance column='[nb_bouts]' derivation='None' name='[none:nb_bouts:ok]' pivot='key' type='ordinal' />
             <column-instance column='[nb_bouts_achieved]' derivation='None' name='[none:nb_bouts_achieved:ok]' pivot='key' type='ordinal' />
             <column-instance column='[nb_bouts_dog]' derivation='None' name='[none:nb_bouts_dog:ok]' pivot='key' type='ordinal' />
+            <column-instance column='[taking]' derivation='None' name='[none:taking:ok]' pivot='key' type='ordinal' />
             <column-instance column='[taking]' derivation='None' name='[none:taking:qk]' pivot='key' type='quantitative' />
             <column aggregation='Sum' datatype='integer' name='[taking]' role='dimension' type='ordinal' />
           </datasource-dependencies>
@@ -309,15 +348,15 @@
             <view>
               <breakdown value='auto' />
             </view>
-            <mark class='Automatic' />
+            <mark class='Circle' />
             <encodings>
               <color column='[federated.06z7erb06w4o361bwo0k20cz3v54].[none:nb_bouts_dog:ok]' />
-              <lod column='[federated.06z7erb06w4o361bwo0k20cz3v54].[none:game_id:ok]' />
+              <size column='[federated.06z7erb06w4o361bwo0k20cz3v54].[cnt:game_id:qk]' />
             </encodings>
           </pane>
         </panes>
         <rows>[federated.06z7erb06w4o361bwo0k20cz3v54].[none:nb_bouts_achieved:ok]</rows>
-        <cols>[federated.06z7erb06w4o361bwo0k20cz3v54].[none:nb_bouts:ok]</cols>
+        <cols>([federated.06z7erb06w4o361bwo0k20cz3v54].[none:taking:ok] / [federated.06z7erb06w4o361bwo0k20cz3v54].[none:nb_bouts:ok])</cols>
       </table>
       <simple-id uuid='{C844193E-7839-467D-87D1-1EFA12095FC1}' />
     </worksheet>
@@ -331,11 +370,13 @@
             <column-instance column='[reward]' derivation='Avg' name='[avg:reward:qk]' pivot='key' type='quantitative' />
             <column-instance column='[game_id]' derivation='Count' name='[cnt:game_id:qk]' pivot='key' type='quantitative' />
             <column datatype='integer' name='[game_id]' role='measure' type='quantitative' />
-            <column aggregation='Sum' datatype='real' name='[hand_value]' role='dimension' type='ordinal' />
+            <column datatype='real' name='[hand_value]' role='measure' type='quantitative' />
             <column aggregation='Sum' datatype='integer' name='[nb_bouts]' role='dimension' type='ordinal' />
             <column-instance column='[hand_value]' derivation='None' name='[none:hand_value:ok]' pivot='key' type='ordinal' />
             <column-instance column='[nb_bouts]' derivation='None' name='[none:nb_bouts:ok]' pivot='key' type='ordinal' />
+            <column-instance column='[taking]' derivation='None' name='[none:taking:ok]' pivot='key' type='ordinal' />
             <column datatype='integer' name='[reward]' role='measure' type='quantitative' />
+            <column aggregation='Sum' datatype='integer' name='[taking]' role='dimension' type='ordinal' />
           </datasource-dependencies>
           <filter class='quantitative' column='[federated.06z7erb06w4o361bwo0k20cz3v54].[cnt:game_id:qk]' included-values='in-range'>
             <min>60</min>
@@ -354,34 +395,57 @@
             <mark class='Line' />
             <encodings>
               <color column='[federated.06z7erb06w4o361bwo0k20cz3v54].[none:nb_bouts:ok]' />
+            </encodings>
+          </pane>
+        </panes>
+        <rows>[federated.06z7erb06w4o361bwo0k20cz3v54].[avg:reward:qk]</rows>
+        <cols>([federated.06z7erb06w4o361bwo0k20cz3v54].[none:taking:ok] / [federated.06z7erb06w4o361bwo0k20cz3v54].[none:hand_value:ok])</cols>
+      </table>
+      <simple-id uuid='{1862773B-AFD1-4950-BC02-23EC96C91746}' />
+    </worksheet>
+    <worksheet name='Sheet 5'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='games_stats' name='federated.06z7erb06w4o361bwo0k20cz3v54' />
+          </datasources>
+          <datasource-dependencies datasource='federated.06z7erb06w4o361bwo0k20cz3v54'>
+            <column-instance column='[reward]' derivation='Avg' name='[avg:reward:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[game_id]' derivation='Count' name='[cnt:game_id:qk]' pivot='key' type='quantitative' />
+            <column datatype='integer' name='[game_id]' role='measure' type='quantitative' />
+            <column datatype='real' name='[hand_value]' role='measure' type='quantitative' />
+            <column aggregation='Sum' datatype='integer' name='[nb_bouts]' role='dimension' type='ordinal' />
+            <column-instance column='[hand_value]' derivation='None' name='[none:hand_value:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[nb_bouts]' derivation='None' name='[none:nb_bouts:ok]' pivot='key' type='ordinal' />
+            <column-instance column='[taking]' derivation='None' name='[none:taking:ok]' pivot='key' type='ordinal' />
+            <column datatype='integer' name='[reward]' role='measure' type='quantitative' />
+            <column aggregation='Sum' datatype='integer' name='[taking]' role='dimension' type='ordinal' />
+          </datasource-dependencies>
+          <filter class='categorical' column='[federated.06z7erb06w4o361bwo0k20cz3v54].[none:taking:ok]'>
+            <groupfilter function='member' level='[none:taking:ok]' member='0' user:ui-domain='relevant' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
+          </filter>
+          <slices>
+            <column>[federated.06z7erb06w4o361bwo0k20cz3v54].[none:taking:ok]</column>
+          </slices>
+          <aggregation value='true' />
+        </view>
+        <style />
+        <panes>
+          <pane id='1' selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Automatic' />
+            <encodings>
+              <color column='[federated.06z7erb06w4o361bwo0k20cz3v54].[none:nb_bouts:ok]' />
               <size column='[federated.06z7erb06w4o361bwo0k20cz3v54].[cnt:game_id:qk]' />
             </encodings>
           </pane>
         </panes>
         <rows>[federated.06z7erb06w4o361bwo0k20cz3v54].[avg:reward:qk]</rows>
-        <cols>[federated.06z7erb06w4o361bwo0k20cz3v54].[none:hand_value:ok]</cols>
+        <cols>[federated.06z7erb06w4o361bwo0k20cz3v54].[none:hand_value:qk]</cols>
       </table>
-      <simple-id uuid='{1862773B-AFD1-4950-BC02-23EC96C91746}' />
-    </worksheet>
-    <worksheet name='Sheet 4'>
-      <table>
-        <view>
-          <datasources />
-          <aggregation value='true' />
-        </view>
-        <style />
-        <panes>
-          <pane selection-relaxation-option='selection-relaxation-allow'>
-            <view>
-              <breakdown value='auto' />
-            </view>
-            <mark class='Automatic' />
-          </pane>
-        </panes>
-        <rows />
-        <cols />
-      </table>
-      <simple-id uuid='{0857298E-724E-4846-8C73-DD4E0C52AEB1}' />
+      <simple-id uuid='{2EA6EC92-3F9D-41CC-8006-BAADD578D2CB}' />
     </worksheet>
   </worksheets>
   <windows saved-dpi-scale-factor='1.25' source-height='37'>
@@ -467,13 +531,12 @@
           <strip size='160'>
             <card param='[federated.06z7erb06w4o361bwo0k20cz3v54].[cnt:game_id:qk]' show-domain='false' show-null-ctrls='false' type='filter' />
             <card pane-specification-id='0' param='[federated.06z7erb06w4o361bwo0k20cz3v54].[none:nb_bouts:ok]' type='color' />
-            <card pane-specification-id='0' param='[federated.06z7erb06w4o361bwo0k20cz3v54].[cnt:game_id:qk]' type='size' />
           </strip>
         </edge>
       </cards>
       <simple-id uuid='{14847AD6-01C2-45B1-9BED-A2C3EB7A6DC8}' />
     </window>
-    <window class='worksheet' maximized='true' name='Sheet 4'>
+    <window class='worksheet' name='Achieved points depending on number of bouts and hand value'>
       <cards>
         <edge name='left'>
           <strip size='160'>
@@ -483,18 +546,52 @@
           </strip>
         </edge>
         <edge name='top'>
-          <strip size='30'>
+          <strip size='2147483647'>
             <card type='columns' />
           </strip>
-          <strip size='30'>
+          <strip size='2147483647'>
             <card type='rows' />
           </strip>
-          <strip size='30'>
+          <strip size='2147483647'>
             <card type='title' />
+          </strip>
+        </edge>
+        <edge name='right'>
+          <strip size='160'>
+            <card pane-specification-id='0' param='[federated.06z7erb06w4o361bwo0k20cz3v54].[avg:reward:qk]' type='color' />
           </strip>
         </edge>
       </cards>
       <simple-id uuid='{5A1646D0-6DCD-4F36-AC12-F500400A4CCC}' />
+    </window>
+    <window class='worksheet' maximized='true' name='Sheet 5'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='title' />
+          </strip>
+        </edge>
+        <edge name='right'>
+          <strip size='160'>
+            <card pane-specification-id='1' param='[federated.06z7erb06w4o361bwo0k20cz3v54].[cnt:game_id:qk]' type='size' />
+            <card pane-specification-id='1' param='[federated.06z7erb06w4o361bwo0k20cz3v54].[none:nb_bouts:ok]' type='color' />
+          </strip>
+        </edge>
+      </cards>
+      <simple-id uuid='{A91F1A3F-C9FD-4326-9F4C-2DE8C3F2E0FE}' />
     </window>
   </windows>
 </workbook>

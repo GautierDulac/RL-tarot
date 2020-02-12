@@ -3,10 +3,10 @@ An example of learning a Deep-Q Agent on French Tarot Game
 """
 import tensorflow as tf
 import rlcard
-from rlcard.models.pretrained_models_tarot_v_ import TarotDQNModelV1, TarotDQNModelV4, TarotDQNModelV9
+from rlcard.models.pretrained_models_tarot_v_ import TarotDQNModelV1, TarotDQNModelV60073
 
-against_model = 9
-models = {'1': TarotDQNModelV1, '4': TarotDQNModelV4, '9': TarotDQNModelV9}
+against_model = 60073
+models = {'1': TarotDQNModelV1, '60073': TarotDQNModelV60073}
 
 
 # Make environment
@@ -20,7 +20,9 @@ with tf.compat.v1.Session() as sess:
     agent = models[str(against_model)](sess.graph, sess).dqn_agent
     sess.run(tf.compat.v1.global_variables_initializer())
     state = env.reset()
-
+    player_id = env.game.starting_player
     while not env.is_over():
         action = agent.step(state)
+        if player_id == 0:
+            action = input('Choose an action id')
         state, player_id = env.step(action)

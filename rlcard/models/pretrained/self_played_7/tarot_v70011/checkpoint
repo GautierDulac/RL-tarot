@@ -1,0 +1,6 @@
+model_checkpoint_path: "model"
+all_model_checkpoint_paths: "../tarot_v70007/model"
+all_model_checkpoint_paths: "../tarot_v70008/model"
+all_model_checkpoint_paths: "../tarot_v70009/model"
+all_model_checkpoint_paths: "../tarot_v70010/model"
+all_model_checkpoint_paths: "model"

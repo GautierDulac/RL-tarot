@@ -12,7 +12,7 @@ from rlcard.agents.dqn_agent import DQNAgent
 from rlcard.utils.logger import Logger
 from rlcard.utils.utils import set_global_seed, time_difference_good_format
 
-record_number = 1
+record_number = 5
 
 # Make environment
 env = rlcard.make('tarot')
@@ -30,7 +30,7 @@ total_self_play_eval = int(episode_num / evaluate_every)
 
 # Set the the number of steps for collecting normalization statistics
 # and intial memory size
-memory_init_size = 1000
+memory_init_size = 1000000
 norm_step = 1000
 
 # The paths for saving the logs and learning curves
@@ -50,15 +50,15 @@ if not os.path.exists('rlcard/models/pretrained'):
 for self_play_init in range(1, total_self_play_eval + 1):
     model_folder_path = 'rlcard/models/pretrained/self_played_{}/tarot_v{}'.format(
         str(record_number),
-        str(record_number * total_self_play_eval * 10 + self_play_init))
+        str(record_number * 10000 + self_play_init))
     if not os.path.exists(model_folder_path):
         os.makedirs(model_folder_path)
 model_path = 'rlcard/models/pretrained/self_played_{}/tarot_v{}/model'.format(
     str(record_number),
-    str(record_number * total_self_play_eval * 10 + self_play))
+    str(record_number * 10000 + self_play))
 
 # Set a global seed
-set_global_seed(42)
+set_global_seed(0)
 
 random_agent = RandomAgent(action_num=eval_env.action_num)
 
@@ -72,7 +72,7 @@ with tf.compat.v1.Session() as sess:
                      replay_memory_init_size=memory_init_size,
                      norm_step=norm_step,
                      state_shape=env.state_shape,
-                     mlp_layers=[512, 512])
+                     mlp_layers=[512, 1024, 512])
 
     opponent_agent = agent
 
@@ -123,13 +123,14 @@ with tf.compat.v1.Session() as sess:
             # Save Model
             model_path = 'rlcard/models/pretrained/self_played_{}/tarot_v{}/model'.format(
                 str(record_number),
-                str(record_number * total_self_play_eval * 10 + self_play))
+                str(record_number * 10000 + self_play))
 
             saver.save(sess, model_path)
 
             # Eval against random
             reward_random = 0
             reward_random_list = []
+            taking_list = []
             eval_env.set_agents([agent] + [random_agent] * (env.player_num - 1))
             for eval_episode in range(evaluate_num):
                 print('\rEPISODE {} - Eval Random {} over {} - Number of game played {} - {}'.format(episode,
@@ -144,6 +145,7 @@ with tf.compat.v1.Session() as sess:
                 total_game_played += 1
                 reward_random_list.append(payoffs[0])
                 reward_random += payoffs[0]
+                taking_list.append(eval_env.game.players[0].taking)
 
             logger_random.log('\n########## Evaluation Against Random - Episode {} ##########'.format(episode))
             logger_random.log(
@@ -157,11 +159,12 @@ with tf.compat.v1.Session() as sess:
             logger_random.make_plot(save_path=figure_path_random + str(episode) + '.png')
             logger_random.make_plot_hist(save_path_1=figure_path_random + str(episode) + '_hist.png',
                                          save_path_2=figure_path_random + str(episode) + '_freq.png',
-                                         reward_list=reward_random_list)
+                                         reward_list=reward_random_list, taking_list=taking_list)
 
             # Eval against last agent
             reward_opponent = 0
             reward_opponent_list = []
+            taking_list = []
             eval_env.set_agents([agent] + [opponent_agent] * (env.player_num - 1))
             for eval_episode in range(evaluate_num):
                 print('\rEPISODE {} - Eval Opponent {} over {} - Number of game played {} - {}'.format(episode,
@@ -176,6 +179,7 @@ with tf.compat.v1.Session() as sess:
                 total_game_played += 1
                 reward_opponent_list.append(payoffs[0])
                 reward_opponent += payoffs[0]
+                taking_list.append(eval_env.game.players[0].taking)
 
             logger_opponent.log('\n########## Evaluation Against Last Agent - Episode {} ##########'.format(episode))
             logger_opponent.log(
@@ -189,7 +193,7 @@ with tf.compat.v1.Session() as sess:
             logger_opponent.make_plot(save_path=figure_path_opponent + str(episode) + '.png')
             logger_opponent.make_plot_hist(save_path_1=figure_path_opponent + str(episode) + '_hist.png',
                                            save_path_2=figure_path_opponent + str(episode) + '_freq.png',
-                                           reward_list=reward_opponent_list)
+                                           reward_list=reward_opponent_list, taking_list=taking_list)
 
             # GO to next step
             self_play += 1

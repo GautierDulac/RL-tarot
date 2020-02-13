@@ -126,12 +126,14 @@ class Logger(object):
         fig.savefig(save_path)
         plt.close()
 
-    def make_plot_hist(self, save_path_1: str = '', save_path_2: str = '', reward_list=List[int]) -> None:
+    def make_plot_hist(self, save_path_1: str = '', save_path_2: str = '', reward_list: List[int] = [],
+                       taking_list: List[int] = []) -> None:
         """
         Make plot using last reward list
         :param save_path_1: (string): where to save the hist
         :param save_path_2: (string): where to save the density
         :param reward_list: (list of int): list of last rewards during the evaluation round
+        :param taking_list: (list of int): has the player evaluated taken this game ?
         :return:
         """
         fig, ax = plt.subplots()
@@ -149,6 +151,28 @@ class Logger(object):
             os.makedirs(save_dir)
 
         fig.savefig(save_path_1)
+        plt.close()
+
+        fig, ax = plt.subplots()
+        taking_reward = [reward_list[i] for i in range(len(reward_list)) if taking_list[i] == 1]
+        ax.hist(taking_reward, label=self.legend_hist + ' - Taking situations', bins=np.linspace(min_bin, max_bin, max_bin - min_bin + 1))
+        plt.xlim((-24, 24))
+        plt.ylim((0, int(len(reward_list) * 0.4)))
+        ax.set(xlabel='Points won', ylabel='Occurencies')
+        ax.legend()
+        ax.grid()
+        fig.savefig(save_path_1[:-4] + '_taking.png')
+        plt.close()
+
+        fig, ax = plt.subplots()
+        not_taking_reward = [reward_list[i] for i in range(len(reward_list)) if taking_list[i] == 0]
+        ax.hist(not_taking_reward, label=self.legend_hist + ' - Not Taking situations', bins=np.linspace(min_bin, max_bin, max_bin - min_bin + 1))
+        plt.xlim((-24, 24))
+        plt.ylim((0, int(len(reward_list) * 0.4)))
+        ax.set(xlabel='Points won', ylabel='Occurencies')
+        ax.legend()
+        ax.grid()
+        fig.savefig(save_path_1[:-4] + '_not_taking.png')
         plt.close()
 
         ax = sns.kdeplot(reward_list, label=self.legend_hist, bw=0.5)

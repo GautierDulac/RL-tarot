@@ -12,14 +12,14 @@ from rlcard.agents.dqn_agent import DQNAgent
 from rlcard.utils.logger import Logger
 from rlcard.utils.utils import set_global_seed, time_difference_good_format
 
-record_number = 5
+record_number = 8
 
 # Make environment
 env = rlcard.make('tarot')
 eval_env = rlcard.make('tarot')
 
 # Set the iterations numbers and how frequently we evaluate/save plot
-evaluate_every = 100
+evaluate_every = 10
 # save_plot_every = 100
 evaluate_num = 1000
 

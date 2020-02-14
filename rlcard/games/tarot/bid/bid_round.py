@@ -2,7 +2,7 @@ from typing import List
 
 from rlcard.games.tarot.alpha_and_omega.player import TarotPlayer
 from rlcard.games.tarot.bid.bid import TarotBid
-from rlcard.games.tarot.utils import cards2list
+from rlcard.games.tarot.utils import cards2list, get_nb_bouts, get_hand_value
 
 
 class BidRound(object):
@@ -75,14 +75,23 @@ class BidRound(object):
                 potential_next = (potential_next + 1) % self.num_players
             return potential_next
 
-    def get_legal_actions(self) -> List[TarotBid]:
+    def get_legal_actions(self, players: List[TarotPlayer], player_id: int) -> List[TarotBid]:
         # TODO REMOVE CONSTRAINTS THAT FORCE ONLY PASSE OU PETITE
+        # TODO REMOVE CONSTRAINTS THAT FORCES TO TAKE ABOVE A CERTAIN HAND
         """
         Get legal bids
         :return: list of legals bids (TarotBid objects)
         """
         # legal_bids = self.all_bids[(self.max_bid_order + 1):] + [self.all_bids[0]]
-        legal_bids = self.all_bids[(self.max_bid_order + 1):2] + [self.all_bids[0]]
+        # legal_bids = self.all_bids[(self.max_bid_order + 1):2] + [self.all_bids[0]]
+        # Force to take petite if hand value > XX and nb_bout > XX
+        points_in_hand = get_hand_value(players[player_id].hand)
+        bouts_in_hand = get_nb_bouts(players[player_id].hand)
+        if (points_in_hand >= 30 and bouts_in_hand >= 2) or (bouts_in_hand == 3):
+            legal_bids = self.all_bids[(self.max_bid_order + 1):2]  # + [self.all_bids[0]]
+        else:
+            legal_bids = self.all_bids[(self.max_bid_order + 1):2] + [self.all_bids[0]]
+
         return legal_bids
 
     def get_state(self, players: List[TarotPlayer], player_id) -> dict:

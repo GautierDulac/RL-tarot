@@ -104,7 +104,7 @@ class BidGame(object):
         Return the legal actions for current player
         :return: (list): A list of legal actions (TarotBid objects)
         """
-        return self.bid_round.get_legal_actions()
+        return self.bid_round.get_legal_actions(self.players, self.get_player_id())
 
     def get_player_num(self) -> int:
         """

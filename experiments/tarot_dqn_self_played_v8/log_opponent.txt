@@ -1,0 +1,189 @@
+
+########## Evaluation Against Last Agent - Episode 0 ##########
+Timestep: 79 Average reward against last agent is 0.094
+
+########## Evaluation Against Last Agent - Episode 10 ##########
+Timestep: 879 Average reward against last agent is 0.56
+
+########## Evaluation Against Last Agent - Episode 20 ##########
+Timestep: 1678 Average reward against last agent is 1.887
+
+########## Evaluation Against Last Agent - Episode 30 ##########
+Timestep: 2479 Average reward against last agent is 2.203
+
+########## Evaluation Against Last Agent - Episode 40 ##########
+Timestep: 3284 Average reward against last agent is 2.138
+
+########## Evaluation Against Last Agent - Episode 50 ##########
+Timestep: 4085 Average reward against last agent is 2.043
+
+########## Evaluation Against Last Agent - Episode 60 ##########
+Timestep: 4881 Average reward against last agent is 2.306
+
+########## Evaluation Against Last Agent - Episode 70 ##########
+Timestep: 5675 Average reward against last agent is 2.181
+
+########## Evaluation Against Last Agent - Episode 80 ##########
+Timestep: 6470 Average reward against last agent is 2.123
+
+########## Evaluation Against Last Agent - Episode 90 ##########
+Timestep: 7270 Average reward against last agent is 2.14
+
+########## Evaluation Against Last Agent - Episode 100 ##########
+Timestep: 8069 Average reward against last agent is 2.055
+
+########## Evaluation Against Last Agent - Episode 110 ##########
+Timestep: 8872 Average reward against last agent is 2.192
+
+########## Evaluation Against Last Agent - Episode 120 ##########
+Timestep: 9675 Average reward against last agent is 2.012
+
+########## Evaluation Against Last Agent - Episode 130 ##########
+Timestep: 10473 Average reward against last agent is 2.008
+
+########## Evaluation Against Last Agent - Episode 140 ##########
+Timestep: 11284 Average reward against last agent is 1.963
+
+########## Evaluation Against Last Agent - Episode 150 ##########
+Timestep: 12083 Average reward against last agent is 2.232
+
+########## Evaluation Against Last Agent - Episode 160 ##########
+Timestep: 12885 Average reward against last agent is 2.205
+
+########## Evaluation Against Last Agent - Episode 170 ##########
+Timestep: 13688 Average reward against last agent is 2.259
+
+########## Evaluation Against Last Agent - Episode 180 ##########
+Timestep: 14482 Average reward against last agent is 2.052
+
+########## Evaluation Against Last Agent - Episode 190 ##########
+Timestep: 15276 Average reward against last agent is 2.094
+
+########## Evaluation Against Last Agent - Episode 200 ##########
+Timestep: 16072 Average reward against last agent is 2.248
+
+########## Evaluation Against Last Agent - Episode 210 ##########
+Timestep: 16865 Average reward against last agent is 2.303
+
+########## Evaluation Against Last Agent - Episode 220 ##########
+Timestep: 17665 Average reward against last agent is 2.153
+
+########## Evaluation Against Last Agent - Episode 230 ##########
+Timestep: 18469 Average reward against last agent is 2.092
+
+########## Evaluation Against Last Agent - Episode 240 ##########
+Timestep: 19271 Average reward against last agent is 2.024
+
+########## Evaluation Against Last Agent - Episode 250 ##########
+Timestep: 20069 Average reward against last agent is 2.195
+
+########## Evaluation Against Last Agent - Episode 260 ##########
+Timestep: 20875 Average reward against last agent is 2.151
+
+########## Evaluation Against Last Agent - Episode 270 ##########
+Timestep: 21676 Average reward against last agent is 2.188
+
+########## Evaluation Against Last Agent - Episode 280 ##########
+Timestep: 22471 Average reward against last agent is 2.046
+
+########## Evaluation Against Last Agent - Episode 290 ##########
+Timestep: 23266 Average reward against last agent is 2.124
+
+########## Evaluation Against Last Agent - Episode 300 ##########
+Timestep: 24061 Average reward against last agent is 2.008
+
+########## Evaluation Against Last Agent - Episode 310 ##########
+Timestep: 24863 Average reward against last agent is 2.052
+
+########## Evaluation Against Last Agent - Episode 320 ##########
+Timestep: 25660 Average reward against last agent is 2.065
+
+########## Evaluation Against Last Agent - Episode 330 ##########
+Timestep: 26466 Average reward against last agent is 2.178
+
+########## Evaluation Against Last Agent - Episode 340 ##########
+Timestep: 27269 Average reward against last agent is 2.24
+
+########## Evaluation Against Last Agent - Episode 350 ##########
+Timestep: 28067 Average reward against last agent is 2.182
+
+########## Evaluation Against Last Agent - Episode 360 ##########
+Timestep: 28861 Average reward against last agent is 2.063
+
+########## Evaluation Against Last Agent - Episode 370 ##########
+Timestep: 29659 Average reward against last agent is 2.007
+
+########## Evaluation Against Last Agent - Episode 380 ##########
+Timestep: 30457 Average reward against last agent is 2.183
+
+########## Evaluation Against Last Agent - Episode 390 ##########
+Timestep: 31253 Average reward against last agent is 2.07
+
+########## Evaluation Against Last Agent - Episode 400 ##########
+Timestep: 32047 Average reward against last agent is 2.09
+
+########## Evaluation Against Last Agent - Episode 410 ##########
+Timestep: 32844 Average reward against last agent is 2.064
+
+########## Evaluation Against Last Agent - Episode 420 ##########
+Timestep: 33643 Average reward against last agent is 2.187
+
+########## Evaluation Against Last Agent - Episode 430 ##########
+Timestep: 34449 Average reward against last agent is 2.248
+
+########## Evaluation Against Last Agent - Episode 440 ##########
+Timestep: 35250 Average reward against last agent is 2.059
+
+########## Evaluation Against Last Agent - Episode 450 ##########
+Timestep: 36046 Average reward against last agent is 2.06
+
+########## Evaluation Against Last Agent - Episode 460 ##########
+Timestep: 36849 Average reward against last agent is 2.094
+
+########## Evaluation Against Last Agent - Episode 470 ##########
+Timestep: 37645 Average reward against last agent is 2.02
+
+########## Evaluation Against Last Agent - Episode 480 ##########
+Timestep: 38444 Average reward against last agent is 2.172
+
+########## Evaluation Against Last Agent - Episode 490 ##########
+Timestep: 39244 Average reward against last agent is 2.218
+
+########## Evaluation Against Last Agent - Episode 500 ##########
+Timestep: 40035 Average reward against last agent is 2.244
+
+########## Evaluation Against Last Agent - Episode 510 ##########
+Timestep: 40835 Average reward against last agent is 1.988
+
+########## Evaluation Against Last Agent - Episode 520 ##########
+Timestep: 41639 Average reward against last agent is 2.232
+
+########## Evaluation Against Last Agent - Episode 530 ##########
+Timestep: 42437 Average reward against last agent is 2.366
+
+########## Evaluation Against Last Agent - Episode 540 ##########
+Timestep: 43231 Average reward against last agent is 2.095
+
+########## Evaluation Against Last Agent - Episode 550 ##########
+Timestep: 44034 Average reward against last agent is 2.28
+
+########## Evaluation Against Last Agent - Episode 560 ##########
+Timestep: 44834 Average reward against last agent is 2.085
+
+########## Evaluation Against Last Agent - Episode 570 ##########
+Timestep: 45638 Average reward against last agent is 2.179
+
+########## Evaluation Against Last Agent - Episode 580 ##########
+Timestep: 46436 Average reward against last agent is 1.908
+
+########## Evaluation Against Last Agent - Episode 590 ##########
+Timestep: 47233 Average reward against last agent is 2.102
+
+########## Evaluation Against Last Agent - Episode 600 ##########
+Timestep: 48026 Average reward against last agent is 2.258
+
+########## Evaluation Against Last Agent - Episode 610 ##########
+Timestep: 48835 Average reward against last agent is 2.132
+
+########## Evaluation Against Last Agent - Episode 620 ##########
+Timestep: 49638 Average reward against last agent is 2.048

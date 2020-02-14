@@ -110,7 +110,7 @@ class BidRound(object):
         player = players[player_id]
         state = {'hand': cards2list(player.hand), 'max_bid': self.max_bid_order,
                  'current_personal_bid': player.bid,
-                 'legal_actions': self.get_legal_actions()}
+                 'legal_actions': self.get_legal_actions(players, player_id)}
         other_bids = []
         for player in players:
             if player.player_id != player_id and player.bid is not None:

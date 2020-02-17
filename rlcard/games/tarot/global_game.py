@@ -145,6 +145,7 @@ class GlobalGame(object):
         return state
 
     def get_payoffs(self) -> dict:
+        # TODO REMOVE PENALISATION WHEN NO PLAYER IS TAKING - 1 POINT BY NEW DEAL
         """
         Return the payoffs of the game
         :return: (dict): Each entry corresponds to the payoff of one player

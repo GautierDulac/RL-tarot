@@ -57,6 +57,7 @@ class GlobalGame(object):
         self.bid_over = False
         self.dog_over = False
         self.main_over = False
+        self.number_of_deals = 0
         self.is_game_over = False
         self.players = [Player(i) for i in range(self.num_players)]
         self.dog = TarotDog()

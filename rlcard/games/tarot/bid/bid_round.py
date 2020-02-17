@@ -87,7 +87,7 @@ class BidRound(object):
         # Force to take petite if hand value > XX and nb_bout > XX
         points_in_hand = get_hand_value(players[player_id].hand)
         bouts_in_hand = get_nb_bouts(players[player_id].hand)
-        if (points_in_hand >= 30 and bouts_in_hand >= 2) or (bouts_in_hand == 3):
+        if (points_in_hand >= 40 and bouts_in_hand >= 2) or (points_in_hand >= 35 and bouts_in_hand == 3):
             legal_bids = self.all_bids[(self.max_bid_order + 1):2]  # + [self.all_bids[0]]
         else:
             legal_bids = self.all_bids[(self.max_bid_order + 1):2] + [self.all_bids[0]]

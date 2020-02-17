@@ -28,6 +28,7 @@ class GlobalGame(object):
         self.players = None
         self.taking_player_id = None
         self.taking_bid_order = None
+        self.number_of_deals = 0
         # Initialize a Bid instance
         self.bid_game = None
         self.bid_round = None
@@ -82,6 +83,7 @@ class GlobalGame(object):
         if self.current_game_part == 'BID':
             state, player_id = self.bid_game.step(played_action)
             if state is None:
+                self.number_of_deals += 1
                 return self.init_game()
             state = self.bid_game.get_state(player_id)
             self.bid_game.bid_round.current_player_id = player_id
@@ -147,7 +149,8 @@ class GlobalGame(object):
         Return the payoffs of the game
         :return: (dict): Each entry corresponds to the payoff of one player
         """
-        return self.main_game.get_payoffs()
+        payoffs = self.main_game.get_payoffs()
+        return {i: payoffs[i] - self.number_of_deals for i in range(self.num_players)}
 
     def get_legal_actions(self) -> Union[List[TarotCard], List[TarotDog]]:
         """

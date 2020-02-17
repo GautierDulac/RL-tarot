@@ -57,6 +57,7 @@ class GlobalGame(object):
         self.bid_over = False
         self.dog_over = False
         self.main_over = False
+        self.number_of_deals = 0
         self.is_game_over = False
         self.players = [Player(i) for i in range(self.num_players)]
         self.dog = TarotDog()
@@ -145,6 +146,7 @@ class GlobalGame(object):
         return state
 
     def get_payoffs(self) -> dict:
+        # TODO REMOVE PENALISATION WHEN NO PLAYER IS TAKING - 1 POINT BY NEW DEAL
         """
         Return the payoffs of the game
         :return: (dict): Each entry corresponds to the payoff of one player

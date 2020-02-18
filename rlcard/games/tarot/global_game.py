@@ -45,7 +45,7 @@ class GlobalGame(object):
         self.main_over = False
         self.is_game_over = False
 
-    def init_game(self) -> (dict, int):
+    def init_game(self, number_of_deals: int = 0) -> (dict, int):
         """
         Initialize players and state for bid game in a globalgame object
         :return: (tuple): containing :
@@ -57,7 +57,7 @@ class GlobalGame(object):
         self.bid_over = False
         self.dog_over = False
         self.main_over = False
-        self.number_of_deals = 0
+        self.number_of_deals = number_of_deals
         self.is_game_over = False
         self.players = [Player(i) for i in range(self.num_players)]
         self.dog = TarotDog()
@@ -85,7 +85,7 @@ class GlobalGame(object):
             state, player_id = self.bid_game.step(played_action)
             if state is None:
                 self.number_of_deals += 1
-                return self.init_game()
+                return self.init_game(self.number_of_deals)
             state = self.bid_game.get_state(player_id)
             self.bid_game.bid_round.current_player_id = player_id
             if self.bid_game.bid_over:

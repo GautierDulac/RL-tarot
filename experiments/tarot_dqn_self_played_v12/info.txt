@@ -1,0 +1,17 @@
+v12 - Model with parameters:
+evaluate_every = 500
+evolve_model_every = 5000
+evaluate_num = 1000
+
+episode_num = 100000
+
+self_play = 1
+total_self_play_eval = int(episode_num / evaluate_every)
+
+# Set the the number of steps for collecting normalization statistics
+# and intial memory size
+memory_init_size = 5000
+norm_step = 1000
+
+---------------------------------
+Using all constraints on bid

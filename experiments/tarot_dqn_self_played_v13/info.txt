@@ -1,0 +1,18 @@
+v12 - Model with parameters:
+# Set the iterations numbers and how frequently we evaluate/save plot
+evaluate_every = 100
+evolve_model_every = 1000
+evaluate_num = 1000
+
+episode_num = 100000
+
+self_play = 1
+total_self_play_eval = int(episode_num / evaluate_every)
+
+# Set the the number of steps for collecting normalization statistics
+# and intial memory size
+memory_init_size = 5000
+norm_step = 1000
+
+---------------------------------
+Using all constraints on bid, with penalisation if no bid

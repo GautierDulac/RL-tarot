@@ -1,3 +1,0 @@
-Test with 500 evaluation between every model change 
-Some interesting moments with almost a taking average positive
-TO BE STATS TESTED

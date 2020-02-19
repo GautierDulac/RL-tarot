@@ -1,5 +1,0 @@
-50 trains with 1000 eval
-Seed 0
-
-Good avg reward against last agent (around 2)
-Pore one against random, close to 0.5

@@ -78,7 +78,7 @@ class MainRound(object):
         if self.target_card is not None:
             if played_card.color != self.target_card.color:
                 if played_card.is_trump:
-                    self.players_cut[self.current_player_id][COLOR_MAP[played_card.color]] = 1
+                    self.players_cut[self.current_player_id][COLOR_MAP[self.target_card.color]] = 1
                 else:
                     self.has_trumps[self.current_player_id] = 0
 

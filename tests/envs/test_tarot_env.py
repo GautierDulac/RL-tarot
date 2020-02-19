@@ -12,7 +12,7 @@ class TestTarotEnv(unittest.TestCase):
     def test_init_game_and_extract_state(self):
         env = Env()
         state, _ = env.init_game()
-        self.assertEqual(state['obs'].size, 6 * 5 * 22)
+        self.assertEqual(state['obs'].size, 7 * 5 * 22)
 
     def test_get_legal_actions(self):
         env = Env()

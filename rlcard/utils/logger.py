@@ -157,7 +157,7 @@ class Logger(object):
         taking_reward = [reward_list[i] for i in range(len(reward_list)) if taking_list[i] == 1]
         ax.hist(taking_reward, label=self.legend_hist + ' - Taking situations', bins=np.linspace(min_bin, max_bin, max_bin - min_bin + 1))
         plt.xlim((-24, 24))
-        plt.ylim((0, int(len(taking_reward) * 0.4)))
+        plt.ylim((0, max(1, int(len(taking_reward) * 0.4))))
         ax.set(xlabel='Points won', ylabel='Occurencies')
         ax.legend()
         ax.grid()
@@ -168,7 +168,7 @@ class Logger(object):
         not_taking_reward = [reward_list[i] for i in range(len(reward_list)) if taking_list[i] == 0]
         ax.hist(not_taking_reward, label=self.legend_hist + ' - Not Taking situations', bins=np.linspace(min_bin, max_bin, max_bin - min_bin + 1))
         plt.xlim((-24, 24))
-        plt.ylim((0, int(len(not_taking_reward) * 0.4)))
+        plt.ylim((0, max(1, int(len(not_taking_reward) * 0.4))))
         ax.set(xlabel='Points won', ylabel='Occurencies')
         ax.legend()
         ax.grid()

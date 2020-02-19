@@ -7,8 +7,8 @@ import time
 import tensorflow as tf
 
 import rlcard
-from rlcard.agents.random_agent import RandomAgent
 from rlcard.agents.dqn_agent import DQNAgent
+from rlcard.agents.random_agent import RandomAgent
 from rlcard.utils.logger import Logger
 from rlcard.utils.utils import time_difference_good_format
 
@@ -23,7 +23,7 @@ evaluate_every = 100
 evaluate_num = 1000
 episode_num = 100000
 # Train against
-train_againt = 'random' # or 'same'
+train_againt = 'random'  # or 'same'
 
 # Set the the number of steps for collecting normalization statistics
 # and intial memory size
@@ -155,4 +155,3 @@ with tf.compat.v1.Session() as sess:
     logger_random.make_plot_hist(save_path_1=figure_path_random + str(episode) + '_hist.png',
                                  save_path_2=figure_path_random + str(episode) + '_freq.png',
                                  reward_list=reward_random_list, taking_list=taking_list)
-

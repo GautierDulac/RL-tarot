@@ -1,5 +1,0 @@
-1000 iterations between each 1000 eval
-memory init size back to 1000
-
-Checker Model 8000 ? 10000 Good aussi
-Réussi à bien faire chuter quand les autres prennent, minimise ses prises qui lui rpaportent moins en moyenne

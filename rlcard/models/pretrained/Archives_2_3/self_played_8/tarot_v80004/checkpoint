@@ -1,5 +1,0 @@
-model_checkpoint_path: "model"
-all_model_checkpoint_paths: "../tarot_v80001/model"
-all_model_checkpoint_paths: "../tarot_v80002/model"
-all_model_checkpoint_paths: "../tarot_v80003/model"
-all_model_checkpoint_paths: "model"

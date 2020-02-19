@@ -1,6 +1,0 @@
-No bias on Bid game
-500 training with 1000 evaluation, interesting results, but reward is often higher against last agent than the random player... why ?
-Positive rewards, but still the "POUSSE" distribution is negatively rewarded
-No convergence, always a good reward against last agent, but poor one on random agent
-
-It might require more data to train, to find situations where we can win when taking ? 

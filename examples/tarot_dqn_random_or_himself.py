@@ -42,14 +42,15 @@ if not os.path.exists('rlcard/models'):
 if not os.path.exists('rlcard/models/pretrained'):
     os.makedirs('rlcard/models/pretrained')
 for eval_number in range(1, episode_num // evaluate_every + 1):
-    model_folder_path = 'rlcard/models/pretrained/random_played_{}/tarot_v{}'.format(
-        str(record_number),
-        str(record_number * 10000 + eval_number))
+    model_folder_path = 'rlcard/models/pretrained/{}_played_{}/tarot_v{}'.format(train_againt,
+                                                                                 str(record_number),
+                                                                                 str(
+                                                                                     record_number * 10000 + eval_number))
     if not os.path.exists(model_folder_path):
         os.makedirs(model_folder_path)
-model_path = 'rlcard/models/pretrained/random_played_{}/tarot_v{}/model'.format(
-    str(record_number),
-    str(record_number * 10000))
+model_path = 'rlcard/models/pretrained/{}_played_{}/tarot_v{}/model'.format(train_againt,
+                                                                            str(record_number),
+                                                                            str(record_number * 10000))
 
 random_agent = RandomAgent(action_num=78)
 
@@ -91,9 +92,10 @@ with tf.compat.v1.Session() as sess:
         if episode % evaluate_every == 0:
             # Save Model
 
-            model_path = 'rlcard/models/pretrained/random_played_{}/tarot_v{}/model'.format(
-                str(record_number),
-                str(record_number * 10000 + episode // evaluate_every))
+            model_path = 'rlcard/models/pretrained/{}_played_{}/tarot_v{}/model'.format(train_againt,
+                                                                                        str(record_number),
+                                                                                        str(
+                                                                                            record_number * 10000 + episode // evaluate_every))
 
             saver.save(sess, model_path)
 

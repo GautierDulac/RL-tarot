@@ -5,6 +5,8 @@ from rlcard.games.tarot.alpha_and_omega.judger import TarotJudger
 from rlcard.games.tarot.alpha_and_omega.player import TarotPlayer
 from rlcard.games.tarot.utils import cards2list, get_end_pot_information
 
+COLOR_MAP = {'SPADE': 0, 'CLOVER': 1, 'HEART': 2, 'DIAMOND': 3, 'TRUMP': 4}
+
 
 class MainRound(object):
 
@@ -29,6 +31,9 @@ class MainRound(object):
         self.pot_cards = dict()
         self.excuse_played = False
         self.excuse_player = None
+        self.players_cut = [[0] * 4] * num_players
+        self.has_trumps = [1] * num_players
+        self.max_trump = [21] * num_players
         self.new_dog = new_dog
         self.is_pot_over = False
         self.is_over = False
@@ -68,6 +73,18 @@ class MainRound(object):
             self.highest_trump = -1
             self.target_card = played_card
             self.pot_cards['target'] = played_card
+
+        # Checking if a player is cuting and updating info for state
+        if self.target_card is not None:
+            if played_card.color != self.target_card.color:
+                if played_card.is_trump:
+                    self.players_cut[self.current_player_id][COLOR_MAP[played_card.color]] = 1
+                else:
+                    self.has_trumps[self.current_player_id] = 0
+
+        # Checking if a player is under_cuting and adaptng its maximal trump
+        if played_card.is_trump and self.highest_trump > played_card.trump_value:
+            self.max_trump[self.current_player_id] = min(self.highest_trump, self.max_trump[self.current_player_id])
 
         # Add in Played_card list
         self.played_cards.append(played_card)
@@ -165,6 +182,9 @@ class MainRound(object):
                 (List[str]) - played_cards: list of all str-tarotcards played up to this moment
                 (int) - pot_number
                 (List[TarotCard]) - legal_actions: list of TarotCards available to be played
+                (List[List[int]]) - cuts_color: telling if a player is cuting for a certain color
+                (List[int]) - has_trumps: telling if a player still has trumps
+                (List[int]) - max_trumps: telling the minimal trump for which a player had to undercut
                 (List[str]) - pot_cards: last few cards (str) played in the pot
                 (str) - target: str-tarotcard of the target card in this pot (potentially None)
                 (List[str]) - others_hand: list of str-tarotcards unknown
@@ -173,7 +193,10 @@ class MainRound(object):
         number_of_played_cards = len(self.played_cards)
         state = {'hand': cards2list(player.hand), 'played_cards': cards2list(self.played_cards),
                  'pot_number': int(number_of_played_cards / 4),
-                 'legal_actions': self.get_legal_actions(players, player_id)}
+                 'legal_actions': self.get_legal_actions(players, player_id),
+                 'cuts_color': self.players_cut,
+                 'has_trumps': self.has_trumps,
+                 'max_trump': self.max_trump}
         state['pot_cards'] = state['played_cards'][state['pot_number'] * 4:]
         if self.target_card is not None:
             state['target'] = self.target_card.get_str()

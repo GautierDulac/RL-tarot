@@ -7,7 +7,7 @@ from rlcard.envs.env import Env
 from rlcard.games.tarot.alpha_and_omega.card import TarotCard
 from rlcard.games.tarot.bid.bid import TarotBid
 from rlcard.games.tarot.global_game import GlobalGame as Game
-from rlcard.games.tarot.utils import ACTION_SPACE, ACTION_LIST, BID_SPACE, BID_LIST
+from rlcard.games.tarot.utils import ACTION_SPACE, ACTION_LIST, BID_SPACE, BID_LIST, encode_info
 from rlcard.games.tarot.utils import encode_hand, encode_target, encode_bid, get_TarotCard_from_str, \
     get_TarotBid_from_str
 
@@ -17,7 +17,7 @@ class TarotEnv(Env):
     def __init__(self):
         # defining a self.game instance of GlobalGame
         super().__init__(Game())
-        self.state_shape = [6, 5, 22]
+        self.state_shape = [7, 5, 22]
 
     def print_state(self, player_id: int) -> None:
         """
@@ -142,7 +142,7 @@ class TarotEnv(Env):
         :param state: a dictionary with given information regarding the current game part
         :return: a dictionary with two information: obs (a ndarray) and legal_actions (a list)
         """
-        obs = np.zeros((6, 5, 22), dtype=int)
+        obs = np.zeros((7, 5, 22), dtype=int)
         legal_action_id = self.get_legal_actions()
         extracted_state = {'legal_actions': legal_action_id}
         if self.game.current_game_part == 'BID':
@@ -165,6 +165,7 @@ class TarotEnv(Env):
             encode_hand(obs, state['pot_cards'], index_to_encode=3)
             encode_hand(obs, state['played_cards'], index_to_encode=4)
             encode_hand(obs, state['others_hand'], index_to_encode=5)
+            encode_info(obs, state['cuts_color'], state['has_trumps'], state['max_trump'], index_to_encode=6)
             extracted_state['obs'] = obs
         else:
             raise ValueError

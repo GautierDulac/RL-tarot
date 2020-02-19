@@ -94,6 +94,29 @@ def encode_hand(plane: np.ndarray, hand: List[str], index_to_encode: int = 0) ->
     return plane
 
 
+def encode_info(plane: np.ndarray, cuts_color, has_trumps, max_trump, index_to_encode: int = 0) -> np.ndarray:
+    """
+    Encode hand and represerve it into plane
+    :param plane: n*5*22 numpy ndarray
+    :param cuts_color: (List[int]) - cuts_color: telling if a player is cuting for a certain color
+    :param has_trumps: (List[bool]) - has_trumps: telling if a player still has trumps
+    :param max_trump: (List[List[bool]]) - max_trumps: telling the minimal trump for which a player had to undercut
+    :param index_to_encode: see tarot extract state function
+    :return: n*5*22 numpy ndarray
+    """
+    # plane = np.zeros((n, 5, 22), dtype=int)
+    plane[index_to_encode] = np.zeros((5, 22), dtype=int)
+    # Instead of considering first dimension as a color, first dimension gives the player info
+    # Then True = 1 for each cuts color info in the 4 first cells of plane[index_to_encode][player_id]
+    # Then has_trump is encoded in the 5th cell and max_trump value in the 6th one
+    num_players = len(cuts_color)
+    for player_id in range(num_players):
+        plane[index_to_encode][player_id][0:4] = cuts_color[player_id]
+        plane[index_to_encode][player_id][4] = has_trumps[player_id]
+        plane[index_to_encode][player_id][5] = max_trump[player_id]
+    return plane
+
+
 def encode_target(plane: np.ndarray, target: str, index_to_encode: int = 2) -> np.ndarray:
     """
     Encode target and represerve it into plane

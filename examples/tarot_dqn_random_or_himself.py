@@ -23,7 +23,7 @@ evaluate_every = 100
 evaluate_num = 1000
 episode_num = 100000
 # Train against
-train_againt = 'random'  # or 'same'
+train_against = 'random'  # or 'same'
 
 # Set the the number of steps for collecting normalization statistics
 # and intial memory size
@@ -31,10 +31,14 @@ memory_init_size = 5000
 norm_step = 1000
 
 # The paths for saving the logs and learning curves
-root_path = './experiments/tarot_dqn_self_played_v{}/'.format(str(record_number))
+root_path = './experiments/{}_played_{}/'.format(train_against, str(record_number))
 log_path_random = root_path + 'log_random.txt'
 csv_path_random = root_path + 'performance_random.csv'
 figure_path_random = root_path + 'figures_random/'
+
+log_path_parameters = root_path + 'log_parameters.txt'
+
+
 
 # Model save path
 if not os.path.exists('rlcard/models'):
@@ -42,15 +46,30 @@ if not os.path.exists('rlcard/models'):
 if not os.path.exists('rlcard/models/pretrained'):
     os.makedirs('rlcard/models/pretrained')
 for eval_number in range(1, episode_num // evaluate_every + 1):
-    model_folder_path = 'rlcard/models/pretrained/{}_played_{}/tarot_v{}'.format(train_againt,
+    model_folder_path = 'rlcard/models/pretrained/{}_played_{}/tarot_v{}'.format(train_against,
                                                                                  str(record_number),
                                                                                  str(
                                                                                      record_number * 10000 + eval_number))
     if not os.path.exists(model_folder_path):
         os.makedirs(model_folder_path)
-model_path = 'rlcard/models/pretrained/{}_played_{}/tarot_v{}/model'.format(train_againt,
+model_path = 'rlcard/models/pretrained/{}_played_{}/tarot_v{}/model'.format(train_against,
                                                                             str(record_number),
                                                                             str(record_number * 10000))
+# Init a Logger to plot the learning curve against random
+logger_random = Logger(xlabel='episode', ylabel='reward', legend='DQN on TAROT against Random',
+                       legend_hist='Histogram of last evaluations against Random', log_path=log_path_random,
+                       csv_path=csv_path_random)
+
+param_file = open(log_path_parameters, 'w')
+param_file.write('record_number: {}'.format(record_number) + '\n')
+param_file.write('evaluate_every: {}'.format(evaluate_every) + '\n')
+param_file.write('evaluate_num: {}'.format(evaluate_num) + '\n')
+param_file.write('episode_num: {}'.format(episode_num) + '\n')
+param_file.write('train_against: {}'.format(train_against) + '\n')
+param_file.write('memory_init_size: {}'.format(memory_init_size) + '\n')
+param_file.write('norm_step: {}'.format(norm_step) + '\n')
+param_file.flush()
+param_file.close()
 
 random_agent = RandomAgent(action_num=78)
 
@@ -69,7 +88,7 @@ with tf.compat.v1.Session() as sess:
     sess.run(tf.compat.v1.global_variables_initializer())
 
     saver = tf.compat.v1.train.Saver(max_to_keep=None)
-    if train_againt == 'random':
+    if train_against == 'random':
         env.set_agents([agent] + [random_agent] * (env.player_num - 1))
     else:
         env.set_agents([agent] + [agent] * (env.player_num - 1))
@@ -79,10 +98,7 @@ with tf.compat.v1.Session() as sess:
     # Count the number of steps
     step_counter = 0
 
-    # Init a Logger to plot the learning curve against random
-    logger_random = Logger(xlabel='episode', ylabel='reward', legend='DQN on TAROT against Random',
-                           legend_hist='Histogram of last evaluations against Random', log_path=log_path_random,
-                           csv_path=csv_path_random)
+
 
     total_game_played = 0
     seconds = time.time()
@@ -92,7 +108,7 @@ with tf.compat.v1.Session() as sess:
         if episode % evaluate_every == 0:
             # Save Model
 
-            model_path = 'rlcard/models/pretrained/{}_played_{}/tarot_v{}/model'.format(train_againt,
+            model_path = 'rlcard/models/pretrained/{}_played_{}/tarot_v{}/model'.format(train_against,
                                                                                         str(record_number),
                                                                                         str(
                                                                                             record_number * 10000 + episode // evaluate_every))

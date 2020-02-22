@@ -8,15 +8,15 @@ import tensorflow as tf
 import rlcard
 from rlcard.agents.random_agent import RandomAgent
 from rlcard.games.tarot.utils import get_hand_value, get_nb_bouts
-from rlcard.models.pretrained_models_tarot_v_ import TarotDQNModelV1, TarotDQNModelV60073, TarotDQNModelV110017
+from rlcard.models.pretrained_models_tarot_v_ import TarotDQNModelV10061
 from rlcard.utils.logger import Logger
 
 num_tests = 100000
 num_games = 10000
-stats_on_model = 110017
+stats_on_model = 10061
 self_played = True
 self_record_number = 1
-models = {'0': RandomAgent, '1': TarotDQNModelV1, '60073': TarotDQNModelV60073, '110017': TarotDQNModelV110017}
+models = {'0': RandomAgent, '10061': TarotDQNModelV10061}
 
 # Model save path
 save_path = 'examples/statistics/tarot_v{}/'.format(str(stats_on_model))
@@ -61,7 +61,7 @@ with tf.compat.v1.Session() as sess:
         state, player_id = env.init_game()
         points_in_hand = get_hand_value(env.game.players[player_id].hand)
         bouts_in_hand = get_nb_bouts(env.game.players[player_id].hand)
-        action = env.decode_action(agent.step(state))
+        action = env.decode_action(agent.eval_step(state))
         logger_taking.add_point(x=points_in_hand, y=bouts_in_hand, z=action.get_bid_order())
 
     # Showing usual results against himself for this agent
@@ -91,7 +91,7 @@ with tf.compat.v1.Session() as sess:
                         nb_bouts[player_id] = get_nb_bouts(env.game.players[player_id].hand)
                         initial_hand[player_id] = env.game.players[player_id].hand
                 bid_iteration += 1
-            action = agent.step(state)
+            action = agent.eval_step(state)
             state, player_id = env.step(action)
         payoffs = env.get_payoffs()
         for player_id in range(0, env.game.get_player_num()):

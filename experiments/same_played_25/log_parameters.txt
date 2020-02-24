@@ -1,7 +1,0 @@
-record_number: 25
-evaluate_every: 5000
-evaluate_num: 2000
-episode_num: 50000
-train_against: same
-memory_init_size: 5000
-norm_step: 1000

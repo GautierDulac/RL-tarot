@@ -152,7 +152,8 @@ class GlobalGame(object):
         :return: (dict): Each entry corresponds to the payoff of one player
         """
         payoffs = self.main_game.get_payoffs()
-        return {i: payoffs[i] - self.number_of_deals for i in range(self.num_players)}
+        # return {i: payoffs[i] - self.number_of_deals for i in range(self.num_players)}
+        return {i: payoffs[i] for i in range(self.num_players)}
 
     def get_legal_actions(self) -> Union[List[TarotCard], List[TarotDog]]:
         """

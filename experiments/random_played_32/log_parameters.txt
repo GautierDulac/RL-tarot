@@ -1,0 +1,7 @@
+record_number: 32
+evaluate_every: 2000
+evaluate_num: 10000
+episode_num: 100000
+train_against: random
+memory_init_size: 100000
+norm_step: 10000

@@ -1,0 +1,132 @@
+
+########## Evaluation Against Random - Episode 0 ##########
+Timestep: 0 Average reward against random is -0.19
+Timestep: 0 Average reward when taking  is -0.33
+
+########## Evaluation Against Random - Episode 2000 ##########
+Timestep: 432812 Average reward against random is -0.07
+Timestep: 432812 Average reward when taking  is 0.08
+
+########## Evaluation Against Random - Episode 4000 ##########
+Timestep: 870305 Average reward against random is 0.16
+Timestep: 870305 Average reward when taking  is 0.96
+
+########## Evaluation Against Random - Episode 6000 ##########
+Timestep: 1310209 Average reward against random is 0.23
+Timestep: 1310209 Average reward when taking  is 0.92
+
+########## Evaluation Against Random - Episode 8000 ##########
+Timestep: 1735892 Average reward against random is 0.20
+Timestep: 1735892 Average reward when taking  is 0.80
+
+########## Evaluation Against Random - Episode 10000 ##########
+Timestep: 2164539 Average reward against random is -0.02
+Timestep: 2164539 Average reward when taking  is 0.02
+
+########## Evaluation Against Random - Episode 12000 ##########
+Timestep: 2601182 Average reward against random is 0.11
+Timestep: 2601182 Average reward when taking  is 0.80
+
+########## Evaluation Against Random - Episode 14000 ##########
+Timestep: 3032314 Average reward against random is 0.00
+Timestep: 3032314 Average reward when taking  is 0.25
+
+########## Evaluation Against Random - Episode 16000 ##########
+Timestep: 3474085 Average reward against random is 0.02
+Timestep: 3474085 Average reward when taking  is 0.32
+
+########## Evaluation Against Random - Episode 18000 ##########
+Timestep: 3914358 Average reward against random is 0.08
+Timestep: 3914358 Average reward when taking  is 0.50
+
+########## Evaluation Against Random - Episode 20000 ##########
+Timestep: 4340230 Average reward against random is 0.26
+Timestep: 4340230 Average reward when taking  is 1.13
+
+########## Evaluation Against Random - Episode 22000 ##########
+Timestep: 4779865 Average reward against random is -0.18
+Timestep: 4779865 Average reward when taking  is -0.46
+
+########## Evaluation Against Random - Episode 24000 ##########
+Timestep: 5219047 Average reward against random is 0.09
+Timestep: 5219047 Average reward when taking  is 0.52
+
+########## Evaluation Against Random - Episode 26000 ##########
+Timestep: 5652711 Average reward against random is 0.07
+Timestep: 5652711 Average reward when taking  is 0.44
+
+########## Evaluation Against Random - Episode 28000 ##########
+Timestep: 6087428 Average reward against random is 0.01
+Timestep: 6087428 Average reward when taking  is 0.21
+
+########## Evaluation Against Random - Episode 30000 ##########
+Timestep: 6526279 Average reward against random is 0.12
+Timestep: 6526279 Average reward when taking  is 0.59
+
+########## Evaluation Against Random - Episode 32000 ##########
+Timestep: 6957548 Average reward against random is 0.24
+Timestep: 6957548 Average reward when taking  is 1.14
+
+########## Evaluation Against Random - Episode 34000 ##########
+Timestep: 7400637 Average reward against random is 0.03
+Timestep: 7400637 Average reward when taking  is 0.27
+
+########## Evaluation Against Random - Episode 36000 ##########
+Timestep: 7844907 Average reward against random is 0.17
+Timestep: 7844907 Average reward when taking  is 0.82
+
+########## Evaluation Against Random - Episode 38000 ##########
+Timestep: 8283076 Average reward against random is 0.16
+Timestep: 8283076 Average reward when taking  is 0.80
+
+########## Evaluation Against Random - Episode 40000 ##########
+Timestep: 8722533 Average reward against random is 0.36
+Timestep: 8722533 Average reward when taking  is 1.69
+
+########## Evaluation Against Random - Episode 42000 ##########
+Timestep: 9164622 Average reward against random is -0.05
+Timestep: 9164622 Average reward when taking  is 0.10
+
+########## Evaluation Against Random - Episode 44000 ##########
+Timestep: 9598926 Average reward against random is 0.09
+Timestep: 9598926 Average reward when taking  is 0.51
+
+########## Evaluation Against Random - Episode 46000 ##########
+Timestep: 10036276 Average reward against random is 0.01
+Timestep: 10036276 Average reward when taking  is 0.36
+
+########## Evaluation Against Random - Episode 48000 ##########
+Timestep: 10476794 Average reward against random is 0.01
+Timestep: 10476794 Average reward when taking  is 0.31
+
+########## Evaluation Against Random - Episode 50000 ##########
+Timestep: 10909033 Average reward against random is 0.07
+Timestep: 10909033 Average reward when taking  is 0.48
+
+########## Evaluation Against Random - Episode 52000 ##########
+Timestep: 11337141 Average reward against random is 0.04
+Timestep: 11337141 Average reward when taking  is 0.33
+
+########## Evaluation Against Random - Episode 54000 ##########
+Timestep: 11778399 Average reward against random is -0.01
+Timestep: 11778399 Average reward when taking  is 0.28
+
+########## Evaluation Against Random - Episode 56000 ##########
+Timestep: 12210289 Average reward against random is 0.26
+Timestep: 12210289 Average reward when taking  is 1.17
+
+########## Evaluation Against Random - Episode 58000 ##########
+Timestep: 12640577 Average reward against random is 0.25
+Timestep: 12640577 Average reward when taking  is 1.05
+
+########## Evaluation Against Random - Episode 60000 ##########
+Timestep: 13074074 Average reward against random is 0.15
+Timestep: 13074074 Average reward when taking  is 0.73
+
+########## Evaluation Against Random - Episode 62000 ##########
+Timestep: 13516731 Average reward against random is 0.03
+Timestep: 13516731 Average reward when taking  is 0.42
+
+########## Evaluation Against Random - Episode 64000 ##########
+Timestep: 13948814 Average reward against random is 0.20
+Timestep: 13948814 Average reward when taking  is 0.93
